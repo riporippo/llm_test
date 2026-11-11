@@ -358,6 +358,8 @@ def main() -> None:
         s = user.strip()
         if not s:
             continue
+        if s.lower() in ("exit", "quit", "bye"):  # / を付け忘れた終了も受け付ける
+            break
         if s.startswith("/"):
             cmd, _, arg = s.partition(" ")
             arg = arg.strip()
