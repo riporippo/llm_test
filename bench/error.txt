@@ -1,0 +1,44 @@
+isl@isl-HP-Z4-G4-Workstation:~/llama.cpp$ ./build/bin/llama-server -hf ggml-org/gpt-oss-120b-GGUF --no-mmproj -c 8192 -np 1 -ngl 99 --n-cpu-moe 12 -t 8 --rpc 172.18.1.57:50052 --host 127.0.0.1 --port 8080 --ctx-checkpoints 0 --cache-ram 0
+0.00.179.734 I srv  llama_server: initializing ...
+0.00.660.135 I cmn  common_param: common_params_print_info: verbosity = 3 (adjust with the  CLI arg)
+Downloading gpt-oss-120b-MXFP4.gguf ──────────────────────────────── 100%
+10.43.093.390 W srv  server_setup: security: no API key is set and CORS allows all origins (see https://github.com/ggml-org/llama.cpp/pull/25655)
+10.43.097.467 I srv    load_model: loading model 'ggml-org/gpt-oss-120b-GGUF'
+10.43.689.464 W common_fit_params: failed to fit params to free device memory: n_gpu_layers already set by user to 99, abort
+10.43.914.447 W load: setting token '<|channel|>' (200005) attribute to USER_DEFINED (16), old attributes: 8
+10.43.915.040 W load: setting token '<|message|>' (200008) attribute to USER_DEFINED (16), old attributes: 8
+10.43.915.174 W load: setting token '<|constrain|>' (200003) attribute to USER_DEFINED (16), old attributes: 8
+10.43.918.457 W load: setting token '<|start|>' (200006) attribute to USER_DEFINED (16), old attributes: 8
+10.43.919.192 W load: special_eog_ids contains both '<|return|>' and '<|call|>', or '<|calls|>' and '<|flush|>' tokens, removing '<|end|>' token from EOG list
+10.43.951.369 W llama_model_loader: tensor overrides to CPU are used with mmap enabled - consider using --load-mode none for better performance
+10.45.766.764 E ggml_backend_cuda_buffer_type_alloc_buffer: allocating 25280.52 MiB on device 0: cudaMalloc failed: out of memory
+10.45.766.774 E ggml_backend_buft_alloc_buffer_n_default: failed to allocate CUDA0 buffer of size 26508547456
+10.46.661.998 E llama_model_load: error loading model: unable to allocate CUDA0 buffer
+10.46.662.007 E llama_model_load_from_file_impl: failed to load model
+10.46.662.013 E cmn  common_init_: failed to load model '/home/isl/.cache/huggingface/hub/models--ggml-org--gpt-oss-120b-GGUF/snapshots/f59990363fbbb67f01bce03e5e7bf0929e3e320b/gpt-oss-120b-MXFP4.gguf'
+10.46.662.018 E srv    load_model: failed to load model, '/home/isl/.cache/huggingface/hub/models--ggml-org--gpt-oss-120b-GGUF/snapshots/f59990363fbbb67f01bce03e5e7bf0929e3e320b/gpt-oss-120b-MXFP4.gguf'
+10.46.662.020 I srv    operator(): operator(): cleaning up before exit...
+10.46.662.813 E srv  server_run_i: exiting due to model loading error
+
+isl@isl-HP-Z4-G4-Workstation:~/llama.cpp$ ./build/bin/llama-server -hf ggml-org/gpt-oss-120b-GGUF --no-mmproj -c 8192 -np 1 -ngl 99 --n-cpu-moe 12 -t 8 --rpc 172.18.1.57:50052 --host 127.0.0.1 --port 8080 --ctx-checkpoints 0 --cache-ram 0
+0.00.179.734 I srv  llama_server: initializing ...
+0.00.660.135 I cmn  common_param: common_params_print_info: verbosity = 3 (adjust with the  CLI arg)
+Downloading gpt-oss-120b-MXFP4.gguf ──────────────────────────────── 100%
+10.43.093.390 W srv  server_setup: security: no API key is set and CORS allows all origins (see https://github.com/ggml-org/llama.cpp/pull/25655)
+10.43.097.467 I srv    load_model: loading model 'ggml-org/gpt-oss-120b-GGUF'
+10.43.689.464 W common_fit_params: failed to fit params to free device memory: n_gpu_layers already set by user to 99, abort
+10.43.914.447 W load: setting token '<|channel|>' (200005) attribute to USER_DEFINED (16), old attributes: 8
+10.43.915.040 W load: setting token '<|message|>' (200008) attribute to USER_DEFINED (16), old attributes: 8
+10.43.915.174 W load: setting token '<|constrain|>' (200003) attribute to USER_DEFINED (16), old attributes: 8
+10.43.918.457 W load: setting token '<|start|>' (200006) attribute to USER_DEFINED (16), old attributes: 8
+10.43.919.192 W load: special_eog_ids contains both '<|return|>' and '<|call|>', or '<|calls|>' and '<|flush|>' tokens, removing '<|end|>' token from EOG list
+10.43.951.369 W llama_model_loader: tensor overrides to CPU are used with mmap enabled - consider using --load-mode none for better performance
+10.45.766.764 E ggml_backend_cuda_buffer_type_alloc_buffer: allocating 25280.52 MiB on device 0: cudaMalloc failed: out of memory
+10.45.766.774 E ggml_backend_buft_alloc_buffer_n_default: failed to allocate CUDA0 buffer of size 26508547456
+10.46.661.998 E llama_model_load: error loading model: unable to allocate CUDA0 buffer
+10.46.662.007 E llama_model_load_from_file_impl: failed to load model
+10.46.662.013 E cmn  common_init_: failed to load model '/home/isl/.cache/huggingface/hub/models--ggml-org--gpt-oss-120b-GGUF/snapshots/f59990363fbbb67f01bce03e5e7bf0929e3e320b/gpt-oss-120b-MXFP4.gguf'
+10.46.662.018 E srv    load_model: failed to load model, '/home/isl/.cache/huggingface/hub/models--ggml-org--gpt-oss-120b-GGUF/snapshots/f59990363fbbb67f01bce03e5e7bf0929e3e320b/gpt-oss-120b-MXFP4.gguf'
+10.46.662.020 I srv    operator(): operator(): cleaning up before exit...
+10.46.662.813 E srv  server_run_i: exiting due to model loading error
+
