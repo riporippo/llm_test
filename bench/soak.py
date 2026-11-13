@@ -60,9 +60,21 @@ def post(url: str, payload: dict, timeout: int) -> dict:
         return json.load(r)
 
 
+def health(base: str) -> str:
+    """llama-server の /health を見る。応答の status か、つながらない理由を返す"""
+    try:
+        with urllib.request.urlopen(base + "/health", timeout=10) as r:
+            return json.load(r).get("status", "?")
+    except urllib.error.HTTPError as e:
+        return f"HTTP {e.code}"
+    except Exception as e:
+        return type(e).__name__
+
+
 class Writer:
     def __init__(self, path: str):
         self.path, self.lock, self.rows = path, threading.Lock(), []
+        self.last_ok = time.time()  # 最後に成功した時刻（サーバー停止の検出用）
         self.fields = ["datetime", "elapsed_min", "user", "scenario", "turn", "ok", "error",
                        "prompt_n", "cache_n", "prompt_tps", "predicted_n", "predicted_tps",
                        "wall_s", "finish_reason", "content_chars", "reasoning_chars"]
@@ -72,6 +84,8 @@ class Writer:
     def add(self, row: dict) -> None:
         with self.lock:
             self.rows.append(row)
+            if row["ok"]:
+                self.last_ok = time.time()
             with open(self.path, "a", newline="", encoding="utf-8") as f:
                 csv.DictWriter(f, fieldnames=self.fields).writerow(row)
 
@@ -146,6 +160,8 @@ def main() -> None:
     ap.add_argument("--reasoning-effort", choices=["low", "medium", "high"], help="gpt-oss 系の推論の深さ")
     ap.add_argument("--timeout", type=int, default=600)
     ap.add_argument("--report-min", type=float, default=10, help="画面に集計を出す間隔（分）")
+    ap.add_argument("--give-up-min", type=float, default=15,
+                    help="この分数のあいだ1件も成功しなければ、サーバー停止とみなして打ち切る（0 で打ち切らない）")
     ap.add_argument("--label", default="soak")
     a = ap.parse_args()
 
@@ -172,11 +188,21 @@ def main() -> None:
             if el - last >= a.report_min:
                 report(out.rows, last, a.label)
                 last = el
+            down = (time.time() - out.last_ok) / 60
+            if a.give_up_min and down >= a.give_up_min:
+                print(f"\n!!! {down:.0f} 分間1件も成功していません（最後の成功 "
+                      f"{dt.datetime.fromtimestamp(out.last_ok):%m-%d %H:%M:%S}、/health={health(a.url.rstrip('/'))}）。"
+                      f"サーバーが止まったとみなして打ち切ります。llama-server の画面・ログを確認してください", flush=True)
+                stop.set()
+                break
     except KeyboardInterrupt:
         print("\n中断します（実行中のリクエストの終了を待たずに終了）")
         stop.set()
 
     ok = [r for r in out.rows if r["ok"]]
+    if ok:
+        print(f"\n最後の成功: {dt.datetime.fromtimestamp(out.last_ok):%m-%d %H:%M:%S}"
+              f"（開始から {(out.last_ok - t_start) / 60:.1f} 分）")
     print(f"\n===== 終了 {dt.datetime.now():%H:%M}  計 {len(out.rows)} 件（成功 {len(ok)} / エラー {len(out.rows) - len(ok)}）")
     report(out.rows, 0, a.label + " 全体")
     if ok:
