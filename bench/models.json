@@ -2,21 +2,51 @@
   "server_bin": "~/llama.cpp/build/bin/llama-server",
   "host": "127.0.0.1",
   "port": 8080,
-  "server_common": ["--no-mmproj", "--rpc", "172.18.1.57:50052", "--ctx-checkpoints", "0", "--cache-ram", "0"],
+  "server_common": [
+    "--no-mmproj",
+    "--rpc",
+    "172.18.1.57:50052",
+    "--ctx-checkpoints",
+    "0",
+    "--cache-ram",
+    "0"
+  ],
   "models": [
     {
       "name": "qwen3.6b",
-      "hf": "unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M"
+      "hf": "unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M",
+      "server_extra": {
+        "all": [
+          "-ngl",
+          "99"
+        ]
+      }
     },
     {
       "name": "glm4.7",
-      "hf": "unsloth/GLM-4.7-Flash-GGUF:Q4_K_M"
+      "hf": "unsloth/GLM-4.7-Flash-GGUF:Q4_K_M",
+      "server_extra": {
+        "all": [
+          "-ngl",
+          "99"
+        ]
+      }
     },
     {
       "name": "gpt-oss-120b",
       "hf": "unsloth/gpt-oss-120b-GGUF:Q4_K_M",
-      "server_extra": {"all": ["-t", "8"]},
-      "bench_extra": {"quiz": ["--max-tokens", "4096"]}
+      "server_extra": {
+        "all": [
+          "-t",
+          "8"
+        ]
+      },
+      "bench_extra": {
+        "quiz": [
+          "--max-tokens",
+          "4096"
+        ]
+      }
     }
   ]
 }
