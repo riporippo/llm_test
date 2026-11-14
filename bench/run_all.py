@@ -49,7 +49,7 @@ PHASES = {
         "prefix": "quiz-",
         "server": ["-c", "16384", "-np", "1"],
         "logs": "quiz_set/*/audit.log",
-        "bench": ["--quiz", "--runs", "1"],
+        "bench": ["--quiz", "--runs", "1", "--max-tokens", "4096"],  # 2048 だと長い回答が途中で切れた
     },
     "speed4": {
         "prefix": "research2-",

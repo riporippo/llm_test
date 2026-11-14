@@ -40,7 +40,12 @@ def main():
                 if r["label"].startswith(p):
                     name = r["label"][len(p):]
                     # 調査1の手入力の label（research1-qwen3.6b など）も、そのままの名前で載せる
-                    by.setdefault(name, {}).setdefault(p, []).append(r)
+                    # 同じ条件（ログ・回・何本目）を測り直した行は、新しいほうで置き換える
+                    key = (r["log"], r["run"], r.get("slot", ""))
+                    by.setdefault(name, {}).setdefault(p, collections.OrderedDict())[key] = r
+    for ph in by.values():
+        for p in list(ph):
+            ph[p] = list(ph[p].values())
 
     head = ["モデル", "精度", "正答率", "JSON", "1人 生成", "4人 生成（1人あたり）", "4人 最小", "4人 全員完了"]
     rows = []
