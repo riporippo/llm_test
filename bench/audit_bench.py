@@ -1,4 +1,5 @@
 import argparse
+import concurrent.futures
 import csv
 import datetime
 import json
@@ -9,6 +10,7 @@ import sys
 import requests
 
 BASE_URL = "http://127.0.0.1:8080/"  # llama-server は http（https にすると SSL エラーで繋がらない）
+MAX_TOKENS = 1024  # 1回の生成の上限（--max-tokens で変更）
 TIMEOUT = 1800  # 秒。大きいモデルで長い入力を処理すると時間がかかる
 
 
@@ -43,7 +45,7 @@ def chat(model_name, prompt):
 		],
 		"temperature": 0.7,
 		"stream": False,
-		"max_tokens": 1024,
+		"max_tokens": MAX_TOKENS,
 		"cache_prompt": False,  # 毎回入力を処理し直す（2回目以降だけ速く見えるのを防ぐ）
 		"chat_template_kwargs": {"enable_thinking": False},  # Qwen 系の思考オフ（対応しないモデルでは無視される）
 	}
@@ -51,10 +53,15 @@ def chat(model_name, prompt):
 		res = requests.post(url, headers=headers, json=data, timeout=TIMEOUT)
 	except requests.exceptions.RequestException as e:
 		print(f"Error: {e}")
-		return None, None, None, None, None, None, None
+		return None, None, None, None, None, None, None, None, None
 	if res.status_code == 200:
 		body = res.json()
-		content = body["choices"][0]["message"]["content"]
+		message = body["choices"][0]["message"]
+		content = message.get("content") or ""
+		# finish_reason: stop なら最後まで書けた。length は上限で打ち切られた
+		# reasoning_chars: 推論（thinking）の文字数。回答が空でこれが大きければ、推論だけで上限を使い切っている
+		finish_reason = body["choices"][0].get("finish_reason")
+		reasoning_chars = len(message.get("reasoning_content") or "")
 		# prompt_n: 入力プロンプトのトークン数
 		# prompt_ms: 入力プロンプトの読み込み時間
 		# prompt_per_token_ms: 1トークン当たりの入力プロンプトの読み込み時間
@@ -68,10 +75,10 @@ def chat(model_name, prompt):
 		predicted_n = t["predicted_n"]
 		predicted_ms = t["predicted_ms"]
 		predicted_per_token_ms = t["predicted_per_token_ms"]
-		return content, prompt_n, prompt_ms, prompt_per_token_ms, predicted_n, predicted_ms, predicted_per_token_ms
+		return content, prompt_n, prompt_ms, prompt_per_token_ms, predicted_n, predicted_ms, predicted_per_token_ms, finish_reason, reasoning_chars
 	else:
 		print(f"Error: {res.status_code} - {res.text}")
-		return None, None, None, None, None, None, None
+		return None, None, None, None, None, None, None, None, None
 
 
 def get_model_name():
@@ -107,16 +114,37 @@ def check_answer(content, answer):
 	}
 
 
+def save_csv(path, rows):
+	"""CSV に追記する。列が増えた場合は、既存の行も新しい列に合わせて書き直す"""
+	fields = list(rows[0].keys())
+	old = []
+	if os.path.exists(path):
+		with open(path, newline="", encoding="utf-8") as f:
+			reader = csv.DictReader(f)
+			old = list(reader)
+			for name in reader.fieldnames or []:
+				if name not in fields:
+					fields.append(name)
+	with open(path, "w", newline="", encoding="utf-8") as f:
+		w = csv.DictWriter(f, fieldnames=fields, restval="")
+		w.writeheader()
+		w.writerows(old + rows)
+
+
 def main():
-	global BASE_URL
+	global BASE_URL, MAX_TOKENS
 	parser = argparse.ArgumentParser(description="auditd ログの要約で入力処理・生成の速さを測る")
 	parser.add_argument("log", help="分析させる audit.log（gen_audit_log.py の出力など）")
 	parser.add_argument("--runs", type=int, default=3, help="測定回数（このほかにウォームアップ1回）")
 	parser.add_argument("--label", default="", help="記録用の名前（例: 調査1-gpt-oss-120b）")
 	parser.add_argument("--url", default=BASE_URL)
 	parser.add_argument("--csv", default="audit_bench_results.csv")
+	parser.add_argument("--parallel", type=int, default=1,
+		help="同時に投げる本数（調査2は 4）。llama-server 側も -np をこの数に、-c を 1本分×本数にする")
+	parser.add_argument("--max-tokens", type=int, default=MAX_TOKENS, help="1回の生成の上限")
 	args = parser.parse_args()
 	BASE_URL = args.url.rstrip("/") + "/"
+	MAX_TOKENS = args.max_tokens
 
 	print("Starting benchmark...")
 	print("Health Check")
@@ -139,33 +167,52 @@ def main():
 
 	rows = []
 	for i in range(args.runs):
-		content, prompt_n, prompt_ms, prompt_per_token_ms, predicted_n, predicted_ms, predicted_per_token_ms = chat(model_name, log_text)
-		if content is None:
-			print(f"run{i + 1}: 失敗")
-			continue
-		# 1トークンあたりのミリ秒から、1秒あたりのトークン数（tok/s）にする
-		prompt_tps = 1000 / prompt_per_token_ms if prompt_per_token_ms else 0
-		predicted_tps = 1000 / predicted_per_token_ms if predicted_per_token_ms else 0
-		total_s = (prompt_ms + predicted_ms) / 1000
-		check = check_answer(content, answer)
-		print(f"run{i + 1}: 入力 {prompt_n} tok {prompt_tps:7.1f} tok/s | 生成 {predicted_n} tok {predicted_tps:5.1f} tok/s"
-			f" | 計 {total_s:6.1f} s | {check}")
-		rows.append({
-			"datetime": datetime.datetime.now().isoformat(timespec="seconds"),
-			"label": args.label,
-			"model": model_name,
-			"log": args.log,
-			"run": i + 1,
-			"prompt_n": prompt_n,
-			"prompt_ms": round(prompt_ms, 1),
-			"prompt_tps": round(prompt_tps, 2),
-			"predicted_n": predicted_n,
-			"predicted_ms": round(predicted_ms, 1),
-			"predicted_tps": round(predicted_tps, 2),
-			"total_s": round(total_s, 2),
-			"check": json.dumps(check),
-			"content": content,
-		})
+		# --parallel 本を同時に投げる（1 なら従来どおり1本ずつ）
+		t_start = datetime.datetime.now()
+		with concurrent.futures.ThreadPoolExecutor(max_workers=args.parallel) as ex:
+			results = list(ex.map(lambda _: chat(model_name, log_text), range(args.parallel)))
+		wall_s = (datetime.datetime.now() - t_start).total_seconds()
+		ok_tokens = 0
+		for slot, result in enumerate(results, 1):
+			content, prompt_n, prompt_ms, prompt_per_token_ms, predicted_n, predicted_ms, predicted_per_token_ms, finish_reason, reasoning_chars = result
+			name = f"run{i + 1}" if args.parallel == 1 else f"run{i + 1}-{slot}"
+			if content is None:
+				print(f"{name}: 失敗")
+				continue
+			# 1トークンあたりのミリ秒から、1秒あたりのトークン数（tok/s）にする
+			prompt_tps = 1000 / prompt_per_token_ms if prompt_per_token_ms else 0
+			predicted_tps = 1000 / predicted_per_token_ms if predicted_per_token_ms else 0
+			total_s = (prompt_ms + predicted_ms) / 1000
+			check = check_answer(content, answer)
+			ok_tokens += predicted_n
+			print(f"{name}: 入力 {prompt_n} tok {prompt_tps:7.1f} tok/s | 生成 {predicted_n} tok {predicted_tps:5.1f} tok/s"
+				f" | 計 {total_s:6.1f} s | {finish_reason} | {check}")
+			if not content.strip():
+				print(f"  ! 回答が空です（finish_reason={finish_reason}、推論 {reasoning_chars} 字）。"
+					"推論だけで上限を使い切った可能性があります。--max-tokens を増やすか、推論を切ってください")
+			rows.append({
+				"datetime": datetime.datetime.now().isoformat(timespec="seconds"),
+				"label": args.label,
+				"model": model_name,
+				"log": args.log,
+				"run": i + 1,
+				"prompt_n": prompt_n,
+				"prompt_ms": round(prompt_ms, 1),
+				"prompt_tps": round(prompt_tps, 2),
+				"predicted_n": predicted_n,
+				"predicted_ms": round(predicted_ms, 1),
+				"predicted_tps": round(predicted_tps, 2),
+				"total_s": round(total_s, 2),
+				"check": json.dumps(check),
+				"content": content,
+				"parallel": args.parallel,
+				"slot": slot,
+				"wall_s": round(wall_s, 2),  # 同時に投げた全員が終わるまでの時間（待ち時間を含む）
+				"finish_reason": finish_reason,
+				"reasoning_chars": reasoning_chars,
+			})
+		if args.parallel > 1 and ok_tokens:
+			print(f"  → 全員が終わるまで {wall_s:.1f} s、全体の生成量 {ok_tokens / wall_s:.1f} tok/s（入力処理の時間を含む）")
 
 	if not rows:
 		print("成功した測定がありません")
@@ -173,17 +220,14 @@ def main():
 
 	print("\n===== 結果（中央値）")
 	print(f"入力処理: {statistics.median(r['prompt_tps'] for r in rows):.1f} tok/s")
-	print(f"生成:     {statistics.median(r['predicted_tps'] for r in rows):.1f} tok/s")
+	print(f"生成:     {statistics.median(r['predicted_tps'] for r in rows):.1f} tok/s（1人あたり。最小 {min(r['predicted_tps'] for r in rows):.1f}）")
 	print(f"1回の時間: {statistics.median(r['total_s'] for r in rows):.1f} s")
+	if args.parallel > 1:
+		print(f"{args.parallel} 人全員が終わるまで: {statistics.median(r['wall_s'] for r in rows):.1f} s")
 	print("\n----- 回答（最後の回）")
 	print(rows[-1]["content"])
 
-	new = not os.path.exists(args.csv)
-	with open(args.csv, "a", newline="", encoding="utf-8") as f:
-		w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
-		if new:
-			w.writeheader()
-		w.writerows(rows)
+	save_csv(args.csv, rows)
 	print(f"\nsaved: {args.csv}（{len(rows)} 行追記）")
 
 
