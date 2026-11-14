@@ -1,0 +1,33 @@
+Starting benchmark...
+Health Check
+Health check passed
+model: unsloth/GLM-4.7-Flash-GGUF:Q4_K_M  n_ctx: 32768  mode: summary  temperature: 0.7  think: False  max_tokens: 1024
+warm-up ...
+
+log: out_audit/audit.log（67 行、13,729 文字）
+run1-1: 入力 6125 tok   725.0 tok/s | 生成 84 tok   7.1 tok/s | 計   20.2 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': False, 'sysupd': True}
+run1-2: 入力 6125 tok   998.6 tok/s | 生成 68 tok  10.6 tok/s | 計   12.4 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': False, 'sysupd': True}
+run1-3: 入力 6125 tok  1012.9 tok/s | 生成 109 tok  20.5 tok/s | 計   11.3 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': False, 'sysupd': True}
+run1-4: 入力 6125 tok  1484.7 tok/s | 生成 134 tok   7.6 tok/s | 計   21.7 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': False, 'sysupd': True}
+  → 全員が終わるまで 22.9 s、全体の生成量 17.3 tok/s（入力処理の時間を含む）
+run2-1: 入力 6125 tok   997.6 tok/s | 生成 79 tok   7.1 tok/s | 計   17.1 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run2-2: 入力 6125 tok  1488.7 tok/s | 生成 89 tok   5.5 tok/s | 計   20.1 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': False, 'sysupd': True}
+run2-3: 入力 6125 tok  1001.2 tok/s | 生成 87 tok  12.0 tok/s | 計   13.3 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': False, 'sysupd': True}
+run2-4: 入力 6125 tok  1014.1 tok/s | 生成 89 tok  30.1 tok/s | 計    9.0 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': False, 'sysupd': True}
+  → 全員が終わるまで 20.3 s、全体の生成量 17.0 tok/s（入力処理の時間を含む）
+run3-1: 入力 6125 tok   997.9 tok/s | 生成 90 tok   7.9 tok/s | 計   17.5 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': False, 'sysupd': True}
+run3-2: 入力 6125 tok  1484.9 tok/s | 生成 111 tok   6.4 tok/s | 計   21.3 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run3-3: 入力 6125 tok  1004.4 tok/s | 生成 129 tok  14.5 tok/s | 計   14.9 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run3-4: 入力 6125 tok  1014.7 tok/s | 生成 170 tok  32.7 tok/s | 計   11.2 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': False, 'sysupd': True}
+  → 全員が終わるまで 22.5 s、全体の生成量 22.2 tok/s（入力処理の時間を含む）
+
+===== 結果（中央値）
+入力処理: 1008.6 tok/s
+生成:     9.2 tok/s（1人あたり。最小 5.5）
+1回の時間: 16.0 s
+4 人全員が終わるまで: 22.5 s
+
+----- 回答（最後の回）
+This log depicts a successful brute-force attack followed by a malicious session on a compromised server. An attacker from IP address 203.0.113.45 attempted multiple failed SSH login attempts for the "root" user before successfully authenticating as the "backup" user. During the session, the attacker used `sudo` to execute commands such as `wget` to download a script from an external IP, `chmod` to make it executable, and `bash` to run it. The script executed malicious commands, including creating a new user named "sysupd" with UID 0 (root privileges), modifying `/etc/passwd` and `/etc/shadow`, and creating a cron job in `/etc/cron.d/sysupd`. Finally, the attacker deleted their history file (`/home/backup/.bash_history`) before terminating the session.
+
+saved: audit_bench_results.csv（12 行追記）

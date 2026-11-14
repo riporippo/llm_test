@@ -1,0 +1,55 @@
+Starting benchmark...
+Health Check
+Health check passed
+model: unsloth/gpt-oss-120b-GGUF:Q4_K_M  n_ctx: 32768  mode: summary  temperature: 0.7  think: False  max_tokens: 1024
+warm-up ...
+
+log: out_audit/audit.log（67 行、13,729 文字）
+run1-1: 入力 5707 tok    71.3 tok/s | 生成 714 tok   4.0 tok/s | 計  259.3 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run1-2: 入力 5707 tok   133.9 tok/s | 生成 620 tok   6.0 tok/s | 計  145.8 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run1-3: 入力 5707 tok   142.8 tok/s | 生成 797 tok   3.8 tok/s | 計  251.9 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run1-4: 入力 5707 tok   106.3 tok/s | 生成 641 tok   4.8 tok/s | 計  187.4 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+  → 全員が終わるまで 264.8 s、全体の生成量 10.5 tok/s（入力処理の時間を含む）
+run2-1: 入力 5707 tok   103.4 tok/s | 生成 669 tok   4.8 tok/s | 計  194.5 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run2-2: 入力 5707 tok   101.0 tok/s | 生成 495 tok   3.4 tok/s | 計  203.9 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run2-3: 入力 5707 tok   139.4 tok/s | 生成 689 tok   3.1 tok/s | 計  262.9 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run2-4: 入力 5707 tok   135.6 tok/s | 生成 684 tok   6.0 tok/s | 計  156.1 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+  → 全員が終わるまで 263.2 s、全体の生成量 9.6 tok/s（入力処理の時間を含む）
+run3-1: 入力 5707 tok   134.6 tok/s | 生成 708 tok   6.3 tok/s | 計  155.2 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run3-2: 入力 5707 tok   103.3 tok/s | 生成 622 tok   4.8 tok/s | 計  184.1 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run3-3: 入力 5707 tok   101.8 tok/s | 生成 695 tok   3.9 tok/s | 計  235.0 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run3-4: 入力 5707 tok   141.8 tok/s | 生成 610 tok   2.9 tok/s | 計  247.4 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+  → 全員が終わるまで 261.4 s、全体の生成量 10.1 tok/s（入力処理の時間を含む）
+
+===== 結果（中央値）
+入力処理: 120.1 tok/s
+生成:     4.4 tok/s（1人あたり。最小 2.9）
+1回の時間: 199.2 s
+4 人全員が終わるまで: 263.2 s
+
+----- 回答（最後の回）
+**Summary of the audit log**
+
+- An external host (203.0.113.45) tried several SSH logins as **root** – all failed.  
+- The same IP succeeded in logging in as the low‑privilege user **backup** (session 2).  
+
+- Once logged in, *backup* executed a few harmless commands (`id`, `uname`, `cat /etc/passwd`) and then used **sudo** to:
+
+  1. **Download** a script from a malicious server (http://198.51.100.23/upd.sh) into `/tmp/.upd.sh` with `wget`.  
+  2. **Make it executable** (`chmod +x /tmp/.upd.sh`).  
+  3. **Run** the script (`bash /tmp/.upd.sh`).  
+
+- The script (or the attacker) created a new account **sysupd** with UID 0 (root) via `useradd -o -u 0 -g 0 -M -d /root -s /bin/bash sysupd`.  
+
+- Persistence was added by:
+
+  * Creating a cron file `/etc/cron.d/sysupd`.  
+  * Accessing `/root/.ssh/authorized_keys` (likely to add a key).  
+
+- An attempted outbound connection to 198.51.100.23 on port 4444 (shown by a failed `connect` syscall) indicates the script tried to reach a C2 server.  
+
+- Finally, the attacker removed evidence by deleting `/home/backup/.bash_history` and closed the SSH session.
+
+**Overall picture:** After a brute‑force SSH attempt, the attacker compromised the system via the `backup` account, escalated to root, installed a back‑door (downloaded script, created a root‑owned user, added a cron job, possibly added an SSH key), and cleaned up traces. This is a classic post‑login privilege‑escalation and persistence chain.
+
+saved: audit_bench_results.csv（12 行追記）

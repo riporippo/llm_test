@@ -1,0 +1,59 @@
+Starting benchmark...
+Health Check
+Health check passed
+model: unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M  n_ctx: 16384  mode: quiz  temperature: 0.0  think: False  max_tokens: 2048
+warm-up ...
+
+log: quiz_set/clean1/audit.log（34 行、7,776 文字）
+run1: 入力 3975 tok  1759.6 tok/s | 生成 553 tok  68.1 tok/s | 計   10.4 s | stop | 3/3 点
+
+log: quiz_set/clean2/audit.log（74 行、14,980 文字）
+run1: 入力 7977 tok  1708.3 tok/s | 生成 1152 tok  67.4 tok/s | 計   21.7 s | stop | 3/3 点
+
+log: quiz_set/inc1/audit.log（71 行、14,692 文字）
+run1: 入力 8263 tok  1711.9 tok/s | 生成 1693 tok  67.2 tok/s | 計   30.0 s | stop | 10/11 点  ×: 侵入時刻（±60秒）
+
+log: quiz_set/inc2/audit.log（69 行、14,240 文字）
+run1: 入力 8083 tok  1709.7 tok/s | 生成 1778 tok  67.3 tok/s | 計   31.1 s | stop | 10/11 点  ×: 侵入時刻（±60秒）
+
+log: quiz_set/inc3/audit.log（72 行、14,910 文字）
+run1: 入力 8396 tok  1698.5 tok/s | 生成 1981 tok  67.2 tok/s | 計   34.4 s | stop | 10/11 点  ×: 侵入時刻（±60秒）
+
+log: quiz_set/inc4/audit.log（72 行、14,907 文字）
+run1: 入力 8412 tok  1704.2 tok/s | 生成 2048 tok  66.9 tok/s | 計   35.5 s | length | 9/11 点  ×: 侵害ありと判定、侵入時刻（±60秒）  （JSON なし）
+  ! 生成が上限で打ち切られています。--max-tokens を増やしてください
+
+log: quiz_set/inc5/audit.log（66 行、13,550 文字）
+run1: 入力 7802 tok  1719.6 tok/s | 生成 2048 tok  67.3 tok/s | 計   35.0 s | length | 9/11 点  ×: 侵害ありと判定、侵入時刻（±60秒）  （JSON なし）
+  ! 生成が上限で打ち切られています。--max-tokens を増やしてください
+
+===== 結果（中央値）
+入力処理: 1709.7 tok/s
+生成:     67.3 tok/s（1人あたり。最小 66.9）
+1回の時間: 31.1 s
+
+===== 精度
+quiz_set/clean1/audit.log: 3/3 点（1 回）
+quiz_set/clean2/audit.log: 3/3 点（1 回）
+quiz_set/inc1/audit.log: 10/11 点（1 回）
+quiz_set/inc2/audit.log: 10/11 点（1 回）
+quiz_set/inc3/audit.log: 10/11 点（1 回）
+quiz_set/inc4/audit.log: 9/11 点（1 回）
+quiz_set/inc5/audit.log: 9/11 点（1 回）
+合計: 54/61 点（88.5%）  JSON を出力できた回: 5/7
+  侵害なしと判定: 2/2
+  攻撃元を挙げていない: 2/2
+  仕掛けを挙げていない: 2/2
+  侵害ありと判定: 3/5
+  攻撃元 IP: 5/5
+  アカウント: 5/5
+  侵入時刻（±60秒）: 0/5
+  接続先 IP: 5/5
+  接続先ポート: 5/5
+  スクリプトの取得・実行: 5/5
+  UID 0 の利用者の追加: 5/5
+  cron の仕掛け: 5/5
+  SSH 鍵の仕掛け: 5/5
+  痕跡の消去: 5/5
+
+saved: audit_bench_results.csv（7 行追記）
