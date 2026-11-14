@@ -31,6 +31,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("csv", nargs="?", default="audit_bench_results.csv")
     ap.add_argument("--md", action="store_true", help="Markdown の表で出す")
+    ap.add_argument("--min-tps", type=float, default=10.0,
+                    help="速度の合格基準：4人同時での1人あたりの生成の最小値（tok/s）")
     a = ap.parse_args()
 
     by = collections.OrderedDict()  # 名前 → 段階 → 行
@@ -47,7 +49,7 @@ def main():
         for p in list(ph):
             ph[p] = list(ph[p].values())
 
-    head = ["モデル", "精度", "正答率", "JSON", "1人 生成", "4人 生成（1人あたり）", "4人 最小", "4人 全員完了"]
+    head = ["モデル", "精度", "正答率", "JSON", "1人 生成", "4人 生成（1人あたり）", "4人 最小", "4人 全員完了", "速度の合否"]
     rows = []
     for name, ph in by.items():
         q = [r for r in ph.get("quiz-", []) if r.get("score") not in ("", None)]
@@ -65,6 +67,8 @@ def main():
             fmt(med(g4), 1, " tok/s"),
             fmt(min(g4) if g4 else None, 1, " tok/s"),
             fmt(med([float(r["wall_s"]) for r in s4]), 0, " 秒"),
+            # 合格基準：4人同時のとき、1人あたりの生成の最小値が MIN_TPS 以上
+            "―" if not g4 else ("○" if min(g4) >= a.min_tps else "×"),
         ])
     if not rows:
         print("quiz- / research1- / research2- で始まる label の行がありません")

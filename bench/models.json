@@ -41,6 +41,56 @@
           "8"
         ]
       }
+    },
+    {
+      "name": "gemma4-26b-a4b",
+      "hf": "unsloth/gemma-4-26B-A4B-it-GGUF:UD-Q4_K_M",
+      "server_extra": {
+        "all": [
+          "-ngl",
+          "99"
+        ]
+      }
+    },
+    {
+      "name": "lfm2.5-24b-a2b",
+      "hf": "LiquidAI/LFM2.5-24B-A2B-GGUF:Q4_K_M",
+      "server_extra": {
+        "all": [
+          "-ngl",
+          "99"
+        ]
+      }
+    },
+    {
+      "name": "gpt-oss-20b",
+      "hf": "unsloth/gpt-oss-20b-GGUF:Q4_K_M",
+      "server_extra": {
+        "all": [
+          "-ngl",
+          "99"
+        ]
+      }
+    },
+    {
+      "name": "gemma4-12b",
+      "hf": "unsloth/gemma-4-12b-it-GGUF:Q4_K_M",
+      "server_extra": {
+        "all": [
+          "-ngl",
+          "99"
+        ]
+      }
+    },
+    {
+      "name": "qwen3.5-9b",
+      "hf": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+      "server_extra": {
+        "all": [
+          "-ngl",
+          "99"
+        ]
+      }
     }
   ]
 }
