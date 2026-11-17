@@ -72,6 +72,7 @@ def main():
         ])
     if not rows:
         print("quiz- / research1- / research2- で始まる label の行がありません")
+        agent_report("agent_bench_results.csv", a.md, a.min_tps)
         return
     if a.md:
         print("| " + " | ".join(head) + " |")
@@ -84,6 +85,7 @@ def main():
 
     # 精度の項目ごとの内訳（どこで間違えたか）
     import json
+    agent_report("agent_bench_results.csv", a.md, a.min_tps)
     print("\n項目ごとの正答数" + ("（精度）" if not a.md else ""))
     for name, ph in by.items():
         items = collections.OrderedDict()
@@ -95,6 +97,42 @@ def main():
         wrong = [f"{k} {sum(v)}/{len(v)}" for k, v in items.items() if sum(v) < len(v)]
         if items:
             print(f"- {name}: " + ("全問正解" if not wrong else "、".join(wrong)))
+
+
+def agent_report(path, md, min_tps):
+    """agent_bench_results.csv（エージェントの測定）をモデルごとにまとめる"""
+    import os
+    if not os.path.exists(path):
+        return
+    by = collections.OrderedDict()
+    with open(path, newline="", encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            by.setdefault(r["label"], collections.OrderedDict())[(r["log"], r["run"])] = r  # 測り直しは新しいほうで置き換え
+    head = ["label", "精度", "正答率", "提出できた", "道具/問", "形式の誤り", "1問の時間", "生成 中央値", "生成 最小", "速度の合否"]
+    rows = []
+    for label, d in by.items():
+        rs = list(d.values())
+        sc, mx = sum(int(r["score"]) for r in rs), sum(int(r["score_max"]) for r in rs)
+        calls = sum(int(r["tool_calls"]) for r in rs)
+        bad = sum(int(r["bad_calls"]) for r in rs)
+        tps = [float(r["gen_tps"]) for r in rs if float(r["gen_tps"] or 0) > 0]
+        rows.append([
+            label, f"{sc}/{mx}", fmt(100 * sc / mx, 1, "%") if mx else "―",
+            f"{sum(1 for r in rs if r['outcome'] == 'submitted')}/{len(rs)}",
+            fmt(calls / len(rs), 1), fmt(100 * bad / calls, 1, "%") if calls else "―",
+            fmt(med([float(r["wall_s"]) for r in rs]), 0, " 秒"),
+            fmt(med(tps), 1, " tok/s"), fmt(min(tps) if tps else None, 1, " tok/s"),
+            ("○" if tps and min(tps) >= min_tps else "×") if label.startswith(("agent4-", "cmp-")) or "agent4" in label else "―",
+        ])
+    print("\nエージェント（agent_bench_results.csv）")
+    if md:
+        print("| " + " | ".join(head) + " |")
+        print("|" + "---|" * len(head))
+        for r in rows:
+            print("| " + " | ".join(r) + " |")
+    else:
+        for r in [head] + rows:
+            print("  ".join(f"{c:<30s}" if i == 0 else f"{c:>12s}" for i, c in enumerate(r)))
 
 
 if __name__ == "__main__":

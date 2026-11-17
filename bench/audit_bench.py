@@ -151,8 +151,8 @@ def score_answer(content, answer):
 	return sum(detail.values()), len(detail), detail, json_ok
 
 
-def chat(model_name, prompt, question=None):
-	url = f"{BASE_URL}v1/chat/completions"
+def chat(model_name, prompt, question=None, base=None):
+	url = f"{base or BASE_URL}v1/chat/completions"
 	headers = {"Content-Type": "application/json"}
 	if question is None:
 		# 要約モード（速度の測定用）
@@ -293,24 +293,29 @@ def main():
 	parser.add_argument("--temperature", type=float, help="既定は要約モード 0.7、採点モード 0")
 	parser.add_argument("--runs", type=int, default=3, help="測定回数（このほかにウォームアップ1回）")
 	parser.add_argument("--label", default="", help="記録用の名前（例: 調査1-gpt-oss-120b）")
-	parser.add_argument("--url", default=BASE_URL)
+	parser.add_argument("--url", action="append",
+		help="llama-server の URL（既定 http://127.0.0.1:8080）。複数指定すると、同時に投げる本数を順に振り分ける")
 	parser.add_argument("--csv", default="audit_bench_results.csv")
 	parser.add_argument("--parallel", type=int, default=1,
 		help="同時に投げる本数（調査2は 4）。llama-server 側も -np をこの数に、-c を 1本分×本数にする")
 	parser.add_argument("--max-tokens", type=int, help="1回の生成の上限（既定は要約モード 1024、採点モード 2048）")
 	args = parser.parse_args()
-	BASE_URL = args.url.rstrip("/") + "/"
+	urls = [u.rstrip("/") + "/" for u in (args.url or [BASE_URL])]
+	BASE_URL = urls[0]
 	MAX_TOKENS = args.max_tokens or (2048 if args.quiz else MAX_TOKENS)
 	TEMPERATURE = args.temperature if args.temperature is not None else (0.0 if args.quiz else TEMPERATURE)
 	THINK = args.think
 
 	print("Starting benchmark...")
 	print("Health Check")
-	if health_check():
-		print("Health check passed")
-	else:
-		print("Health check failed")
-		sys.exit(1)
+	for u in urls:
+		BASE_URL = u
+		if health_check():
+			print(f"Health check passed: {u}")
+		else:
+			print(f"Health check failed: {u}")
+			sys.exit(1)
+	BASE_URL = urls[0]
 
 	model_name = get_model_name()
 	n_ctx = get_n_ctx()
@@ -319,7 +324,8 @@ def main():
 
 	# ウォームアップ（1回目は GPU の準備などで遅くなりやすいので捨てる）
 	print("warm-up ...")
-	chat(model_name, "type=DAEMON_START msg=audit(0.000:1): op=start res=success")
+	for u in urls:
+		chat(model_name, "type=DAEMON_START msg=audit(0.000:1): op=start res=success", base=u)
 
 	rows = []
 	for log_path in args.log:
@@ -343,7 +349,7 @@ def main():
 			# --parallel 本を同時に投げる（1 なら従来どおり1本ずつ）
 			t_start = datetime.datetime.now()
 			with concurrent.futures.ThreadPoolExecutor(max_workers=args.parallel) as ex:
-				results = list(ex.map(lambda _: chat(model_name, log_text, question), range(args.parallel)))
+				results = list(ex.map(lambda k: chat(model_name, log_text, question, urls[k % len(urls)]), range(args.parallel)))
 			wall_s = (datetime.datetime.now() - t_start).total_seconds()
 			ok_tokens = 0
 			for slot, result in enumerate(results, 1):
@@ -389,6 +395,7 @@ def main():
 					"content": content,
 					"parallel": args.parallel,
 					"slot": slot,
+					"url": urls[(slot - 1) % len(urls)],
 					"wall_s": round(wall_s, 2),  # 同時に投げた全員が終わるまでの時間（待ち時間を含む）
 					"finish_reason": finish_reason,
 					"reasoning_chars": reasoning_chars,

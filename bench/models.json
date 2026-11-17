@@ -91,6 +91,38 @@
           "99"
         ]
       }
+    },
+    {
+      "name": "cmp-gpt-oss-20b-rpc",
+      "hf": "unsloth/gpt-oss-20b-GGUF:Q4_K_M",
+      "server_extra": {
+        "all": [
+          "-ngl",
+          "99"
+        ]
+      },
+      "phases": [
+        "speed4",
+        "agent4"
+      ],
+      "note": "RPC 比較：2台の GPU に層を分ける（今の構成）"
+    },
+    {
+      "name": "cmp-gpt-oss-20b-head",
+      "hf": "unsloth/gpt-oss-20b-GGUF:Q4_K_M",
+      "server_extra": {
+        "all": [
+          "-ngl",
+          "99",
+          "--device",
+          "CUDA0"
+        ]
+      },
+      "phases": [
+        "speed4",
+        "agent4"
+      ],
+      "note": "RPC 比較：Head の GPU（CUDA0）だけ。デバイス名は llama-server --list-devices で確認"
     }
   ]
 }
