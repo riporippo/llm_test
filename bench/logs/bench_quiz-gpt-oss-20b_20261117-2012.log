@@ -1,0 +1,62 @@
+Starting benchmark...
+Health Check
+Health check passed: http://127.0.0.1:8080/
+model: unsloth/gpt-oss-20b-GGUF:Q4_K_M  n_ctx: 16384  mode: quiz  temperature: 0.0  think: False  max_tokens: 4096
+warm-up ...
+
+log: quiz_set/clean1/audit.log（34 行、7,776 文字）
+run1: 入力 3384 tok  1472.3 tok/s | 生成 648 tok  81.8 tok/s | 計   10.2 s | stop | 2/3 点  ×: 攻撃元を挙げていない
+
+log: quiz_set/clean2/audit.log（74 行、14,980 文字）
+run1: 入力 6396 tok  1444.6 tok/s | 生成 3311 tok  80.0 tok/s | 計   45.8 s | stop | 1/3 点  ×: 侵害なしと判定、攻撃元を挙げていない
+
+log: quiz_set/inc1/audit.log（71 行、14,692 文字）
+run1: 入力 6556 tok  1432.3 tok/s | 生成 4096 tok  80.4 tok/s | 計   55.5 s | length | 0/11 点  ×: 侵害ありと判定、攻撃元 IP、アカウント、侵入時刻（±60秒）、接続先 IP、接続先ポート、スクリプトの取得・実行、UID 0 の利用者の追加、cron の仕掛け、SSH 鍵の仕掛け、痕跡の消去  （JSON なし）
+  ! 回答が空です（finish_reason=length、推論 10358 字）。推論だけで上限を使い切った可能性があります。--max-tokens を増やすか、推論を切ってください
+
+log: quiz_set/inc2/audit.log（69 行、14,240 文字）
+run1: 入力 6458 tok  1451.7 tok/s | 生成 4096 tok  80.3 tok/s | 計   55.5 s | length | 0/11 点  ×: 侵害ありと判定、攻撃元 IP、アカウント、侵入時刻（±60秒）、接続先 IP、接続先ポート、スクリプトの取得・実行、UID 0 の利用者の追加、cron の仕掛け、SSH 鍵の仕掛け、痕跡の消去  （JSON なし）
+  ! 回答が空です（finish_reason=length、推論 11420 字）。推論だけで上限を使い切った可能性があります。--max-tokens を増やすか、推論を切ってください
+
+log: quiz_set/inc3/audit.log（72 行、14,910 文字）
+run1: 入力 6662 tok  1426.7 tok/s | 生成 4096 tok  80.4 tok/s | 計   55.6 s | length | 0/11 点  ×: 侵害ありと判定、攻撃元 IP、アカウント、侵入時刻（±60秒）、接続先 IP、接続先ポート、スクリプトの取得・実行、UID 0 の利用者の追加、cron の仕掛け、SSH 鍵の仕掛け、痕跡の消去  （JSON なし）
+  ! 回答が空です（finish_reason=length、推論 10317 字）。推論だけで上限を使い切った可能性があります。--max-tokens を増やすか、推論を切ってください
+
+log: quiz_set/inc4/audit.log（72 行、14,907 文字）
+run1: 入力 6654 tok  1445.2 tok/s | 生成 4096 tok  80.6 tok/s | 計   55.4 s | length | 7/11 点  ×: 侵害ありと判定、侵入時刻（±60秒）、接続先ポート、SSH 鍵の仕掛け  （JSON なし）
+  ! 生成が上限で打ち切られています。--max-tokens を増やしてください
+
+log: quiz_set/inc5/audit.log（66 行、13,550 文字）
+run1: 入力 6181 tok  1451.6 tok/s | 生成 4096 tok  80.6 tok/s | 計   55.1 s | length | 0/11 点  ×: 侵害ありと判定、攻撃元 IP、アカウント、侵入時刻（±60秒）、接続先 IP、接続先ポート、スクリプトの取得・実行、UID 0 の利用者の追加、cron の仕掛け、SSH 鍵の仕掛け、痕跡の消去  （JSON なし）
+  ! 回答が空です（finish_reason=length、推論 11984 字）。推論だけで上限を使い切った可能性があります。--max-tokens を増やすか、推論を切ってください
+
+===== 結果（中央値）
+入力処理: 1445.2 tok/s
+生成:     80.4 tok/s（1人あたり。最小 80.0）
+1回の時間: 55.4 s
+
+===== 精度
+quiz_set/clean1/audit.log: 2/3 点（1 回）
+quiz_set/clean2/audit.log: 1/3 点（1 回）
+quiz_set/inc1/audit.log: 0/11 点（1 回）
+quiz_set/inc2/audit.log: 0/11 点（1 回）
+quiz_set/inc3/audit.log: 0/11 点（1 回）
+quiz_set/inc4/audit.log: 7/11 点（1 回）
+quiz_set/inc5/audit.log: 0/11 点（1 回）
+合計: 10/61 点（16.4%）  JSON を出力できた回: 2/7
+  侵害なしと判定: 1/2
+  攻撃元を挙げていない: 0/2
+  仕掛けを挙げていない: 2/2
+  侵害ありと判定: 0/5
+  攻撃元 IP: 1/5
+  アカウント: 1/5
+  侵入時刻（±60秒）: 0/5
+  接続先 IP: 1/5
+  接続先ポート: 0/5
+  スクリプトの取得・実行: 1/5
+  UID 0 の利用者の追加: 1/5
+  cron の仕掛け: 1/5
+  SSH 鍵の仕掛け: 0/5
+  痕跡の消去: 1/5
+
+saved: audit_bench_results.csv（7 行追記）

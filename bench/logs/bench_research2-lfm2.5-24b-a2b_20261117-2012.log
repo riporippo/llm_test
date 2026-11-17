@@ -1,0 +1,45 @@
+Starting benchmark...
+Health Check
+Health check passed: http://127.0.0.1:8080/
+model: LiquidAI/LFM2.5-24B-A2B-GGUF:Q4_K_M  n_ctx: 32768  mode: summary  temperature: 0.7  think: False  max_tokens: 1024
+warm-up ...
+
+log: out_audit/audit.log（67 行、13,729 文字）
+run1-1: 入力 6031 tok   753.4 tok/s | 生成 1024 tok  20.6 tok/s | 計   57.6 s | length | {'attacker_ip': False, 'account': False, 'c2_ip': False, 'sysupd': False}
+  ! 回答が空です（finish_reason=length、推論 3733 字）。推論だけで上限を使い切った可能性があります。--max-tokens を増やすか、推論を切ってください
+run1-2: 入力 6031 tok  1075.0 tok/s | 生成 1024 tok  22.5 tok/s | 計   51.2 s | length | {'attacker_ip': False, 'account': False, 'c2_ip': False, 'sysupd': False}
+  ! 回答が空です（finish_reason=length、推論 3790 字）。推論だけで上限を使い切った可能性があります。--max-tokens を増やすか、推論を切ってください
+run1-3: 入力 6031 tok  1537.0 tok/s | 生成 1024 tok  19.5 tok/s | 計   56.3 s | length | {'attacker_ip': False, 'account': False, 'c2_ip': False, 'sysupd': False}
+  ! 回答が空です（finish_reason=length、推論 3329 字）。推論だけで上限を使い切った可能性があります。--max-tokens を増やすか、推論を切ってください
+run1-4: 入力 6031 tok  1134.0 tok/s | 生成 1024 tok  24.5 tok/s | 計   47.1 s | length | {'attacker_ip': False, 'account': False, 'c2_ip': False, 'sysupd': False}
+  ! 回答が空です（finish_reason=length、推論 3993 字）。推論だけで上限を使い切った可能性があります。--max-tokens を増やすか、推論を切ってください
+  → 全員が終わるまで 57.8 s、全体の生成量 70.9 tok/s（入力処理の時間を含む）
+run2-1: 入力 6031 tok  1500.9 tok/s | 生成 1024 tok  19.0 tok/s | 計   57.8 s | length | {'attacker_ip': False, 'account': False, 'c2_ip': False, 'sysupd': False}
+  ! 回答が空です（finish_reason=length、推論 3514 字）。推論だけで上限を使い切った可能性があります。--max-tokens を増やすか、推論を切ってください
+run2-2: 入力 6031 tok  1094.7 tok/s | 生成 1024 tok  20.5 tok/s | 計   55.3 s | length | {'attacker_ip': False, 'account': False, 'c2_ip': False, 'sysupd': False}
+  ! 回答が空です（finish_reason=length、推論 4208 字）。推論だけで上限を使い切った可能性があります。--max-tokens を増やすか、推論を切ってください
+run2-3: 入力 6031 tok  1134.3 tok/s | 生成 1024 tok  24.3 tok/s | 計   47.3 s | length | {'attacker_ip': False, 'account': False, 'c2_ip': False, 'sysupd': False}
+  ! 回答が空です（finish_reason=length、推論 3725 字）。推論だけで上限を使い切った可能性があります。--max-tokens を増やすか、推論を切ってください
+run2-4: 入力 6031 tok  1084.7 tok/s | 生成 1024 tok  22.3 tok/s | 計   51.3 s | length | {'attacker_ip': False, 'account': False, 'c2_ip': False, 'sysupd': False}
+  ! 回答が空です（finish_reason=length、推論 3994 字）。推論だけで上限を使い切った可能性があります。--max-tokens を増やすか、推論を切ってください
+  → 全員が終わるまで 58.1 s、全体の生成量 70.5 tok/s（入力処理の時間を含む）
+run3-1: 入力 6031 tok  1139.7 tok/s | 生成 1024 tok  24.3 tok/s | 計   47.4 s | length | {'attacker_ip': False, 'account': False, 'c2_ip': False, 'sysupd': False}
+  ! 回答が空です（finish_reason=length、推論 4321 字）。推論だけで上限を使い切った可能性があります。--max-tokens を増やすか、推論を切ってください
+run3-2: 入力 6031 tok  1094.0 tok/s | 生成 1024 tok  20.5 tok/s | 計   55.4 s | length | {'attacker_ip': False, 'account': False, 'c2_ip': False, 'sysupd': False}
+  ! 回答が空です（finish_reason=length、推論 4048 字）。推論だけで上限を使い切った可能性があります。--max-tokens を増やすか、推論を切ってください
+run3-3: 入力 6031 tok  1512.3 tok/s | 生成 1024 tok  19.0 tok/s | 計   57.8 s | length | {'attacker_ip': False, 'account': False, 'c2_ip': False, 'sysupd': False}
+  ! 回答が空です（finish_reason=length、推論 4173 字）。推論だけで上限を使い切った可能性があります。--max-tokens を増やすか、推論を切ってください
+run3-4: 入力 6031 tok  1086.5 tok/s | 生成 1024 tok  22.3 tok/s | 計   51.4 s | length | {'attacker_ip': False, 'account': False, 'c2_ip': False, 'sysupd': False}
+  ! 回答が空です（finish_reason=length、推論 3316 字）。推論だけで上限を使い切った可能性があります。--max-tokens を増やすか、推論を切ってください
+  → 全員が終わるまで 58.1 s、全体の生成量 70.4 tok/s（入力処理の時間を含む）
+
+===== 結果（中央値）
+入力処理: 1114.4 tok/s
+生成:     21.5 tok/s（1人あたり。最小 19.0）
+1回の時間: 53.4 s
+4 人全員が終わるまで: 58.1 s
+
+----- 回答（最後の回）
+
+
+saved: audit_bench_results.csv（12 行追記）

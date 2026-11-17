@@ -1,0 +1,34 @@
+Starting benchmark...
+Health Check
+Health check passed: http://127.0.0.1:8080/
+model: unsloth/Qwen3.5-9B-GGUF:Q4_K_M  n_ctx: 32768  mode: summary  temperature: 0.7  think: False  max_tokens: 1024
+warm-up ...
+
+log: out_audit/audit.log（67 行、13,729 文字）
+  ! 入力 約7380 + 生成上限 1024 トークンが、1本あたりの文脈（8192）を超えます。llama-server の -c を大きくするか、ログを短くしてください
+run1-1: 入力 7434 tok   520.1 tok/s | 生成 119 tok   7.6 tok/s | 計   29.8 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run1-2: 入力 7434 tok  1056.1 tok/s | 生成 137 tok   6.2 tok/s | 計   29.1 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': False, 'sysupd': True}
+run1-3: 入力 7434 tok   886.7 tok/s | 生成 165 tok  31.4 tok/s | 計   13.6 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run1-4: 入力 7434 tok  1005.1 tok/s | 生成 131 tok  11.9 tok/s | 計   18.3 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': False, 'sysupd': True}
+  → 全員が終わるまで 31.6 s、全体の生成量 17.5 tok/s（入力処理の時間を含む）
+run2-1: 入力 7434 tok  1061.6 tok/s | 生成 124 tok   5.4 tok/s | 計   29.9 s | stop | {'attacker_ip': False, 'account': True, 'c2_ip': False, 'sysupd': True}
+run2-2: 入力 7434 tok  1002.2 tok/s | 生成 131 tok  12.5 tok/s | 計   17.8 s | stop | {'attacker_ip': False, 'account': True, 'c2_ip': True, 'sysupd': True}
+run2-3: 入力 7434 tok   802.7 tok/s | 生成 127 tok   8.0 tok/s | 計   25.0 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run2-4: 入力 7434 tok   888.2 tok/s | 生成 143 tok  33.2 tok/s | 計   12.6 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': False, 'sysupd': True}
+  → 全員が終わるまで 30.7 s、全体の生成量 17.1 tok/s（入力処理の時間を含む）
+run3-1: 入力 7434 tok   803.4 tok/s | 生成 142 tok   8.7 tok/s | 計   25.5 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run3-2: 入力 7434 tok  1008.6 tok/s | 生成 144 tok  13.2 tok/s | 計   18.2 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run3-3: 入力 7434 tok  1058.7 tok/s | 生成 141 tok   6.0 tok/s | 計   30.4 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run3-4: 入力 7434 tok   891.1 tok/s | 生成 139 tok  31.7 tok/s | 計   12.7 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+  → 全員が終わるまで 30.7 s、全体の生成量 18.4 tok/s（入力処理の時間を含む）
+
+===== 結果（中央値）
+入力処理: 946.7 tok/s
+生成:     10.3 tok/s（1人あたり。最小 5.4）
+1回の時間: 21.6 s
+4 人全員が終わるまで: 30.8 s
+
+----- 回答（最後の回）
+The audit log reveals a successful SSH login by the user "backup" from IP 203.0.113.45 after several failed root authentication attempts. Once logged in, the user executed a series of commands via `sudo` that appear to constitute a remote compromise: they downloaded a script (`upd.sh`) from the suspicious IP `198.51.100.23`, made it executable, and then used it to create a new system user named "sysupd" with root privileges, generate an SSH key, and install a cron job for persistent access. Finally, the user deleted their bash history to cover tracks before logging out.
+
+saved: audit_bench_results.csv（12 行追記）

