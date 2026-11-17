@@ -57,6 +57,24 @@ PHASES = {
         "logs": "out_audit/audit.log",
         "bench": ["--parallel", "4", "--runs", "3"],
     },
+    # エージェント：道具を使って quiz_set を解かせる（agent_bench.py）。
+    # 前回までの入力をキャッシュから読むのがエージェントの使い方なので、キャッシュを切るオプションを外す
+    "agent": {
+        "prefix": "agent-",
+        "server": ["-c", "32768", "-np", "1", "--jinja"],
+        "drop_common": ["--ctx-checkpoints", "--cache-ram"],
+        "logs": "quiz_set/*/audit.log",
+        "script": "agent_bench.py",
+        "bench": ["--runs", "2"],
+    },
+    "agent4": {
+        "prefix": "agent4-",
+        "server": ["-c", "131072", "-np", "4", "--jinja"],
+        "drop_common": ["--ctx-checkpoints", "--cache-ram"],
+        "logs": "quiz_set/*/audit.log",
+        "script": "agent_bench.py",
+        "bench": ["--runs", "2", "--parallel", "4"],
+    },
     "speed1": {
         "prefix": "research1-",
         "server": ["-c", "8192", "-np", "1"],
@@ -64,6 +82,20 @@ PHASES = {
         "bench": ["--runs", "3"],
     },
 }
+
+
+def drop_options(opts: list, names: list) -> list:
+    """opts から、names にあるオプションとその値（次の要素）を取り除く"""
+    out, skip = [], False
+    for o in opts:
+        if skip:
+            skip = False
+            continue
+        if o in names:
+            skip = True
+            continue
+        out.append(o)
+    return out
 
 
 def now() -> str:
@@ -136,7 +168,8 @@ def stop_server(proc: subprocess.Popen, base: str) -> None:
 def main() -> None:
     ap = argparse.ArgumentParser(description="モデルごとに llama-server を起動して測定する")
     ap.add_argument("--models", default=os.path.join(HERE, "models.json"))
-    ap.add_argument("--phases", default="quiz,speed4", help="実行する段階（カンマ区切り）: " + ", ".join(PHASES))
+    ap.add_argument("--phases", default="quiz,speed4", help="実行する段階（カンマ区切り）: " + ", ".join(PHASES)
+                    + "。agent / agent4 は agent_bench_results.csv に記録する")
     ap.add_argument("--only", help="この名前のモデルだけ（カンマ区切り）")
     ap.add_argument("--force", action="store_true", help="測定済みでもやり直す")
     ap.add_argument("--dry-run", action="store_true", help="コマンドを表示するだけで実行しない")
@@ -173,11 +206,12 @@ def main() -> None:
         if health(base) != "down":
             sys.exit(f"{base} で既に何かが動いています。先に止めてください（別の llama-server が残っていませんか）")
 
-    done = set() if a.force else done_labels(a.csv)
+    done = set() if a.force else (done_labels(a.csv) | done_labels("agent_bench_results.csv"))
     stamp = dt.datetime.now().strftime("%Y%m%d-%H%M")
     summary_path = f"logs/run_all_{stamp}.csv"
     summary = []
-    plan = [(m, p) for m in models for p in phases]  # モデルごとに全段階を済ませる（ダウンロード済みのうちに）
+    # モデルに "phases" があれば、その段階だけ測る（RPC の比較用の設定など）
+    plan = [(m, p) for m in models for p in phases if p in m.get("phases", phases)]  # モデルごとに全段階を済ませる（ダウンロード済みのうちに）
     print(f"[{now()}] {len(models)} モデル × {len(phases)} 段階 = {len(plan)} 件")
 
     for n, (m, phase) in enumerate(plan, 1):
@@ -185,12 +219,13 @@ def main() -> None:
         label = ph["prefix"] + m["name"]
         logs = sorted(glob.glob(ph["logs"]))
         extra = m.get("server_extra", {})
-        server_cmd = ([server_bin, "-hf", m["hf"]] + common + ph["server"]
+        server_cmd = ([server_bin, "-hf", m["hf"]] + drop_options(common, ph.get("drop_common", [])) + ph["server"]
                       + list(extra.get("all", [])) + list(extra.get(phase, []))
                       + ["--host", host, "--port", str(port)])
-        bench_cmd = ([sys.executable, "audit_bench.py"] + logs + ph["bench"]
+        bench_cmd = ([sys.executable, ph.get("script", "audit_bench.py")] + logs + ph["bench"]
                      + list(m.get("bench_extra", {}).get(phase, []))
-                     + ["--label", label, "--url", base, "--csv", a.csv])
+                     + ["--label", label, "--url", base]
+                     + ([] if ph.get("script") else ["--csv", a.csv]))
         print(f"\n===== [{now()}] ({n}/{len(plan)}) {label}")
         row = {"label": label, "model": m["hf"], "phase": phase, "status": "", "load_s": "",
                "bench_s": "", "placement": "", "note": "", "server_cmd": " ".join(server_cmd)}

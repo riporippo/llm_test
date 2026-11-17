@@ -31,6 +31,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("csv", nargs="?", default="audit_bench_results.csv")
     ap.add_argument("--md", action="store_true", help="Markdown の表で出す")
+    ap.add_argument("--min-tps", type=float, default=10.0,
+                    help="速度の合格基準：4人同時での1人あたりの生成の最小値（tok/s）")
     a = ap.parse_args()
 
     by = collections.OrderedDict()  # 名前 → 段階 → 行
@@ -47,7 +49,7 @@ def main():
         for p in list(ph):
             ph[p] = list(ph[p].values())
 
-    head = ["モデル", "精度", "正答率", "JSON", "1人 生成", "4人 生成（1人あたり）", "4人 最小", "4人 全員完了"]
+    head = ["モデル", "精度", "正答率", "JSON", "1人 生成", "4人 生成（1人あたり）", "4人 最小", "4人 全員完了", "速度の合否"]
     rows = []
     for name, ph in by.items():
         q = [r for r in ph.get("quiz-", []) if r.get("score") not in ("", None)]
@@ -65,9 +67,12 @@ def main():
             fmt(med(g4), 1, " tok/s"),
             fmt(min(g4) if g4 else None, 1, " tok/s"),
             fmt(med([float(r["wall_s"]) for r in s4]), 0, " 秒"),
+            # 合格基準：4人同時のとき、1人あたりの生成の最小値が MIN_TPS 以上
+            "―" if not g4 else ("○" if min(g4) >= a.min_tps else "×"),
         ])
     if not rows:
         print("quiz- / research1- / research2- で始まる label の行がありません")
+        agent_report("agent_bench_results.csv", a.md, a.min_tps)
         return
     if a.md:
         print("| " + " | ".join(head) + " |")
@@ -80,6 +85,7 @@ def main():
 
     # 精度の項目ごとの内訳（どこで間違えたか）
     import json
+    agent_report("agent_bench_results.csv", a.md, a.min_tps)
     print("\n項目ごとの正答数" + ("（精度）" if not a.md else ""))
     for name, ph in by.items():
         items = collections.OrderedDict()
@@ -91,6 +97,42 @@ def main():
         wrong = [f"{k} {sum(v)}/{len(v)}" for k, v in items.items() if sum(v) < len(v)]
         if items:
             print(f"- {name}: " + ("全問正解" if not wrong else "、".join(wrong)))
+
+
+def agent_report(path, md, min_tps):
+    """agent_bench_results.csv（エージェントの測定）をモデルごとにまとめる"""
+    import os
+    if not os.path.exists(path):
+        return
+    by = collections.OrderedDict()
+    with open(path, newline="", encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            by.setdefault(r["label"], collections.OrderedDict())[(r["log"], r["run"])] = r  # 測り直しは新しいほうで置き換え
+    head = ["label", "精度", "正答率", "提出できた", "道具/問", "形式の誤り", "1問の時間", "生成 中央値", "生成 最小", "速度の合否"]
+    rows = []
+    for label, d in by.items():
+        rs = list(d.values())
+        sc, mx = sum(int(r["score"]) for r in rs), sum(int(r["score_max"]) for r in rs)
+        calls = sum(int(r["tool_calls"]) for r in rs)
+        bad = sum(int(r["bad_calls"]) for r in rs)
+        tps = [float(r["gen_tps"]) for r in rs if float(r["gen_tps"] or 0) > 0]
+        rows.append([
+            label, f"{sc}/{mx}", fmt(100 * sc / mx, 1, "%") if mx else "―",
+            f"{sum(1 for r in rs if r['outcome'] == 'submitted')}/{len(rs)}",
+            fmt(calls / len(rs), 1), fmt(100 * bad / calls, 1, "%") if calls else "―",
+            fmt(med([float(r["wall_s"]) for r in rs]), 0, " 秒"),
+            fmt(med(tps), 1, " tok/s"), fmt(min(tps) if tps else None, 1, " tok/s"),
+            ("○" if tps and min(tps) >= min_tps else "×") if label.startswith(("agent4-", "cmp-")) or "agent4" in label else "―",
+        ])
+    print("\nエージェント（agent_bench_results.csv）")
+    if md:
+        print("| " + " | ".join(head) + " |")
+        print("|" + "---|" * len(head))
+        for r in rows:
+            print("| " + " | ".join(r) + " |")
+    else:
+        for r in [head] + rows:
+            print("  ".join(f"{c:<30s}" if i == 0 else f"{c:>12s}" for i, c in enumerate(r)))
 
 
 if __name__ == "__main__":
