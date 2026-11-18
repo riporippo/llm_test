@@ -194,6 +194,7 @@ def solve(url, model, log_path, opt, verbose=False):
                    "chat_template_kwargs": {"enable_thinking": opt["think"]}}
         if opt.get("reasoning_effort"):
             payload["reasoning_effort"] = opt["reasoning_effort"]
+            payload["chat_template_kwargs"]["reasoning_effort"] = opt["reasoning_effort"]
         try:
             body = post(url, payload, opt["timeout"])
         except Exception as ex:
