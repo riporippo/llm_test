@@ -1,0 +1,63 @@
+Starting benchmark...
+Health Check
+Health check passed: http://127.0.0.1:8080/
+model: LiquidAI/LFM2.5-24B-A2B-GGUF:Q4_K_M  n_ctx: 24576  mode: quiz  temperature: 0.0  think: False  max_tokens: 12288
+warm-up ...
+
+log: quiz_set/clean1/audit.log（34 行、7,776 文字）
+run1: 入力 3449 tok  1590.2 tok/s | 生成 5499 tok  59.8 tok/s | 計   94.1 s | stop | 2/3 点  ×: 攻撃元を挙げていない
+
+log: quiz_set/clean2/audit.log（74 行、14,980 文字）
+run1: 入力 6643 tok  1553.1 tok/s | 生成 12288 tok  58.5 tok/s | 計  214.4 s | length | 0/3 点  ×: 侵害なしと判定、攻撃元を挙げていない、仕掛けを挙げていない  （JSON なし）
+  ! 回答が空です（finish_reason=length、推論 39138 字）。推論だけで上限を使い切った可能性があります。--max-tokens を増やすか、推論を切ってください
+
+log: quiz_set/inc1/audit.log（71 行、14,692 文字）
+run1: 入力 6801 tok  1546.3 tok/s | 生成 12288 tok  58.9 tok/s | 計  212.9 s | length | 0/11 点  ×: 侵害ありと判定、攻撃元 IP、アカウント、侵入時刻（±60秒）、接続先 IP、接続先ポート、スクリプトの取得・実行、UID 0 の利用者の追加、cron の仕掛け、SSH 鍵の仕掛け、痕跡の消去  （JSON なし）
+  ! 回答が空です（finish_reason=length、推論 35607 字）。推論だけで上限を使い切った可能性があります。--max-tokens を増やすか、推論を切ってください
+
+log: quiz_set/inc2/audit.log（69 行、14,240 文字）
+run1: 入力 6676 tok  1536.4 tok/s | 生成 12288 tok  58.8 tok/s | 計  213.4 s | length | 0/11 点  ×: 侵害ありと判定、攻撃元 IP、アカウント、侵入時刻（±60秒）、接続先 IP、接続先ポート、スクリプトの取得・実行、UID 0 の利用者の追加、cron の仕掛け、SSH 鍵の仕掛け、痕跡の消去  （JSON なし）
+  ! 回答が空です（finish_reason=length、推論 35584 字）。推論だけで上限を使い切った可能性があります。--max-tokens を増やすか、推論を切ってください
+
+log: quiz_set/inc3/audit.log（72 行、14,910 文字）
+run1: 入力 6920 tok  1556.1 tok/s | 生成 12288 tok  58.7 tok/s | 計  213.7 s | length | 0/11 点  ×: 侵害ありと判定、攻撃元 IP、アカウント、侵入時刻（±60秒）、接続先 IP、接続先ポート、スクリプトの取得・実行、UID 0 の利用者の追加、cron の仕掛け、SSH 鍵の仕掛け、痕跡の消去  （JSON なし）
+  ! 回答が空です（finish_reason=length、推論 34405 字）。推論だけで上限を使い切った可能性があります。--max-tokens を増やすか、推論を切ってください
+
+log: quiz_set/inc4/audit.log（72 行、14,907 文字）
+run1: 入力 6904 tok  1547.1 tok/s | 生成 12288 tok  58.2 tok/s | 計  215.4 s | length | 0/11 点  ×: 侵害ありと判定、攻撃元 IP、アカウント、侵入時刻（±60秒）、接続先 IP、接続先ポート、スクリプトの取得・実行、UID 0 の利用者の追加、cron の仕掛け、SSH 鍵の仕掛け、痕跡の消去  （JSON なし）
+  ! 回答が空です（finish_reason=length、推論 37358 字）。推論だけで上限を使い切った可能性があります。--max-tokens を増やすか、推論を切ってください
+
+log: quiz_set/inc5/audit.log（66 行、13,550 文字）
+run1: 入力 6386 tok  1551.4 tok/s | 生成 12288 tok  58.7 tok/s | 計  213.3 s | length | 0/11 点  ×: 侵害ありと判定、攻撃元 IP、アカウント、侵入時刻（±60秒）、接続先 IP、接続先ポート、スクリプトの取得・実行、UID 0 の利用者の追加、cron の仕掛け、SSH 鍵の仕掛け、痕跡の消去  （JSON なし）
+  ! 回答が空です（finish_reason=length、推論 35558 字）。推論だけで上限を使い切った可能性があります。--max-tokens を増やすか、推論を切ってください
+
+===== 結果（中央値）
+入力処理: 1551.3 tok/s
+生成:     58.8 tok/s（1人あたり。最小 58.2）
+1回の時間: 213.4 s
+
+===== 精度
+quiz_set/clean1/audit.log: 2/3 点（1 回）
+quiz_set/clean2/audit.log: 0/3 点（1 回）
+quiz_set/inc1/audit.log: 0/11 点（1 回）
+quiz_set/inc2/audit.log: 0/11 点（1 回）
+quiz_set/inc3/audit.log: 0/11 点（1 回）
+quiz_set/inc4/audit.log: 0/11 点（1 回）
+quiz_set/inc5/audit.log: 0/11 点（1 回）
+合計: 2/61 点（3.3%）  JSON を出力できた回: 1/7
+  侵害なしと判定: 1/2
+  攻撃元を挙げていない: 0/2
+  仕掛けを挙げていない: 1/2
+  侵害ありと判定: 0/5
+  攻撃元 IP: 0/5
+  アカウント: 0/5
+  侵入時刻（±60秒）: 0/5
+  接続先 IP: 0/5
+  接続先ポート: 0/5
+  スクリプトの取得・実行: 0/5
+  UID 0 の利用者の追加: 0/5
+  cron の仕掛け: 0/5
+  SSH 鍵の仕掛け: 0/5
+  痕跡の消去: 0/5
+
+saved: audit_bench_results.csv（7 行追記）

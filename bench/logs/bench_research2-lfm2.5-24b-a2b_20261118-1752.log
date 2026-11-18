@@ -1,0 +1,33 @@
+Starting benchmark...
+Health Check
+Health check passed: http://127.0.0.1:8080/
+model: LiquidAI/LFM2.5-24B-A2B-GGUF:Q4_K_M  n_ctx: 65536  mode: summary  temperature: 0.7  think: False  max_tokens: 8192
+warm-up ...
+
+log: out_audit/audit.log（67 行、13,729 文字）
+run1-1: 入力 6031 tok   751.6 tok/s | 生成 2526 tok  20.5 tok/s | 計  131.1 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run1-2: 入力 6031 tok  1077.9 tok/s | 生成 1885 tok  23.0 tok/s | 計   87.5 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run1-3: 入力 6031 tok  1527.7 tok/s | 生成 3925 tok  26.2 tok/s | 計  154.0 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run1-4: 入力 6031 tok  1133.0 tok/s | 生成 2317 tok  21.2 tok/s | 計  114.6 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': False, 'sysupd': True}
+  → 全員が終わるまで 155.3 s、全体の生成量 68.6 tok/s（入力処理の時間を含む）
+run2-1: 入力 6031 tok  1505.8 tok/s | 生成 2370 tok  19.9 tok/s | 計  122.8 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run2-2: 入力 6031 tok  1092.8 tok/s | 生成 3788 tok  18.6 tok/s | 計  208.6 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': False, 'sysupd': True}
+run2-3: 入力 6031 tok  1078.0 tok/s | 生成 2054 tok  23.2 tok/s | 計   94.3 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run2-4: 入力 6031 tok  1131.8 tok/s | 生成 3620 tok  18.8 tok/s | 計  197.5 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+  → 全員が終わるまで 211.2 s、全体の生成量 56.0 tok/s（入力処理の時間を含む）
+run3-1: 入力 6031 tok  1512.4 tok/s | 生成 3064 tok  17.5 tok/s | 計  178.9 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run3-2: 入力 6031 tok  1133.6 tok/s | 生成 3723 tok  21.3 tok/s | 計  180.0 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run3-3: 入力 6031 tok  1084.9 tok/s | 生成 2892 tok  18.6 tok/s | 計  161.1 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run3-4: 入力 6031 tok  1094.6 tok/s | 生成 1830 tok  22.3 tok/s | 計   87.7 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+  → 全員が終わるまで 190.8 s、全体の生成量 60.3 tok/s（入力処理の時間を含む）
+
+===== 結果（中央値）
+入力処理: 1113.2 tok/s
+生成:     20.9 tok/s（1人あたり。最小 17.5）
+1回の時間: 142.5 s
+4 人全員が終わるまで: 190.8 s
+
+----- 回答（最後の回）
+The audit log shows several failed SSH login attempts from 203.0.113.45 targeting both root and backup accounts, suggesting a brute‑force attack. A successful login as user **backup** was followed by a series of suspicious actions: reading /etc/passwd, downloading a script via wget from an external host (198.51.100.23), using sudo to create the new user **sysupd**, modifying permissions on .upd.sh, executing the downloaded script, and deleting its own bash history. The activity also includes creation of a cron job in /etc/cron.d/sysupd, indicating that the backup account was likely compromised and used to install or run potentially malicious code.
+
+saved: audit_bench_results.csv（12 行追記）

