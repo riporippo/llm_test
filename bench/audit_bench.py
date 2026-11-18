@@ -7,6 +7,7 @@ import os
 import re
 import statistics
 import sys
+import time
 
 import requests
 
@@ -16,6 +17,7 @@ TEMPERATURE = 0.7  # 要約モードの既定。採点モード（--quiz）で�
 THINK = False  # 推論（thinking）を使うか（--think）
 SAMPLING = {}  # top_k / top_p / repeat_penalty（指定したものだけ送る）
 REASONING_EFFORT = None
+CLIENT_TIMING = False  # True なら手元で時刻を計る（--client-timing。vLLM などと比べるとき）
 TIMEOUT = 1800  # 秒。大きいモデルで長い入力を処理すると時間がかかる
 
 
@@ -188,6 +190,8 @@ def chat(model_name, prompt, question=None, base=None):
 	if REASONING_EFFORT:
 		data["reasoning_effort"] = REASONING_EFFORT  # gpt-oss 系の推論の深さ
 		data["chat_template_kwargs"]["reasoning_effort"] = REASONING_EFFORT  # テンプレートに渡す形でも指定する
+	if CLIENT_TIMING:
+		return chat_stream_timing(url, headers, data)
 	try:
 		res = requests.post(url, headers=headers, json=data, timeout=TIMEOUT)
 	except requests.exceptions.RequestException as e:
@@ -218,6 +222,70 @@ def chat(model_name, prompt, question=None, base=None):
 	else:
 		print(f"Error: {res.status_code} - {res.text}")
 		return None, None, None, None, None, None, None, None, None
+
+
+def chat_stream_timing(url, headers, data):
+	"""応答をストリーミングで受け、手元で時刻を計る（--client-timing）。
+
+	vLLM や SGLang は llama.cpp の timings を返さないため、エンジンを比べるときはこの方式にそろえる。
+	  入力処理の時間 = 要求を送ってから最初のトークン（推論を含む）が届くまで（待ち時間を含む）
+	  生成の時間     = 最初のトークンから最後のトークンまで
+	  トークン数     = 応答の usage（入力 prompt_tokens、出力 completion_tokens）
+	戻り値は chat() と同じ並び。
+	"""
+	data = dict(data, stream=True, stream_options={"include_usage": True})
+	content, reasoning = [], []
+	usage, finish = {}, None
+	t0 = time.perf_counter()
+	t_first = t_last = None
+	try:
+		with requests.post(url, headers=headers, json=data, timeout=TIMEOUT, stream=True) as res:
+			if res.status_code != 200:
+				print(f"Error: {res.status_code} - {res.text[:300]}")
+				return None, None, None, None, None, None, None, None, None
+			for raw in res.iter_lines(chunk_size=1, decode_unicode=False):  # 1 バイトずつ読む（既定の 512 バイトずつだと届いた時刻がずれる）
+				if not raw:
+					continue
+				line = raw.decode("utf-8", "replace").strip()
+				if not line.startswith("data:"):
+					continue
+				payload = line[5:].strip()
+				if payload == "[DONE]":
+					break
+				try:
+					ev = json.loads(payload)
+				except json.JSONDecodeError:
+					continue
+				if ev.get("usage"):
+					usage = ev["usage"]
+				for ch in ev.get("choices", []):
+					d = ch.get("delta") or {}
+					piece_r = d.get("reasoning_content") or d.get("reasoning") or ""
+					piece_c = d.get("content") or ""
+					if piece_r or piece_c:
+						now = time.perf_counter()
+						if t_first is None:
+							t_first = now
+						t_last = now
+					reasoning.append(piece_r)
+					content.append(piece_c)
+					if ch.get("finish_reason"):
+						finish = ch["finish_reason"]
+	except requests.exceptions.RequestException as e:
+		print(f"Error: {e}")
+		return None, None, None, None, None, None, None, None, None
+	t_end = time.perf_counter()
+	if t_first is None:
+		t_first = t_last = t_end
+	prompt_n = usage.get("prompt_tokens", 0)
+	predicted_n = usage.get("completion_tokens", 0)
+	prompt_ms = (t_first - t0) * 1000
+	predicted_ms = (t_last - t_first) * 1000
+	prompt_per_token_ms = prompt_ms / prompt_n if prompt_n else 0
+	# 最初のトークンは入力処理の側に入るので、生成速度は残りのトークン数で計算する
+	predicted_per_token_ms = predicted_ms / (predicted_n - 1) if predicted_n > 1 else 0
+	return ("".join(content), prompt_n, prompt_ms, prompt_per_token_ms, predicted_n, predicted_ms,
+		predicted_per_token_ms, finish, len("".join(reasoning)))
 
 
 def get_model_name():
@@ -291,7 +359,7 @@ def save_csv(path, rows):
 
 
 def main():
-	global BASE_URL, MAX_TOKENS, TEMPERATURE, THINK, REASONING_EFFORT
+	global BASE_URL, MAX_TOKENS, TEMPERATURE, THINK, REASONING_EFFORT, CLIENT_TIMING
 	parser = argparse.ArgumentParser(description="auditd ログの分析で、速さ（要約モード）と精度（--quiz）を測る")
 	parser.add_argument("log", nargs="+", help="分析させる audit.log（gen_audit_log.py の出力など）。複数指定できる")
 	parser.add_argument("--quiz", action="store_true",
@@ -302,6 +370,8 @@ def main():
 	parser.add_argument("--top-p", type=float)
 	parser.add_argument("--repeat-penalty", type=float, help="同じ語の繰り返しを抑える（LFM2.5 の推奨は 1.05）")
 	parser.add_argument("--reasoning-effort", choices=["low", "medium", "high"], help="gpt-oss 系の推論の深さ")
+	parser.add_argument("--client-timing", action="store_true",
+		help="速度をストリーミングで手元で計る。vLLM・SGLang など timings を返さないエンジンや、エンジン同士の比較で使う")
 	parser.add_argument("--runs", type=int, default=3, help="測定回数（このほかにウォームアップ1回）")
 	parser.add_argument("--label", default="", help="記録用の名前（例: 調査1-gpt-oss-120b）")
 	parser.add_argument("--url", action="append",
@@ -317,6 +387,7 @@ def main():
 	TEMPERATURE = args.temperature if args.temperature is not None else (0.0 if args.quiz else TEMPERATURE)
 	THINK = args.think
 	REASONING_EFFORT = args.reasoning_effort
+	CLIENT_TIMING = args.client_timing
 	for key, val in (("top_k", args.top_k), ("top_p", args.top_p), ("repeat_penalty", args.repeat_penalty)):
 		if val is not None:
 			SAMPLING[key] = val
@@ -418,6 +489,7 @@ def main():
 					"mode": "quiz" if args.quiz else "summary",
 					"think": THINK,
 					"temperature": TEMPERATURE,
+					"timing": "client" if CLIENT_TIMING else "server",
 					"sampling": json.dumps({**SAMPLING, **({"reasoning_effort": REASONING_EFFORT} if REASONING_EFFORT else {})}),
 					"score": score,
 					"score_max": score_max,

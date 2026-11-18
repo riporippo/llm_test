@@ -103,6 +103,7 @@ def main():
         ])
     if not rows:
         print("quiz- / research1- / research2- で始まる label の行がありません")
+        compare_report(a.csv, a.md, a.min_tps)
         agent_report("agent_bench_results.csv", a.md, a.min_tps)
         return
     if a.md:
@@ -118,6 +119,7 @@ def main():
           "誤検知＝侵害なしのログで「侵害あり」と判定した数。打ち切り＝生成が上限で切れた回（あれば精度は要再測定）。"
           "1人 生成の * は精度の測定（1人）の値".format(a.min_tps, a.min_acc))
     # 精度の項目ごとの内訳（どこで間違えたか）
+    compare_report(a.csv, a.md, a.min_tps)
     agent_report("agent_bench_results.csv", a.md, a.min_tps)
     print("\n項目ごとの正答数" + ("（精度）" if not a.md else ""))
     for name, ph in by.items():
@@ -130,6 +132,46 @@ def main():
         wrong = [f"{k} {sum(v)}/{len(v)}" for k, v in items.items() if sum(v) < len(v)]
         if items:
             print(f"- {name}: " + ("全問正解" if not wrong else "、".join(wrong)))
+
+
+def compare_report(path, md, min_tps):
+    """label が cmp- で始まる測定（構成・エンジンの比較）を並べる"""
+    by = collections.OrderedDict()
+    with open(path, newline="", encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            if r["label"].startswith("cmp-"):
+                by.setdefault(r["label"], collections.OrderedDict())[(r["log"], r["run"], r.get("slot", ""))] = r
+    if not by:
+        return
+    head = ["label", "件数", "計り方", "最初の出力まで（中央値）", "生成 中央値", "生成 最小", "全員完了（中央値）", "全体の生成量", "速度の合否"]
+    rows = []
+    for label, d in by.items():
+        rs = list(d.values())
+        g = [float(r["predicted_tps"]) for r in rs if float(r["predicted_tps"] or 0) > 0]
+        # 全体の生成量：同時に投げた1セットの生成トークン数の合計 ÷ そのセットの全員完了時間（セットごとの中央値）
+        sets = collections.defaultdict(list)
+        for r in rs:
+            sets[(r["log"], r["run"])].append(r)
+        thr = [sum(int(x["predicted_n"]) for x in v) / float(v[0]["wall_s"]) for v in sets.values() if float(v[0].get("wall_s") or 0) > 0]
+        rows.append([
+            label, str(len(rs)), rs[0].get("timing") or "server",
+            fmt(med([float(r["prompt_ms"]) / 1000 for r in rs]), 1, " 秒"),
+            fmt(med(g), 1, " tok/s"), fmt(min(g) if g else None, 1, " tok/s"),
+            fmt(med([float(r["wall_s"]) for r in rs if r.get("wall_s")]), 0, " 秒"),
+            fmt(med(thr), 1, " tok/s"),
+            ("○" if g and min(g) >= min_tps else "×"),
+        ])
+    print("\n構成・エンジンの比較（label が cmp- で始まるもの）")
+    if md:
+        print("| " + " | ".join(head) + " |")
+        print("|" + "---|" * len(head))
+        for r in rows:
+            print("| " + " | ".join(r) + " |")
+    else:
+        for r in [head] + rows:
+            print("  ".join(f"{c:<40s}" if i == 0 else f"{c:>12s}" for i, c in enumerate(r)))
+    print("最初の出力まで：要求を送ってから最初のトークンが届くまで（入力処理と順番待ちを含む）．"
+          "全体の生成量：同時に投げた1セットの生成トークン数の合計を，全員が終わるまでの時間で割った値")
 
 
 def agent_report(path, md, min_tps):
