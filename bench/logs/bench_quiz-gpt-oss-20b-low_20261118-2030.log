@@ -1,0 +1,57 @@
+Starting benchmark...
+Health Check
+Health check passed: http://127.0.0.1:8080/
+model: unsloth/gpt-oss-20b-GGUF:Q4_K_M  n_ctx: 24576  mode: quiz  temperature: 1.0  think: False  max_tokens: 12288  reasoning_effort: low
+warm-up ...
+
+log: quiz_set/clean1/audit.log（34 行、7,776 文字）
+run1: 入力 3384 tok  1479.0 tok/s | 生成 646 tok  82.7 tok/s | 計   10.1 s | stop | 2/3 点  ×: 攻撃元を挙げていない
+
+log: quiz_set/clean2/audit.log（74 行、14,980 文字）
+run1: 入力 6396 tok  1447.4 tok/s | 生成 878 tok  80.2 tok/s | 計   15.4 s | stop | 0/3 点  ×: 侵害なしと判定、攻撃元を挙げていない、仕掛けを挙げていない
+
+log: quiz_set/inc1/audit.log（71 行、14,692 文字）
+run1: 入力 6556 tok  1445.8 tok/s | 生成 1797 tok  80.2 tok/s | 計   26.9 s | stop | 8/11 点  ×: 侵入時刻（±60秒）、接続先ポート、SSH 鍵の仕掛け
+
+log: quiz_set/inc2/audit.log（69 行、14,240 文字）
+run1: 入力 6458 tok  1449.1 tok/s | 生成 1084 tok  80.5 tok/s | 計   17.9 s | stop | 9/11 点  ×: 侵入時刻（±60秒）、接続先ポート
+
+log: quiz_set/inc3/audit.log（72 行、14,910 文字）
+run1: 入力 6662 tok  1451.3 tok/s | 生成 879 tok  80.8 tok/s | 計   15.5 s | stop | 7/11 点  ×: 攻撃元 IP、侵入時刻（±60秒）、接続先ポート、cron の仕掛け
+
+log: quiz_set/inc4/audit.log（72 行、14,907 文字）
+run1: 入力 6654 tok  1438.9 tok/s | 生成 1019 tok  80.2 tok/s | 計   17.3 s | stop | 9/11 点  ×: 攻撃元 IP、侵入時刻（±60秒）
+
+log: quiz_set/inc5/audit.log（66 行、13,550 文字）
+run1: 入力 6181 tok  1435.3 tok/s | 生成 1327 tok  80.3 tok/s | 計   20.8 s | stop | 9/11 点  ×: 侵入時刻（±60秒）、接続先ポート
+
+===== 結果（中央値）
+入力処理: 1447.4 tok/s
+生成:     80.3 tok/s（1人あたり。最小 80.2）
+1回の時間: 17.3 s
+
+===== 精度
+quiz_set/clean1/audit.log: 2/3 点（1 回）
+quiz_set/clean2/audit.log: 0/3 点（1 回）
+quiz_set/inc1/audit.log: 8/11 点（1 回）
+quiz_set/inc2/audit.log: 9/11 点（1 回）
+quiz_set/inc3/audit.log: 7/11 点（1 回）
+quiz_set/inc4/audit.log: 9/11 点（1 回）
+quiz_set/inc5/audit.log: 9/11 点（1 回）
+合計: 44/61 点（72.1%）  JSON を出力できた回: 7/7
+  侵害なしと判定: 1/2
+  攻撃元を挙げていない: 0/2
+  仕掛けを挙げていない: 1/2
+  侵害ありと判定: 5/5
+  攻撃元 IP: 3/5
+  アカウント: 5/5
+  侵入時刻（±60秒）: 0/5
+  接続先 IP: 5/5
+  接続先ポート: 1/5
+  スクリプトの取得・実行: 5/5
+  UID 0 の利用者の追加: 5/5
+  cron の仕掛け: 4/5
+  SSH 鍵の仕掛け: 4/5
+  痕跡の消去: 5/5
+
+saved: audit_bench_results.csv（7 行追記）

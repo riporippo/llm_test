@@ -1,0 +1,2 @@
+label,model,phase,status,load_s,bench_s,placement,note,server_cmd
+quiz-lfm2.5-24b-a2b,LiquidAI/LFM2.5-24B-A2B-GGUF:Q4_K_M,quiz,interrupted,21,,,,/home/isl/llama.cpp/build/bin/llama-server -hf LiquidAI/LFM2.5-24B-A2B-GGUF:Q4_K_M --no-mmproj --rpc 172.18.1.57:50052 --ctx-checkpoints 0 --cache-ram 0 -c 16384 -np 1 -ngl 99 -c 24576 --host 127.0.0.1 --port 8080
