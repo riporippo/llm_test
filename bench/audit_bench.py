@@ -14,6 +14,8 @@ BASE_URL = "http://127.0.0.1:8080/"  # llama-server は http（https にする�
 MAX_TOKENS = 1024  # 1回の生成の上限（--max-tokens で変更）
 TEMPERATURE = 0.7  # 要約モードの既定。採点モード（--quiz）では 0 にする
 THINK = False  # 推論（thinking）を使うか（--think）
+SAMPLING = {}  # top_k / top_p / repeat_penalty（指定したものだけ送る）
+REASONING_EFFORT = None
 TIMEOUT = 1800  # 秒。大きいモデルで長い入力を処理すると時間がかかる
 
 
@@ -181,6 +183,11 @@ def chat(model_name, prompt, question=None, base=None):
 		"cache_prompt": False,  # 毎回入力を処理し直す（2回目以降だけ速く見えるのを防ぐ）
 		"chat_template_kwargs": {"enable_thinking": THINK},  # Qwen 系の思考オン・オフ（対応しないモデルでは無視される）
 	}
+	# モデルごとの推奨の生成設定（--top-k / --top-p / --repeat-penalty / --reasoning-effort）
+	data.update(SAMPLING)
+	if REASONING_EFFORT:
+		data["reasoning_effort"] = REASONING_EFFORT  # gpt-oss 系の推論の深さ
+		data["chat_template_kwargs"]["reasoning_effort"] = REASONING_EFFORT  # テンプレートに渡す形でも指定する
 	try:
 		res = requests.post(url, headers=headers, json=data, timeout=TIMEOUT)
 	except requests.exceptions.RequestException as e:
@@ -284,13 +291,17 @@ def save_csv(path, rows):
 
 
 def main():
-	global BASE_URL, MAX_TOKENS, TEMPERATURE, THINK
+	global BASE_URL, MAX_TOKENS, TEMPERATURE, THINK, REASONING_EFFORT
 	parser = argparse.ArgumentParser(description="auditd ログの分析で、速さ（要約モード）と精度（--quiz）を測る")
 	parser.add_argument("log", nargs="+", help="分析させる audit.log（gen_audit_log.py の出力など）。複数指定できる")
 	parser.add_argument("--quiz", action="store_true",
 		help="採点モード：question.txt の設問に答えさせ、answer.json と照らして採点する")
 	parser.add_argument("--think", action="store_true", help="推論（thinking）を有効にする")
 	parser.add_argument("--temperature", type=float, help="既定は要約モード 0.7、採点モード 0")
+	parser.add_argument("--top-k", type=int, help="モデルの推奨値があれば指定する")
+	parser.add_argument("--top-p", type=float)
+	parser.add_argument("--repeat-penalty", type=float, help="同じ語の繰り返しを抑える（LFM2.5 の推奨は 1.05）")
+	parser.add_argument("--reasoning-effort", choices=["low", "medium", "high"], help="gpt-oss 系の推論の深さ")
 	parser.add_argument("--runs", type=int, default=3, help="測定回数（このほかにウォームアップ1回）")
 	parser.add_argument("--label", default="", help="記録用の名前（例: 調査1-gpt-oss-120b）")
 	parser.add_argument("--url", action="append",
@@ -305,6 +316,10 @@ def main():
 	MAX_TOKENS = args.max_tokens or (2048 if args.quiz else MAX_TOKENS)
 	TEMPERATURE = args.temperature if args.temperature is not None else (0.0 if args.quiz else TEMPERATURE)
 	THINK = args.think
+	REASONING_EFFORT = args.reasoning_effort
+	for key, val in (("top_k", args.top_k), ("top_p", args.top_p), ("repeat_penalty", args.repeat_penalty)):
+		if val is not None:
+			SAMPLING[key] = val
 
 	print("Starting benchmark...")
 	print("Health Check")
@@ -320,7 +335,8 @@ def main():
 	model_name = get_model_name()
 	n_ctx = get_n_ctx()
 	print(f"model: {model_name}  n_ctx: {n_ctx}  mode: {'quiz' if args.quiz else 'summary'}"
-		f"  temperature: {TEMPERATURE}  think: {THINK}  max_tokens: {MAX_TOKENS}")
+		f"  temperature: {TEMPERATURE}  think: {THINK}  max_tokens: {MAX_TOKENS}"
+		+ (f"  sampling: {SAMPLING}" if SAMPLING else "") + (f"  reasoning_effort: {REASONING_EFFORT}" if REASONING_EFFORT else ""))
 
 	# ウォームアップ（1回目は GPU の準備などで遅くなりやすいので捨てる）
 	print("warm-up ...")
@@ -402,6 +418,7 @@ def main():
 					"mode": "quiz" if args.quiz else "summary",
 					"think": THINK,
 					"temperature": TEMPERATURE,
+					"sampling": json.dumps({**SAMPLING, **({"reasoning_effort": REASONING_EFFORT} if REASONING_EFFORT else {})}),
 					"score": score,
 					"score_max": score_max,
 					"json_ok": json_ok,
