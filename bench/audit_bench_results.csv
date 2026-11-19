@@ -5981,3 +5981,47 @@ Overall, the log documents a successful remote intrusion that escalated to root,
 4. The session then cleans up by deleting the backup user’s bash history and logs out.
 
 In short, a compromised account was leveraged to install a permanent root backdoor and add an additional privileged user with persistent access.",4,4,http://127.0.0.1:8081/,16.15,stop,405,summary,False,0.7,client,{},,,
+2026-11-19T21:07:16,cmp-D-worker-local-gpt-oss-20b,ggml-org/gpt-oss-20b-GGUF,out_audit/audit.log,1,5707,2660.6,2144.98,297,4214.0,70.24,6.87,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": false, ""sysupd"": true}","The audit trail shows a single intrusion session:
+
+* Several failed SSH login attempts as **root** from 203.0.113.45.  
+* A successful SSH login as user **backup** (uid 1003) from the same IP.  
+* The backup user used `sudo` to download a shell script (`/tmp/.upd.sh`) via `wget`, made it executable, and ran it.  
+* The script created a new account **sysupd** with UID 0 (root), added a cron job (`/etc/cron.d/sysupd`), and added a public key to `/root/.ssh/authorized_keys`.  
+* The session ended cleanly with the backup user logging out.  
+
+In short, an attacker gained a non‑root account, then escalated privileges by adding a root‑privileged user and installing persistence mechanisms.",2,1,http://127.0.0.1:8080/,7.76,stop,531,summary,False,0.7,client,{},,,
+2026-11-19T21:07:16,cmp-D-worker-local-gpt-oss-20b,ggml-org/gpt-oss-20b-GGUF,out_audit/audit.log,1,5707,2688.5,2122.73,375,5053.6,74.01,7.74,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","**Auditd Log Summary**
+
+- **Initial brute‑force attempts**: Several failed SSH logins as `root` from 203.0.113.45 (five attempts) followed by a failed login as `backup`.  
+- **Successful compromise**: The `backup` user authenticated successfully over SSH (PAM success, session open).  
+- **Privilege escalation & malicious activity**:  
+  - `backup` used `sudo` to run commands as root.  
+  - Downloaded a shell script (`/tmp/.upd.sh`) via `wget` from `http://198.51.100.23`.  
+  - Made the script executable (`chmod +x`).  
+  - Executed the script, which performed the following:  
+    - Created a new user `sysupd` with UID 0 (root) and home `/root`.  
+    - Added the user to the system (`useradd`).  
+    - Created a cron job (`/etc/cron.d/sysupd`) and a root SSH key file (`/root/.ssh/authorized_keys`).  
+- **Cleanup**: Deleted `.bash_history` in the `backup` home directory.  
+- **Session termination**: The SSH session closed normally.  
+
+**Conclusion**: The log records a successful remote intrusion that escalated privileges, added a new root‑equivalent account, installed a scheduled job, and added a persistent SSH key—clearly a full compromise of the host.",2,2,http://127.0.0.1:8080/,7.76,stop,303,summary,False,0.7,client,{},,,
+2026-11-19T21:07:24,cmp-D-worker-local-gpt-oss-20b,ggml-org/gpt-oss-20b-GGUF,out_audit/audit.log,2,5707,2653.9,2150.42,298,4209.0,70.56,6.86,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","**Audit Log Summary**
+
+- A series of failed SSH root login attempts came from 203.0.113.45, followed by a successful login as user **“backup”** from the same IP.
+- The “backup” session used `sudo` to download a script (`upd.sh`) from `http://198.51.100.23/upd.sh`, made it executable, and ran it.
+- The script created a new root‑privileged account **“sysupd”** (UID 0), installed a cron job (`/etc/cron.d/sysupd`), and added a new SSH public key to `/root/.ssh/authorized_keys`.
+- After completing these actions, the “backup” session was closed and logged out.
+
+This log documents a clear compromise: an attacker gained a non‑root account, leveraged sudo to elevate to root, added a backdoor user, and installed persistence mechanisms.",2,1,http://127.0.0.1:8080/,7.14,stop,390,summary,False,0.7,client,{},,,
+2026-11-19T21:07:24,cmp-D-worker-local-gpt-oss-20b,ggml-org/gpt-oss-20b-GGUF,out_audit/audit.log,2,5707,2699.2,2114.31,319,4425.4,71.86,7.12,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","The audit log shows a clear compromise of a Linux host.  
+
+1. **Brute‑force attempts** – Several failed SSH root authentications from 203.0.113.45.  
+2. **Successful compromise** – A later SSH login as the account “backup” succeeds.  
+3. **Privilege escalation** – The attacker uses `sudo` to download a remote script (`upd.sh`) from 198.51.100.23, makes it executable, and runs it.  
+4. **Persistence and lateral movement** – The script creates a new root‑equivalent user “sysupd”, installs a cron job (`/etc/cron.d/sysupd`), and appends a public key to `/root/.ssh/authorized_keys`, giving the attacker ongoing access.  
+5. **Cleanup** – The attacker deletes its shell history before logging out.
+
+Overall, the log documents a successful intrusion, privilege escalation, installation of a backdoor, and attempts to hide traces.",2,2,http://127.0.0.1:8080/,7.14,stop,427,summary,False,0.7,client,{},,,
+2026-11-19T21:07:30,cmp-D-worker-local-gpt-oss-20b,ggml-org/gpt-oss-20b-GGUF,out_audit/audit.log,3,5707,2715.9,2101.32,292,4039.6,72.04,6.76,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": true, ""sysupd"": true}","The audit log shows a brute‑force SSH attack from 203.0.113.45 that repeatedly failed for the root account, followed by a successful login as the “backup” user. Once logged in, the user used sudo to download a malicious script from 198.51.100.23, made it executable, and ran it. The script created a new root‑privileged account (sysupd), installed a cron job and a root‑SSH authorized_keys entry, and opened a network connection to 198.51.100.23:4444. Finally, it cleared its history before logging out, indicating a clear compromise and persistence installation.",2,1,http://127.0.0.1:8080/,6.77,stop,602,summary,False,0.7,client,{},,,
+2026-11-19T21:07:30,cmp-D-worker-local-gpt-oss-20b,ggml-org/gpt-oss-20b-GGUF,out_audit/audit.log,3,5707,2668.8,2138.4,255,3635.5,69.87,6.3,"{""attacker_ip"": true, ""account"": true, ""c2_ip"": false, ""sysupd"": true}","The auditd trace shows a clear intrusion attempt. Multiple failed SSH login attempts as **root** were logged from the IP 203.0.113.45, followed by a successful login as the user **backup**. From that session the attacker used **sudo** to run system utilities, downloading a shell script (`upd.sh`) from an external server, making it executable, and running it. The script created a new user **sysupd** with UID 0, added a cron job, and injected a key into **/root/.ssh/authorized_keys**. The session was then terminated. In short, the log documents a compromised account that escalated privileges, installed persistence mechanisms, and left a backdoor.",2,2,http://127.0.0.1:8080/,6.77,stop,466,summary,False,0.7,client,{},,,
