@@ -170,6 +170,16 @@ def compare_report(path, md, min_tps):
     else:
         for r in [head] + rows:
             print("  ".join(f"{c:<40s}" if i == 0 else f"{c:>12s}" for i, c in enumerate(r)))
+    # 複数のサーバーに振り分けた測定は，サーバーごとの内訳も出す
+    for label, d in by.items():
+        rs = list(d.values())
+        urls = sorted({r.get("url", "") for r in rs if r.get("url")})
+        if len(urls) > 1:
+            for u in urls:
+                ru = [r for r in rs if r.get("url") == u]
+                g = [float(r["predicted_tps"]) for r in ru if float(r["predicted_tps"] or 0) > 0]
+                print(f"  {label} の内訳 {u}: {len(ru)} 件，生成 中央値 {fmt(med(g), 1, ' tok/s')}，最小 {fmt(min(g) if g else None, 1, ' tok/s')}，"
+                      f"最初の出力まで 中央値 {fmt(med([float(r['prompt_ms']) / 1000 for r in ru]), 1, ' 秒')}")
     print("最初の出力まで：要求を送ってから最初のトークンが届くまで（入力処理と順番待ちを含む）．"
           "全体の生成量：同時に投げた1セットの生成トークン数の合計を，全員が終わるまでの時間で割った値")
 
